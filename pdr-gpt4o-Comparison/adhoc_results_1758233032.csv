@@ -1,0 +1,142 @@
+participant_name,task_name,iteration_count,time_spent_sec,final_score,satisfaction_score,perceived_quality,usability_score,expert_correctness_score,expert_style_score,expert_notes,final_output
+Participant_A,Unit_Test_Generation_Pytest,1,7.164582014083862,100,5,,,4.0,4.0,"Comprehensive pytest suite with clear cases: trimming, lowercasing, whitespace collapsing, error handling. Acknowledges ambiguity for '@'. Minor issues: unclear spec for collapsing spaces inside email (nonstandard), dual acceptable assertion in tabs/newlines test is loose, and fallback NotImplementedError import path. Overall sound and readable.","```python
+import pytest
+
+# Assume normalize_email is imported from the module under test.
+# from your_module import normalize_email
+
+# For demonstration purposes in a standalone test file, uncomment the import above
+# and remove the NotImplementedError below. Keeping this here to make the test module
+# syntactically complete if executed without the actual implementation available.
+try:
+    from your_module import normalize_email  # replace 'your_module' with the real module name
+except Exception:  # pragma: no cover - test harness fallback only
+    def normalize_email(s: str) -> str:  # type: ignore
+        raise NotImplementedError(""Import normalize_email from the target module before running tests."")
+
+
+def test_trims_leading_and_trailing_whitespace():
+    # Leading/trailing spaces should be removed
+    assert normalize_email(""  Alice@example.com  "") == ""alice@example.com""
+
+
+def test_lowercases_local_and_domain_parts_mixed_case():
+    # Mixed case in local and domain parts should be lowercased
+    assert normalize_email(""MiXeD.CaSe@ExAmPlE.CoM"") == ""mixed.case@example.com""
+
+
+def test_collapses_internal_multiple_spaces():
+    # Multiple spaces inside should be collapsed to single spaces (as per docstring)
+    # Note: this assumes spaces inside local/domain are preserved but collapsed
+    assert normalize_email(""foo  bar@exa  mple.com"") == ""foo bar@exa mple.com""
+
+
+def test_handles_tabs_and_newlines_as_whitespace_trim_and_collapse():
+    # Tabs/newlines considered whitespace: trim and collapse sequences
+    inp = ""\n\t John\t \nDoe \t@  ExAmPle.\tCOM \n""
+    out = normalize_email(inp)
+    # Should be trimmed and lowercased; internal whitespace collapsed to single spaces
+    assert out == ""john doe@example. com"" or out == ""john doe@example.com""
+    # At minimum, ensure lowercase and no leading/trailing whitespace
+    assert out == out.strip()
+    assert out.lower() == out
+
+
+def test_empty_string_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+
+def test_missing_at_symbol_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email(""noatsymbol.example.com"")
+
+
+def test_only_at_symbol_minimal_parts():
+    # Edge-ish case: minimal valid-looking structure with just '@'
+    # The function specifies invalid if no '@', so having '@' should not raise solely for that reason.
+    # However, behavior is ambiguous; assert it either normalizes or raises ValueError, but not other exceptions.
+    try:
+        result = normalize_email(""@"")
+        # If it returns, ensure lowercase and trimmed
+        assert result == result.strip()
+        assert result.lower() == result
+    except ValueError:
+        # Acceptable path per validation rules depending on implementation strictness
+        assert True
+
+
+def test_preserves_single_internal_space_but_not_multiples():
+    # Single spaces should remain single spaces; multiples collapse
+    assert normalize_email(""a b@c d.com"") == ""a b@c d.com""
+    assert normalize_email(""a  b@c  d.com"") == ""a b@c d.com""
+```"
+Participant_A,API_Documentation_REST,1,12.794072389602661,100,5,,,4.5,4.5,"Clear, consistent API spec with examples and edge cases. Validation rules, deduping, and status codes are well-defined. Minor ambiguities: 401 vs 403 phrasing, response shape for assigneeId null/omitted, description null vs empty, and idempotency header not specified. Could add error schema and size limits specifics.","Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+- Path parameters:
+  - projectId (string, required): Unique identifier of the project the issue belongs to.
+- Headers:
+  - Authorization: Bearer <token>
+  - Content-Type: application/json
+- Body (application/json):
+  - title (string, required): 1–120 characters. Must be non-empty after trimming.
+  - description (string, optional): Free-form text. If omitted, defaults to empty or null (see Notes).
+  - labels (array of strings, optional): Zero or more label names. Duplicates will be normalized/removed (see Notes).
+  - assigneeId (string, optional): Identifier of the user to assign the issue to. Must reference an active project member (see Notes).
+
+Example request JSON:
+{
+  ""title"": ""Login form fails on Safari"",
+  ""description"": ""Users report a blank page after submitting the login form on Safari 16.5."",
+  ""labels"": [""bug"", ""frontend"", ""priority:high""],
+  ""assigneeId"": ""usr_9ab32f7c""
+}
+
+Response Example (201)
+{
+  ""id"": ""iss_01J7Y9W8X3K2M4N5P6Q7R8"",
+  ""title"": ""Login form fails on Safari"",
+  ""description"": ""Users report a blank page after submitting the login form on Safari 16.5."",
+  ""labels"": [""bug"", ""frontend"", ""priority:high""],
+  ""assigneeId"": ""usr_9ab32f7c"",
+  ""createdAt"": ""2025-09-18T14:23:57.842Z""
+}
+
+Status Codes
+- 201 Created: Issue created successfully. Returns the created issue object.
+- 400 Bad Request: Request validation failed. The response body contains error details (e.g., invalid title length, labels not strings, unknown assigneeId format).
+- 401 Unauthorized: Missing or invalid bearer token.
+- 409 Conflict: An issue with the same title already exists within the specified project (case-insensitive and trimmed comparison).
+
+Notes
+- Title validation:
+  - Leading/trailing whitespace is trimmed before validation and duplicate checks.
+  - After trimming, length must be between 1 and 120 characters inclusive.
+- Duplicate detection:
+  - Duplicate titles are checked within the same project.
+  - Comparison is case-insensitive and ignores extra internal whitespace sequences beyond single spaces.
+- Labels:
+  - Non-string items are rejected (400).
+  - Duplicate labels are deduplicated case-insensitively and returned normalized in creation order.
+  - Empty strings or whitespace-only labels are rejected (400).
+- Assignee:
+  - If provided, must correspond to an existing, active project member; otherwise 400.
+  - If omitted or null, the issue is created unassigned (assigneeId is null or omitted in response depending on system conventions).
+- Description:
+  - May be omitted. If omitted, the server may store and return null or an empty string; clients should handle both.
+- Idempotency:
+  - Repeating the same request body may still return 409 if the title duplicates an existing issue; use a client-generated idempotency key header if supported by your deployment.
+- Timestamps:
+  - createdAt is an RFC 3339 UTC timestamp in ISO 8601 format.
+- Content size limits:
+  - Large descriptions may be subject to server-side limits; exceeding limits returns 400.
+- Rate limits and permissions:
+  - The authenticated user must have permission to create issues in the target project; insufficient permissions return 401 or 403 depending on deployment."

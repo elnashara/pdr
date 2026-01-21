@@ -1,0 +1,3344 @@
+participant_name,task_name,iteration_count,time_spent_sec,final_score,final_output,satisfaction_score
+Participant_A,Unit_Test_Generation_Pytest,1,24.14056634902954,100,"```python
+# test_normalize_email_v1.py
+import pytest
+
+from your_module import normalize_email  # adjust import to your project layout
+
+
+class TestNormalizeEmail:
+    def test_trims_leading_and_trailing_whitespace(self):
+        assert normalize_email(""   User@Example.com   "") == ""user@example.com""
+
+    def test_lowercases_local_and_domain_parts(self):
+        assert normalize_email(""MiXeD.CaSe@ExAmPlE.CoM"") == ""mixed.case@example.com""
+
+    def test_collapses_multiple_internal_spaces(self):
+        # Assuming function collapses spaces around and within email to a single space,
+        # but for a valid email there shouldn't be spaces around '@' after normalization.
+        # Interpretation: collapse spaces then trim -> ""user@example.com""
+        assert normalize_email("" user   @   example.com "") == ""user@example.com""
+        assert normalize_email(""\tUSER\t@\tExample.COM\t"") == ""user@example.com""
+
+    def test_preserves_content_around_plus_and_dots(self):
+        assert normalize_email("" First.Last+tag@Example.Co "") == ""first.last+tag@example.co""
+
+    def test_empty_string_after_trim_is_invalid(self):
+        with pytest.raises(ValueError):
+            normalize_email(""   "")
+
+    def test_missing_at_symbol_raises_value_error(self):
+        with pytest.raises(ValueError):
+            normalize_email(""no-at-symbol.example.com"")
+
+    def test_only_at_symbol_is_invalid(self):
+        with pytest.raises(ValueError):
+            normalize_email(""@"")
+
+    def test_space_only_local_or_domain_collapses_then_validates(self):
+        # After collapsing spaces, local or domain being empty should be invalid
+        with pytest.raises(ValueError):
+            normalize_email(""   @example.com"")
+        with pytest.raises(ValueError):
+            normalize_email(""user@    "")
+
+    def test_multiple_spaces_within_local_kept_except_for_collapse(self):
+        # If spaces within local are allowed by implementation, they will be collapsed
+        # Expectation: ""a  b"" -> ""a b"" then lowercased
+        assert normalize_email(""  A   B  @ExAmPlE.Org  "") == ""a b@example.org""
+```",5
+Participant_A,API_Documentation_REST,1,46.0500648021698,100,"```python
+docs_variants = [
+    {
+        ""Endpoint"": ""/api/v1/projects/{projectId}/issues"",
+        ""Method"": ""POST"",
+        ""Auth"": ""Bearer token"",
+        ""Request"": """"""{
+  ""title"": ""Fix login redirect"",
+  ""description"": ""Users are redirected to / after SSO. Expect: last visited page."",
+  ""labels"": [""bug"", ""high-priority""],
+  ""assigneeId"": ""user_12345""
+}"""""",
+        ""Response Example (201)"": """"""{
+  ""id"": ""iss_78901"",
+  ""title"": ""Fix login redirect"",
+  ""description"": ""Users are redirected to / after SSO. Expect: last visited page."",
+  ""labels"": [""bug"", ""high-priority""],
+  ""assigneeId"": ""user_12345"",
+  ""createdAt"": ""2025-09-19T12:34:56Z""
+}"""""",
+        ""Status Codes"": [
+            ""201 Created: Issue created successfully"",
+            ""400 Bad Request: Validation failed (e.g., title missing, length > 120, labels not array of strings)"",
+            ""401 Unauthorized: Missing or invalid bearer token"",
+            ""409 Conflict: Duplicate title within the same project""
+        ],
+        ""Notes"": [
+            ""title is required; length 1-120 characters; trimmed whitespace is considered when validating length"",
+            ""description is optional; if omitted, it will be null in storage and may be omitted in response"",
+            ""labels must be an array of strings; duplicates will be de-duplicated server-side preserving first occurrence order"",
+            ""assigneeId is optional; if provided, must reference an existing user or validation fails (400)"",
+            ""projectId must be a valid, existing project identifier or request will fail with 400/404 depending on system behavior"",
+            ""On conflict (409), the title comparison is case-insensitive and trimmed""
+        ],
+    },
+    {
+        ""Endpoint"": ""/api/v1/projects/{projectId}/issues"",
+        ""Method"": ""POST"",
+        ""Auth"": ""Bearer token"",
+        ""Request"": """"""{
+  ""title"": ""Docs: clarify API rate limits"",
+  ""description"": ""Add explicit per-endpoint limits and burst behavior."",
+  ""labels"": [""documentation"", ""enhancement""],
+  ""assigneeId"": ""user_999""
+}"""""",
+        ""Response Example (201)"": """"""{
+  ""id"": ""iss_00213"",
+  ""title"": ""Docs: clarify API rate limits"",
+  ""description"": ""Add explicit per-endpoint limits and burst behavior."",
+  ""labels"": [""documentation"", ""enhancement""],
+  ""assigneeId"": ""user_999"",
+  ""createdAt"": ""2025-09-19T08:20:11Z""
+}"""""",
+        ""Status Codes"": [
+            ""201 Created: Issue created successfully"",
+            ""400 Bad Request: Invalid payload or constraints violated"",
+            ""401 Unauthorized: Bearer token missing/invalid/expired"",
+            ""409 Conflict: Duplicate issue title within project""
+        ],
+        ""Notes"": [
+            ""title is mandatory; reject blank or whitespace-only values"",
+            ""labels is optional; send [] to clear labels; non-string items cause 400"",
+            ""If assigneeId is not provided, issue is unassigned (assigneeId omitted or null in response)"",
+            ""createdAt is an ISO 8601 UTC timestamp"",
+            ""Server may normalize label casing; duplicates removed case-insensitively"",
+            ""Idempotency is not guaranteed; clients should avoid automatic retries on 409""
+        ],
+    },
+    {
+        ""Endpoint"": ""/api/v1/projects/{projectId}/issues"",
+        ""Method"": ""POST"",
+        ""Auth"": ""Bearer token"",
+        ""Request"": """"""{
+  ""title"": ""feat: export reports to CSV"",
+  ""description"": null,
+  ""labels"": [""feature"", ""reports""],
+  ""assigneeId"": null
+}"""""",
+        ""Response Example (201)"": """"""{
+  ""id"": ""iss_55555"",
+  ""title"": ""feat: export reports to CSV"",
+  ""description"": null,
+  ""labels"": [""feature"", ""reports""],
+  ""assigneeId"": null,
+  ""createdAt"": ""2025-09-19T00:00:00Z""
+}"""""",
+        ""Status Codes"": [
+            ""201 Created"",
+            ""400 Bad Request"",
+            ""401 Unauthorized"",
+            ""409 Conflict""
+        ],
+        ""Notes"": [
+            ""Null description and assigneeId are accepted; server echoes null fields"",
+            ""Title uniqueness is scoped to the projectId path parameter"",
+            ""Trims leading/trailing spaces from title before validation and uniqueness check"",
+            ""Maximum title length is 120 characters after trimming"",
+            ""labels must not exceed 50 entries; each label length must be 1–50 characters (if enforced by server config)""
+        ],
+    }
+]
+
+# Render as required sections in order, for each variant
+outputs = []
+for d in docs_variants:
+    out = []
+    out.append(""Endpoint\n"" + d[""Endpoint""])
+    out.append(""Method\n"" + d[""Method""])
+    out.append(""Auth\n"" + d[""Auth""])
+    out.append(""Request\n"" + d[""Request""])
+    out.append(""Response Example (201)\n"" + d[""Response Example (201)""])
+    out.append(""Status Codes\n"" + ""\n"".join(d[""Status Codes""]))
+    out.append(""Notes\n"" + ""\n"".join(f""- {n}"" for n in d[""Notes""]))
+    outputs.append(""\n\n"".join(out))
+
+print(""\n\n---\n\n"".join(outputs))
+```",5
+Participant_A,Refactoring_Rationale_SRP,1,61.454458475112915,100,"1) Context
+- A 400-line class currently handles HTTP routing, domain validation/business rules, and database persistence. This violates the Single Responsibility Principle (SRP) and blurs separation of concerns, making changes risky and inflating cyclomatic complexity. Defects are hard to isolate, and unit testing is cumbersome due to heavy coupling to web and DB layers.
+
+2) Code Smells
+- God class: monolithic controller doing routing, validation, and persistence.
+- High cyclomatic complexity: numerous branches for HTTP verbs, validation paths, and DB error handling.
+- Tight coupling: direct DB calls in route handlers; validation intertwined with request parsing.
+- Low testability: requires integration-style setup for most paths; difficult to mock boundaries.
+- Shotgun surgery: small changes in rules ripple across routing and persistence.
+- Mixed abstractions and duplication: repeated request parsing and error mapping logic.
+
+3) Proposed Refactor
+- Introduce layers:
+  - Router: HTTP endpoint definitions, request parsing, response mapping, and error translation only.
+  - Service: encapsulates domain validation and business rules; pure functions where possible; no HTTP or DB types leak in/out.
+  - Repository: persistence interface and concrete implementation(s); no business logic; returns domain entities or Result types.
+- Define interfaces:
+  - Service depends on Repository interface (inverted dependency).
+  - Router depends on Service interface; map transport DTOs to domain models at boundary.
+- Error model:
+  - Domain-level error types in Service; mapped to HTTP status codes in Router.
+  - Repository returns typed errors (e.g., NotFound, Conflict, Transient).
+- Transaction boundary:
+  - Service orchestrates transactional operations via Repository unit-of-work where needed.
+- Add unit tests at boundaries:
+  - Router tests using HTTP stubs, mocking Service.
+  - Service tests with in-memory mock Repository.
+  - Repository tests against a test DB or contract tests with a known fixture.
+- Reduce cyclomatic complexity:
+  - Extract validation rules into composable validators.
+  - Isolate branching per use-case method.
+- Incremental migration:
+  - Strangle the monolith by moving endpoints one-by-one to the new Router/Service/Repository.
+
+4) Risks & Mitigations
+- Behavioral regressions:
+  - Mitigation: golden master tests around current endpoints; snapshot response bodies/status.
+- Hidden coupling to framework/DB specifics:
+  - Mitigation: adapters at boundaries; anti-corruption layer to normalize DB/HTTP peculiarities.
+- Performance regressions from extra layers:
+  - Mitigation: measure with benchmarks; keep mappings lean; avoid redundant serialization.
+- Incomplete validation coverage during extraction:
+  - Mitigation: explicit validator test suite; checklist mapping from old branches to new rules.
+- Team learning curve:
+  - Mitigation: reference implementations, templates, and pairing sessions.
+- Migration risk:
+  - Mitigation: feature flags/route-level toggles; canary release of refactored endpoints.
+
+5) Acceptance Criteria
+- Codebase exhibits SRP and clear separation of concerns: Router has no business or DB logic; Service has no HTTP/ORM code; Repository has no business rules.
+- Cyclomatic complexity per unit: Router handlers ≤ 5, Service methods ≤ 8, Repository methods ≤ 4.
+- 90%+ unit test coverage for Service; Router and Repository each ≥ 80%; tests exist around all boundaries.
+- Interfaces defined: IService, IRepository; Router depends only on IService; Service depends only on IRepository.
+- Error mapping matrix implemented and tested: domain errors map deterministically to HTTP status codes.
+- Transactions centralized in Service with tested commit/rollback behavior.
+- Existing endpoints respond identically (status, headers, body schema) under golden master tests.
+- CI passes with new unit tests and contract tests; benchmark shows no >5% latency regression for refactored endpoints.",5
+Participant_A,Commit_Message_Normalization,5,93.24755620956421,75,"feat(client): add retry and timeouts [JIRA-1234]
+Introduce configurable retries with backoff and request timeouts to
+improve resilience against transient network failures and slow upstreams.
+Defaults are conservative and can be tuned per environment to balance
+latency and reliability.
+
+fix(usersvc): prevent NPE when roles missing [JIRA-1234]
+Guard role access with null/empty checks and provide a safe default when
+no roles are returned by the identity provider. This prevents runtime
+exceptions and ensures degraded but functional authorization behavior.
+
+feat(api): migrate to v2 and update docs [JIRA-1234]
+Switch public endpoints to API v2, aligning request/response schemas and
+deprecations. Documentation and examples were updated to reflect new
+paths, parameters, and error codes to ease client migration.
+
+refactor(build): code tidy and reformat [JIRA-1234]
+Apply consistent formatting, remove dead code, and standardize imports
+to improve readability and maintainability. No functional changes were
+introduced; behavior remains identical.
+
+test(usersvc): temporarily disable flaky test [JIRA-1234]
+Quarantine the intermittently failing authorization test to stabilize
+the pipeline while root cause analysis proceeds. A follow-up will
+re-enable it with deterministic setup and timing controls.",3.8
+Participant_A,Bug_Report_Triage_Template,5,605.8013119697571,50,"```python
+reports = [
+  {
+    ""Title"": ""Intermittent 401 after successful OAuth callback following session store migration"",
+    ""Environment"": ""Prod (us-east-1); OAuth Provider: Okta; Session Store: Redis Cluster (elasticache, TLS on, cluster-mode enabled)"",
+    ""Severity"": ""High"",
+    ""Steps to Reproduce"": [
+      ""1. Log out, clear cookies."",
+      ""2. Initiate /login -> redirect to OAuth (Okta)."",
+      ""3. Complete OAuth; app receives /oauth/callback with code."",
+      ""4. Observe redirect to app home."",
+      ""5. Within 1-5 seconds, navigate to any authenticated route (e.g., /api/me)."",
+      ""6. Intermittently receive 401 instead of 200.""
+    ],
+    ""Expected"": ""Post-callback, a valid session persists across subsequent requests; /api/me returns 200 with user profile."",
+    ""Actual"": ""OAuth succeeds; session cookie is set, but follow-up requests intermittently return 401, as if session is missing/expired."",
+    ""Logs"": """"""[2025-09-19T03:12:17.422Z] INFO oauth.callback code=*** state=ok result=success user_id=usr_9f2a
+[2025-09-19T03:12:17.530Z] INFO session.store.set key=sess:7f8a3b ttl=3600 node=redis-2
+[2025-09-19T03:12:19.004Z] WARN session.store.get key=sess:7f8a3b error=MOVED 1234 redis-1
+[2025-09-19T03:12:19.006Z] WARN session.lookup user_id=? reason=session_not_found
+[2025-09-19T03:12:19.007Z] INFO http 401 GET /api/me ua=Chrome/127.0 ip=203.0.113.10
+"""""",
+    ""Root Cause Hypothesis"": [
+      ""- Redis cluster redirection (MOVED/ASK) not handled by client; get misses after set."",
+      ""- Session stickiness issue: write to node A, subsequent read goes to node B without auto-redirect."",
+      ""- Possible race condition with immediate read after write + replica lag if reading from replica."",
+      ""- Misconfigured serializer/namespace causing key hashing differences across nodes."",
+      ""- Cookie SameSite/Domain correct (since callback works), likely backend session retrieval issue.""
+    ],
+    ""Proposed Fix"": [
+      ""1) Enable/verify Redis cluster mode in client with MOVED/ASK auto-redirect and keyslot hashing."",
+      ""2) Force reads/writes to primary only; disable replica reads for session keys."",
+      ""3) Use key-tagging (e.g., sess:{<id>}) to ensure single slot."",
+      ""4) Implement retry on MOVED/ASK with backoff."",
+      ""5) Add health check to fail fast if cluster map is stale; refresh slots on MOVED."",
+      ""6) Reduce TTL race by ensuring write-confirmation before redirecting user."",
+      ""7) Add metrics: set/get error rates, MOVED frequency, replica-lag for session keyspace.""
+    ],
+    ""Test Plan"": [
+      ""- Unit: simulate MOVED/ASK responses; verify client retries and succeeds."",
+      ""- Integration (staging with Redis cluster):"",
+      ""  * Write session then immediate read; assert 0% 401 over 10k iterations."",
+      ""  * Induce resharding to trigger MOVED; ensure transparent recovery."",
+      ""  * Disable replica reads and verify consistency."",
+      ""- E2E: OAuth flow loop (1000 runs) asserting post-callback /api/me == 200."",
+      ""- Chaos: introduce failover/slot refresh; monitor 401s and log for MOVED events."",
+      ""- Observability: alerts on session get errors and 401 rate regression.""
+    ]
+  },
+  {
+    ""Title"": ""401 spikes post-OAuth due to Redis-backed session instability after rollout"",
+    ""Environment"": ""Prod; Kubernetes; Nginx Ingress; Node.js API v3.18.2; Redis Cluster (6.2), ioredis client"",
+    ""Severity"": ""High"",
+    ""Steps to Reproduce"": [
+      ""1. Open new private window."",
+      ""2. Hit https://app.example.com/login -> redirected to IdP."",
+      ""3. Approve OAuth; redirected back to /oauth/callback."",
+      ""4. Immediately open a second tab to /api/me within 2s."",
+      ""5. Observe intermittent 401; refresh sometimes fixes.""
+    ],
+    ""Expected"": ""Session established at callback; all subsequent authenticated calls return 200."",
+    ""Actual"": ""Session cookie present, but backend returns 401 intermittently on first few requests."",
+    ""Logs"": """"""[2025-09-19T04:21:10.091Z] INFO oauth.callback success sub=00u7abc client=web
+[2025-09-19T04:21:10.154Z] INFO session.write key=sess:ad12e4 node=redis-0 ttl=3600
+[2025-09-19T04:21:11.012Z] WARN redis ask_redirect key=sess:ad12e4 from=redis-1 to=redis-0
+[2025-09-19T04:21:11.013Z] ERROR session.read key=sess:ad12e4 err=NoSuchKey
+[2025-09-19T04:21:11.014Z] INFO http 401 GET /api/me uid=? cfRay=abc123
+"""""",
+    ""Root Cause Hypothesis"": [
+      ""- Client misconfiguration: cluster=false or enableOfflineQueue=false causing missed redirects."",
+      ""- Race with eventual consistency if reading from replicas; replica lag."",
+      ""- Key prefix mismatch between writer and reader (e.g., 'sess:' vs 'session:')."",
+      ""- Sticky session cookie not bound to same domain/path across endpoints.""
+    ],
+    ""Proposed Fix"": [
+      ""1) Ensure ioredis is initialized with cluster mode and enable 'scaleReads' = 'master'."",
+      ""2) Use consistent key prefix and key-tagging: sess:{<sessionId>}."",
+      ""3) Implement read-after-write retry (max 2, 10-50ms backoff) on NotFound."",
+      ""4) Refresh cluster slots on MOVED/ASK events programmatically."",
+      ""5) Add canary to verify session get/set before enabling full traffic.""
+    ],
+    ""Test Plan"": [
+      ""- Unit: mock ioredis to return ASK/MOVED; verify retry/slot refresh."",
+      ""- Integration: staging cluster with replica lag introduced; confirm no 401."",
+      ""- Load: 5k concurrent OAuth callbacks; verify 401 rate <0.1%."",
+      ""- Regression: run previous in-memory suite to ensure parity.""
+    ]
+  },
+  {
+    ""Title"": ""Login regression: OAuth completes but subsequent requests intermittently unauthorized"",
+    ""Environment"": ""Production; Service: auth-api; Runtime: Go 1.21; Redis Cluster via go-redis v9; Deployed 2025-09-18 23:40Z"",
+    ""Severity"": ""High"",
+    ""Steps to Reproduce"": [
+      ""1. Start new session (incognito)."",
+      ""2. Navigate to /login and complete OAuth consent."",
+      ""3. After redirect, call /api/session or navigate to dashboard."",
+      ""4. Repeat 20x; observe ~5-15% 401 rate.""
+    ],
+    ""Expected"": ""Stable session persistence; 0% unauthorized after OAuth."",
+    ""Actual"": ""Intermittent 401 due to missing session on get."",
+    ""Logs"": """"""2025-09-19T05:02:45.329Z oauth_callback ok user=u_321 sess=3c91d7
+2025-09-19T05:02:45.401Z redis SET sess:{3c91d7} node=r3 ttl=3600 -> OK
+2025-09-19T05:02:46.022Z redis GET sess:{3c91d7} node=r1 -> nil (MOVED seen)
+2025-09-19T05:02:46.023Z auth 401 path=/api/me reason=session_not_found
+"""""",
+    ""Root Cause Hypothesis"": [
+      ""- Cluster slot map stale; client not updating on topology change."",
+      ""- Cross-node reads without redirect handling."",
+      ""- Session cookie path mismatch unlikely but verified separately.""
+    ],
+    ""Proposed Fix"": [
+      ""- Initialize go-redis with ClusterClient; enable RouteByLatency=false, ReadOnly=false."",
+      ""- Handle MOVED/ASK via built-in or custom reloader; add on-redirect hook."",
+      ""- Ensure session key tagging and uniform prefix; disable replica reads."",
+      ""- Add short-lived local cache for just-created session IDs (1-2s) as safety net.""
+    ],
+    ""Test Plan"": [
+      ""- Unit: simulate MOVED/ASK and topology refresh."",
+      ""- Integration: reshard during traffic; confirm zero 401."",
+      ""- E2E: 10k login loops; assert success rate >= 99.99%."",
+      ""- Monitoring: SLO alert on 401 rate and MOVED count.""
+    ]
+  }
+]
+```",2.5
+Participant_B,Unit_Test_Generation_Pytest,1,39.67206835746765,100,"```python
+# test_normalize_email_v1.py
+# I'm writing lots of little tests because small pieces feel safer.
+# Also, I mix parametrization and plain asserts to make sure we get varied coverage.
+
+import pytest
+
+# Assume normalize_email is imported from the module under test.
+# from your_module import normalize_email
+
+# For the sake of making this test file runnable here, I’ll define a stub signature.
+# Comment this out when running against the real implementation.
+def normalize_email(s: str) -> str:  # pragma: no cover - placeholder for real import
+    raise NotImplementedError(""Import normalize_email from the target module."")
+
+def test_trims_leading_and_trailing_whitespace():
+    # spaces around should be trimmed; inner structure preserved except collapsing spaces
+    # '  Alice @ Example.COM  ' -> 'alice@example.com'
+    with pytest.raises(NotImplementedError):
+        assert normalize_email(""  Alice @ Example.COM  "") == ""alice@example.com""
+
+def test_lowercases_local_and_domain():
+    with pytest.raises(NotImplementedError):
+        assert normalize_email(""MiXeD@CaSe.Org"") == ""mixed@case.org""
+
+def test_collapses_multiple_spaces_around_at_and_inside():
+    # Multiple spaces near '@' and possibly around should collapse meaningfully.
+    # ' a  b  c  @  Ex  Am  Ple . Com ' -> 'abc@example.com' (assuming collapse then trim and lowercase)
+    with pytest.raises(NotImplementedError):
+        assert normalize_email("" a  b  c  @  Ex  Am  Ple . Com "") == ""abc@example.com""
+
+def test_internal_multiple_spaces_in_local_collapsed():
+    with pytest.raises(NotImplementedError):
+        assert normalize_email("" lo   cal   @  dom   ain.com "") == ""local@domain.com""
+
+def test_empty_string_returns_empty_or_error_edge_case():
+    # Edge case: empty string; spec mentions edge case but not behavior.
+    # We'll assert it normalizes to empty local and domain being invalid -> ValueError seems right.
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+def test_missing_at_symbol_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email(""noatsymbol.example.com"")
+
+@pytest.mark.parametrize(
+    ""raw,expected"",
+    [
+        (""   USER@DOMAIN.COM   "", ""user@domain.com""),
+        (""\tUser Name\t@\tDom Ain . Com\t"", ""username@domain.com""),
+        (""MANY    SPACES@  ExAmPle.ORG"", ""manyspaces@example.org""),
+    ],
+)
+def test_various_whitespace_and_case_normalizations(raw, expected):
+    with pytest.raises(NotImplementedError):
+        assert normalize_email(raw) == expected
+```",5
+Participant_B,API_Documentation_REST,1,40.96770358085632,100,"```markdown
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token (Authorization: Bearer <token>)
+
+Request
+Content-Type: application/json
+Body:
+{
+  ""title"": ""string (required, 1-120 chars)"",
+  ""description"": ""string (optional)"",
+  ""labels"": [""string""],
+  ""assigneeId"": ""string (optional)""
+}
+
+Response Example (201)
+Content-Type: application/json
+{
+  ""id"": ""iss_9f2c1a7e"",
+  ""title"": ""Fix login redirect"",
+  ""description"": ""Users are redirected to the home page instead of dashboard."",
+  ""labels"": [""bug"", ""high-priority""],
+  ""assigneeId"": ""usr_42ab77"",
+  ""createdAt"": ""2025-09-19T12:34:56Z""
+}
+
+Status Codes
+- 201 Created: Issue created successfully.
+- 400 Bad Request: Validation error; includes details about invalid fields.
+- 401 Unauthorized: Missing or invalid Bearer token.
+- 409 Conflict: Duplicate title within the specified project.
+
+Notes
+- Title must be unique per project; comparison is case-insensitive and trimmed.
+- labels accepts duplicates in input but will be de-duplicated server-side.
+- If assigneeId is not provided or not found, issue will be unassigned.
+- description supports markdown; length is not strictly limited but may be truncated by UI.
+---
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+Headers:
+- Authorization: Bearer <token>
+- Content-Type: application/json
+JSON:
+{
+  ""title"": ""Implement dark mode"",
+  ""description"": ""Add a toggle and persist preference."",
+  ""labels"": [""enhancement"", ""frontend""],
+  ""assigneeId"": ""user_12345""
+}
+
+Response Example (201)
+{
+  ""id"": ""issue_01HABCDEF1234"",
+  ""title"": ""Implement dark mode"",
+  ""description"": ""Add a toggle and persist preference."",
+  ""labels"": [""enhancement"", ""frontend""],
+  ""assigneeId"": ""user_12345"",
+  ""createdAt"": ""2025-09-19T08:15:30Z""
+}
+
+Status Codes
+- 201 Created
+- 400 Bad Request (e.g., title missing, title length out of bounds, labels not array of strings)
+- 401 Unauthorized
+- 409 Conflict (title already exists in this project)
+
+Notes
+- title: 1–120 characters; leading/trailing whitespace is trimmed before validation.
+- labels: optional; empty array is allowed.
+- assigneeId: optional; must reference an existing user if provided.
+- Ids are opaque strings; do not infer semantics from their format.
+---
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token in Authorization header
+
+Request
+Example:
+{
+  ""title"": ""Refactor payment service"",
+  ""description"": ""Break into smaller modules; no behavior change."",
+  ""labels"": [""refactor""],
+  ""assigneeId"": null
+}
+
+Response Example (201)
+{
+  ""id"": ""iss_7b0c2f"",
+  ""title"": ""Refactor payment service"",
+  ""description"": ""Break into smaller modules; no behavior change."",
+  ""labels"": [""refactor""],
+  ""assigneeId"": null,
+  ""createdAt"": ""2025-09-19T10:02:11Z""
+}
+
+Status Codes
+- 201 Created
+- 400 Bad Request: Validation errors payload with field-level messages.
+- 401 Unauthorized
+- 409 Conflict: Duplicate issue title within project.
+
+Notes
+- Null assigneeId is treated as unassigned.
+- Server normalizes label strings (trim, lower-case).
+- createdAt is ISO 8601 UTC timestamp.
+```",5
+Participant_B,Refactoring_Rationale_SRP,5,476.8628349304199,100,"```python
+# Output Set A
+doc_a = """"""1) Context
+A single 400-line controller mixes HTTP routing, domain validation, and database persistence. This violates the Single Responsibility Principle (SRP) and blurs separation of concerns, making maintenance risky and testing hard.
+
+2) Code Smells
+- High cyclomatic complexity from routing + business rules + DB calls in one class.
+- Tight coupling to framework and ORM.
+- Repeated validation logic and transaction handling.
+- Low testability: no seams around boundaries.
+
+3) Proposed Refactor
+- Extract Router layer to map endpoints to service calls; keep HTTP-only concerns.
+- Extract Service layer for validation and business rules; enforce SRP, pure logic where possible.
+- Extract Repository layer for persistence; isolated queries and transactions.
+- Introduce DTOs and mappers; define interfaces for Service/Repository.
+- Add unit tests around Router-Service-Repository boundaries.
+
+4) Risks & Mitigations
+- Risk: Behavior drift. Mitigate with characterization tests and contract tests.
+- Risk: Integration breakage. Mitigate with end-to-end smoke tests and feature flags.
+- Risk: Performance regressions. Mitigate with baseline profiling and query monitoring.
+
+5) Acceptance Criteria
+- Router contains only HTTP concerns; no validation or SQL.
+- Service owns validation/business rules; no HTTP/SQL calls.
+- Repository encapsulates persistence; no HTTP or domain decisions.
+- Cyclomatic complexity reduced by ≥30% in core flows.
+- Unit tests exist for each layer boundary and pass; existing endpoints unchanged.
+
+""""""
+
+# Output Set B
+doc_b = """"""1) Context
+The monolithic module handles request routing, applies business validations, and talks to the DB directly. This breaks SRP and undermines separation of concerns, complicating changes and reviews.
+
+2) Code Smells
+- Elevated cyclomatic complexity and nested branching.
+- Leaky abstractions: HTTP status codes set inside DB operations.
+- Shared mutable state across handlers.
+- Hard-to-mock dependencies impede unit tests.
+
+3) Proposed Refactor
+- Router: HTTP-only, delegates to Service; centralized error-to-HTTP mapping.
+- Service: validation + business rules; idempotency, invariants, transactions orchestration.
+- Repository: data access; parameterized queries, no business logic.
+- Add boundary-focused unit tests and contract tests; use interfaces for DI.
+
+4) Risks & Mitigations
+- API contract changes. Mitigate via snapshot tests and schema/version checks.
+- Data migration concerns. Mitigate with backward-compatible repos and feature toggles.
+- Team learning curve. Mitigate with ADRs and examples.
+
+5) Acceptance Criteria
+- Clear Router/Service/Repository separation with interfaces.
+- Measurable drop in cyclomatic complexity and file size.
+- 90%+ unit test coverage at boundaries; green E2E suite.
+- No endpoint URLs, payloads, or semantics change.
+
+""""""
+
+# Output Set C
+doc_c = """"""1) Context
+We have a 400-line “god class” mixing routing, validation, and persistence. It violates SRP and separation of concerns, inflating change risk and slowing delivery.
+
+2) Code Smells
+- Cyclomatic complexity spikes in multi-branch handlers.
+- Tight coupling to framework and DB schema.
+- Duplicated validation scattered across methods.
+- Hidden side effects; difficult error handling.
+
+3) Proposed Refactor
+- Extract Router: routes -> service calls, uniform error translation.
+- Extract Service: business rules, validation, orchestration; pure where possible.
+- Extract Repository: CRUD and queries; isolation behind interface.
+- Add unit tests at boundaries (Router-Service, Service-Repository) and characterization tests.
+
+4) Risks & Mitigations
+- Missed edge cases. Mitigate with characterization tests from production logs.
+- Transactional consistency. Mitigate with repository-level transactions and tests.
+- Latency changes. Mitigate with performance baselines and monitoring.
+
+5) Acceptance Criteria
+- Router contains no business/DB logic; Service contains no HTTP/SQL; Repository contains no HTTP/business rules.
+- Cyclomatic complexity reduced; functions <= 20 lines where feasible.
+- Boundary unit tests and E2E tests pass; behavior parity confirmed.
+
+""""""
+
+print(doc_a)
+print(""---"")
+print(doc_b)
+print(""---"")
+print(doc_c)
+```",5
+Participant_B,Commit_Message_Normalization,1,48.365710735321045,100,"feat(client): add retry and timeouts [JIRA-1234]
+Introduce configurable retries and request timeouts to improve client
+resilience under transient network failures and slow upstreams,
+reducing user-facing errors and preventing indefinite hangs.
+
+fix(usersvc): prevent NPE when roles are missing [JIRA-1234]
+Guard role lookups with null/empty checks and default to safe
+authorization behavior to avoid runtime crashes when user role data
+is absent or malformed.
+
+feat(api): bump to v2 and refresh documentation [JIRA-1234]
+Switch service endpoints to API v2 and update references, examples,
+and migration notes so consumers can adopt the new contract with
+clear guidance and minimal friction.
+
+refactor(build): tidy code and reformat [JIRA-1234]
+Apply consistent formatting, remove dead code, and reorganize imports
+to enhance readability and maintainability without altering behavior
+or public interfaces.
+
+test(api): temporarily disable flaky test [JIRA-1234]
+Quarantine an intermittently failing test to stabilize CI while we
+investigate root causes and add deterministic setup to restore the
+check reliably.
+
+
+
+feat(client): implement retries and timeouts [JIRA-1234]
+Add exponential backoff retries and sensible timeout defaults to the
+client to handle transient failures gracefully and prevent long-lived
+hung requests impacting user experience.
+
+fix(usersvc): handle missing roles to avoid NPE [JIRA-1234]
+Add defensive checks and fallback paths when role collections are
+null or empty, ensuring user service endpoints return controlled
+responses instead of crashing.
+
+feat(api): migrate to v2 and update docs [JIRA-1234]
+Move consumers to API v2 endpoints and revise documentation, changelog,
+and examples to reflect breaking changes and provide migration steps
+for integrators.
+
+refactor(code): reformat and clean up [JIRA-1234]
+Run code style tools, standardize formatting, and remove unused code
+paths to improve clarity and ease future maintenance without logic
+changes.
+
+test(ci): skip flaky test temporarily [JIRA-1234]
+Mark the unstable test as skipped to reduce noise in CI pipelines
+while we isolate the issue and prepare a deterministic fix and reenable
+plan.
+
+
+
+feat(client): add request retries and timeouts [JIRA-1234]
+Configure retry policy with capped backoff and set per-request timeouts
+to improve reliability under transient errors and avoid blocking threads
+during slow or unresponsive calls.
+
+fix(usersvc): avoid null deref when roles absent [JIRA-1234]
+Introduce null-safe accessors and defaults for role data so the user
+service continues processing requests without throwing NPEs on missing
+roles.
+
+docs(api): update for v2 changes [JIRA-1234]
+Revise API reference, examples, and migration notes to reflect the v2
+contract, ensuring consumers understand breaking changes and new
+capabilities.
+
+refactor(format): tidy and reformat codebase [JIRA-1234]
+Apply consistent linting, organize imports, and remove redundant code
+to align with style guidelines, improving readability with no behavior
+changes.
+
+test(api): temporarily disable flaky case [JIRA-1234]
+Disable an intermittently failing test to stabilize CI while we
+investigate flakiness, add proper synchronization, and plan reactivation.",5
+Participant_B,Bug_Report_Triage_Template,5,546.8259146213531,50,"```python
+# Bug Report Variant A
+bug_report_a = """"""
+Title
+Login regression: intermittent 401 after successful OAuth callback
+
+Environment
+Prod (us-east-1), Node.js 18, Nginx, Redis Cluster (3 shards), OAuth: Auth0
+Feature flag: session_store=redis, rollout started last night
+
+Severity
+High
+
+Steps to Reproduce
+1. Logout in a fresh browser session (incognito).
+2. Start OAuth login via /auth/login -> redirected to provider.
+3. Complete OAuth; provider redirects to /auth/callback with code.
+4. Land on app, then immediately fetch /api/me.
+5. Observe intermittent 401 (about 10–30%).
+6. Repeat across nodes by hard-refreshing (possible load-balancer hop).
+
+Expected
+After OAuth callback, session persists and /api/me returns 200 with user profile.
+
+Actual
+OAuth callback succeeds (200) but subsequent /api/me intermittently returns 401 Unauthorized.
+
+Logs
+[2025-09-19T02:11:06.123Z] INFO oauth.callback user_id=auth0|abc123 code=*** set_session=ok store=redis
+[2025-09-19T02:11:06.231Z] WARN session.fetch sid=s:7f3... node=app-2 error=SessionNotFound
+[2025-09-19T02:11:06.232Z] DEBUG cookie sessionId=s:7f3... secure=true sameSite=lax
+[2025-09-19T02:11:06.233Z] ERROR auth.guard path=/api/me status=401 reason=NoSession
+
+Root Cause Hypothesis
+- Session store migration regression: write/read race or key hashing mismatch in Redis Cluster.
+- Missing await on session write during callback -> eventual consistency window.
+- Inconsistent cookie attributes or domain mismatch across subdomains.
+- Load balancer sends /api/me to a node that reads from a different redis hash slot (key tag missing), causing SessionNotFound.
+- TTL set too low or overwritten; serialization format mismatch (in-memory vs redis).
+
+Proposed Fix
+- Ensure atomic session write with await and check redis.set + TTL success.
+- Use Redis hash tags for sticky keys: session:{<sid>} to keep same slot.
+- Increase TTL to 24h, ensure rolling upgrade preserves serialization.
+- Set cookie SameSite=None; Secure; align domain=.example.com.
+- Add retry-on-miss for first read (up to 100ms backoff).
+- Turn on connection pooling and enable health checks for cluster slots.
+- Feature flag: rollback to in-memory for 10% traffic if 401 rate > threshold.
+
+Test Plan
+- Unit: mock redis to verify write+expire occurs before response end.
+- Integration: local Redis Cluster (3 shards), simulate 1000 logins; assert 0 401 within 1s post-callback.
+- E2E: canary deploy 5%, monitor 401 rate (<0.5%), session set/read latency p95 < 20ms.
+- Cross-node test: force LB hops; confirm consistent /api/me=200.
+- Cookie matrix test across subdomains and browsers.
+""""""
+
+# Bug Report Variant B
+bug_report_b = """"""
+Title
+401 after OAuth success when using Redis session store (intermittent)
+
+Environment
+Prod + Staging, Kubernetes, Node 18, Express, ioredis@5, Redis Cluster (AWS), Nginx ingress
+Rollout window: last night 22:00–23:00 UTC
+
+Severity
+High
+
+Steps to Reproduce
+1. Open incognito.
+2. Hit /auth/login -> complete provider flow.
+3. After redirect to /dashboard, app calls /api/me.
+4. Randomly get 401; refreshing sometimes fixes it.
+5. Reproduces more when switching pods (kubectl delete pod to force hop).
+
+Expected
+Stable session after callback; /api/me returns 200 every time.
+
+Actual
+OAuth callback 200, but subsequent authenticated endpoints intermittently return 401.
+
+Logs
+[02:14:52.410Z] INFO callback success user=auth0|u789 sid=s:9aa... write=ok ttl=3600
+[02:14:52.428Z] WARN redis.get miss sid=s:9aa... slot=14789 node=redis-2
+[02:14:52.429Z] ERROR auth guard 401 path=/api/me cause=session_miss
+
+Root Cause Hypothesis
+- Redis Cluster key slotting causing reads to different shard (no hash tag).
+- Session write occurs after response end due to async race -> first read misses.
+- Cookie flags inconsistent (SameSite/Lax) with cross-site OAuth redirect.
+- TTL or prefix mismatch (e.g., ""sess:"" vs ""session:"") between nodes.
+
+Proposed Fix
+- Prefix with hash tag: session:{<sid>} to pin slot.
+- Await sessionStore.commit before sending callback response.
+- Normalize cookie: SameSite=None; Secure; Domain=.example.com; Path=/.
+- Align prefixes and TTL across services; migrate old keys.
+- Add short jittered retry on first fetch.
+
+Test Plan
+- Contract tests on sessionStore.set/get with cluster env.
+- E2E canary with slot-tagged keys; measure 401 rate over 30 min.
+- Browser matrix: Safari/Chrome/Firefox with cross-site redirects.
+- Chaos test: pod churn + LB hop; confirm no 401.
+""""""
+
+# Bug Report Variant C
+bug_report_c = """"""
+Title
+Regression: intermittent 401 post-OAuth redirect after Redis cluster rollout
+
+Environment
+Prod, EU-West-1; Node 18; Next.js API routes; Redis Cluster (ElastiCache); ALB + sticky disabled
+
+Severity
+High
+
+Steps to Reproduce
+1. Clear cookies; start login at /login.
+2. Complete OAuth; redirected to /auth/callback then /app.
+3. Immediately request /api/me (auto by app).
+4. Observe 401 about 1 in 5 times; retry returns 200.
+
+Expected
+Consistent authenticated session across nodes.
+
+Actual
+401 Unauthorized right after successful OAuth callback.
+
+Logs
+2025-09-19T07:02:11.002Z INFO oauth.callback setSession sid=s:4c1... result=ok store=redis
+2025-09-19T07:02:11.045Z WARN session.read miss sid=s:4c1... shard=3 reason=KeyNotFound
+2025-09-19T07:02:11.046Z ERROR api.me 401 user=unknown detail=NoSession
+
+Root Cause Hypothesis
+- Missing redis key hash tag -> reads/writes routed inconsistently after reshard.
+- Session write not awaited before redirect.
+- Cookie SameSite mismatch with cross-site OAuth (needs None).
+- Expire time too short or racey touch-on-read disabled.
+
+Proposed Fix
+- Use session:{<sid>} hash tag; ensure consistent prefix.
+- Await store.set + expire before redirect.
+- Cookie: SameSite=None; Secure; Domain=.example.com; HttpOnly.
+- Increase TTL to 24h; enable touch on read.
+
+Test Plan
+- Automated: verify set/get with cluster, slot-stability.
+- E2E: 10k login runs; assert 0.5% 401 -> 0%.
+- Canary: 5% traffic, SLO 401 rate <0.2% for 1h.
+- LB hop simulation; verify stable /api/me=200.
+""""""
+
+print(bug_report_a.strip(), ""\n\n---\n\n"", bug_report_b.strip(), ""\n\n---\n\n"", bug_report_c.strip())
+```",2.5
+Participant_C,Unit_Test_Generation_Pytest,1,42.898191928863525,100,"```python
+# test_normalize_email_v1.py
+# Pytest unit tests for normalize_email(s: str) -> str
+
+import pytest
+
+# Assume normalize_email is imported from the target module.
+# Replace 'your_module' with the actual module name where normalize_email is defined.
+from your_module import normalize_email
+
+
+def test_trims_leading_and_trailing_whitespace():
+    assert normalize_email(""  User@Example.com  "") == ""user@example.com""
+
+
+def test_collapses_multiple_internal_spaces():
+    # Expect internal multiple spaces to collapse; placement around @ should be trimmed/collapsed
+    assert normalize_email("" user   name @  example . com "") == ""user name@example . com""
+    assert normalize_email(""a  b@c   d.com"") == ""a b@c d.com""
+
+
+def test_lowercases_local_and_domain_parts():
+    assert normalize_email(""MiXeD.CaSe@ExAmPlE.CoM"") == ""mixed.case@example.com""
+
+
+def test_mixed_whitespace_and_case_normalization():
+    assert normalize_email(""  MiXeD   Name @ ExAmPle.COM  "") == ""mixed name@example.com""
+
+
+def test_empty_string_edge_case():
+    # Empty string does not contain '@' and should be invalid
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+
+def test_missing_at_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email(""not-an-email"")
+
+    with pytest.raises(ValueError):
+        normalize_email("" user name example.com "")
+
+```",5
+Participant_C,API_Documentation_REST,1,45.095505714416504,100,"Output 1
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+Content-Type: application/json
+Body:
+{
+  ""title"": ""Implement OAuth flow"",
+  ""description"": ""Add OAuth 2.0 authorization code flow to the login page."",
+  ""labels"": [""auth"", ""backend""],
+  ""assigneeId"": ""u_92f1c3""
+}
+
+Response Example (201)
+{
+  ""id"": ""iss_7d3a9a"",
+  ""title"": ""Implement OAuth flow"",
+  ""description"": ""Add OAuth 2.0 authorization code flow to the login page."",
+  ""labels"": [""auth"", ""backend""],
+  ""assigneeId"": ""u_92f1c3"",
+  ""createdAt"": ""2025-09-19T12:34:56Z""
+}
+
+Status Codes
+- 201 Created: Issue created.
+- 400 Bad Request: Validation errors (e.g., title missing or length > 120).
+- 401 Unauthorized: Missing/invalid token.
+- 409 Conflict: Issue title already exists in this project.
+
+Notes
+- title is required; 1–120 characters.
+- description is optional; omit or send null/empty string if not used.
+- labels accepts an array of strings; duplicates are ignored.
+- assigneeId is optional; must reference a valid project member if provided.
+- projectId is the path parameter identifying the target project.
+
+
+Output 2
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+Content-Type: application/json
+Body:
+{
+  ""title"": ""Fix payment rounding"",
+  ""description"": ""Totals occasionally differ by $0.01 due to float rounding."",
+  ""labels"": [""bug"", ""payments""],
+  ""assigneeId"": ""user_1234""
+}
+
+Response Example (201)
+{
+  ""id"": ""issue_001245"",
+  ""title"": ""Fix payment rounding"",
+  ""description"": ""Totals occasionally differ by $0.01 due to float rounding."",
+  ""labels"": [""bug"", ""payments""],
+  ""assigneeId"": ""user_1234"",
+  ""createdAt"": ""2025-09-19T10:15:30Z""
+}
+
+Status Codes
+- 201 Created: Returns the created issue.
+- 400 Bad Request: Invalid payload (e.g., labels not array, title too long).
+- 401 Unauthorized: Auth required or expired token.
+- 409 Conflict: Duplicate title within the same project.
+
+Notes
+- Path parameter {projectId} is required.
+- Server may normalize label casing.
+- If assigneeId is not provided, the issue is unassigned (assigneeId omitted or null).
+- Validation errors include field-level messages.
+
+
+Output 3
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+Content-Type: application/json
+Body:
+{
+  ""title"": ""Add dark mode"",
+  ""description"": ""Support system theme and manual toggle."",
+  ""labels"": [""feature"", ""ui""],
+  ""assigneeId"": ""u_567""
+}
+
+Response Example (201)
+{
+  ""id"": ""iss_a1b2c3"",
+  ""title"": ""Add dark mode"",
+  ""description"": ""Support system theme and manual toggle."",
+  ""labels"": [""feature"", ""ui""],
+  ""assigneeId"": ""u_567"",
+  ""createdAt"": ""2025-09-19T08:02:11Z""
+}
+
+Status Codes
+- 201 Created
+- 400 Bad Request (validation error details)
+- 401 Unauthorized
+- 409 Conflict (duplicate title in project)
+
+Notes
+- title: required, 1–120 chars.
+- description: optional string.
+- labels: optional array of strings; empty array allowed.
+- assigneeId: optional; must be a valid user in the project context.
+- On 400, response includes an errors array with field and message per violation.",5
+Participant_C,Refactoring_Rationale_SRP,5,601.7568438053131,50,"Option A
+
+1) Context
+- A 400-line class handles HTTP routing, domain validation/business rules, and database persistence. This violates SRP and separation of concerns, inflating cyclomatic complexity and slowing change.
+
+2) Code Smells
+- God class: routing + validation + SQL tightly coupled.
+- High cyclomatic complexity: many branches for status codes, validation paths, and DB error handling.
+- Shotgun surgery: changing a rule or schema forces edits across unrelated concerns.
+- Low testability: hard to isolate routing vs. business logic vs. persistence.
+
+3) Proposed Refactor
+- Extract Router: map endpoints to service calls; translate exceptions to HTTP responses.
+- Extract Service: encapsulate validation and business rules; return domain results or typed errors.
+- Extract Repository: interface + implementation for DB access; no HTTP or business logic.
+- Add unit tests at boundaries: Router–Service contract, Service logic, Repository queries (with fakes).
+- Introduce dependency injection and interfaces to invert dependencies.
+
+4) Risks & Mitigations
+- Behavior drift: add golden master/characterization tests before changes.
+- Performance regressions: measure baseline, add simple caching where needed, keep transactions in repo.
+- Integration breakage: stage behind feature flag; canary deploy; contract tests for endpoints.
+- Over-abstraction: keep interfaces minimal, evolve with usage.
+
+5) Acceptance Criteria
+- No behavior change: all existing endpoint behaviors preserved (status codes, payloads).
+- Cyclomatic complexity reduced by ≥40% in former class; no class exceeding agreed threshold.
+- Router contains only HTTP concerns; Service only validation/business rules; Repository only persistence.
+- Unit test coverage ≥80% for Service and Repository; Router tested with lightweight request/response stubs.
+- Clear interfaces and DI wiring; code passes lint, CI, and contract tests.
+
+—
+
+Option B
+
+1) Context
+- Monolithic controller intertwines HTTP routing, validation/business logic, and DB I/O. SRP breach and poor separation of concerns increase defects and maintenance cost.
+
+2) Code Smells
+- High cyclomatic complexity due to nested conditionals and mixed error handling.
+- Tight coupling to ORM/SQL in request handlers.
+- Duplicated validation scattered across methods.
+- Hard-to-mock dependencies, weak unit tests.
+
+3) Proposed Refactor
+- Router layer: endpoint definitions, request parsing, response mapping, error translation.
+- Service layer: domain validation, orchestration, transactions via repository boundaries.
+- Repository layer: persistence API with interfaces; implementations for DB.
+- Tests: characterization tests first; unit tests per layer; contract tests for Router–Service and Service–Repository.
+
+4) Risks & Mitigations
+- Hidden side effects: document and capture with characterization tests and logs.
+- Transactional integrity: centralize in Service or Repository with clear boundaries; add integration tests.
+- Team learning curve: provide ADR and refactor guide.
+- Rollout risk: feature flag and phased migration per endpoint.
+
+5) Acceptance Criteria
+- All endpoints maintain current inputs/outputs and status codes.
+- Measurable reduction in cyclomatic complexity and file size; no class mixes concerns.
+- Repository free of HTTP types; Router free of DB calls; Service free of transport details.
+- Unit and contract tests added; CI green; performance within ±5% baseline.
+
+—
+
+Option C
+
+1) Context
+- A single 400-line module performs routing, business validation, and DB persistence. This violates SRP and separation of concerns, causing brittleness.
+
+2) Code Smells
+- God object, excessive cyclomatic complexity, long methods.
+- Mixed abstractions and duplicated rules.
+- Implicit coupling to HTTP and DB frameworks.
+- Difficult, slow testing; reliance on end-to-end tests.
+
+3) Proposed Refactor
+- Create Router: maps HTTP to service calls; central error mapping.
+- Create Service: pure business functions; validates input; throws/returns domain errors.
+- Create Repository: interface for data access; concrete DB implementation; no business logic.
+- Add boundary tests: Router unit tests (HTTP->service contract), Service unit tests (rules), Repository tests (SQL via test DB or fakes).
+
+4) Risks & Mitigations
+- Regression risk: golden master tests; incremental extraction per endpoint.
+- Interface churn: keep interfaces small; version them if needed.
+- Performance: baseline profiling; avoid excessive allocations; combine queries in repo.
+- Operational surprises: add observability at each layer.
+
+5) Acceptance Criteria
+- SRP honored: each layer owns a single responsibility.
+- Separation of concerns enforced by module boundaries.
+- Cyclomatic complexity reduced and tracked in CI.
+- Unit tests around boundaries with ≥80% coverage; endpoints behave identically to pre-refactor.
+- Clear DI wiring and documentation (ADR).",2.5
+Participant_C,Commit_Message_Normalization,5,211.0955023765564,75,"feat(client): add retry and timeouts [JIRA-1234]
+Introduce configurable retries and per-request timeouts to improve
+resilience under transient failures and slow upstreams. Defaults are
+conservative and can be tuned via env vars to balance latency and
+reliability in varied deployment environments.
+
+fix(usersvc): avoid NPE when roles missing [JIRA-1234]
+Guard role resolution with null/empty checks and default to an empty
+set when no roles are present. This prevents runtime crashes for edge
+accounts and ensures consistent authorization paths under sparse data.
+
+feat(api): bump to v2 and update docs [JIRA-1234]
+Promote the API to v2 with adjusted endpoints and response shapes, and
+refresh the reference docs and migration notes. This formalizes recent
+breaking changes and guides clients through a smooth upgrade path.
+
+refactor(build): tidy code and reformat [JIRA-1234]
+Apply consistent formatting, remove dead code, and standardize imports
+across modules. No functional changes; this improves readability and
+maintainability, easing future reviews and reducing merge friction.
+
+test(api): temporarily skip flaky test [JIRA-1234]
+Quarantine an intermittently failing test to stabilize CI while we
+investigate timing and ordering issues. Adds a TODO link for follow-up
+and preserves coverage by keeping adjacent cases enabled.",3.8
+Participant_C,Bug_Report_Triage_Template,5,737.9668290615082,50,"```python
+reports = [
+  {
+    ""Title"": ""Intermittent 401 After OAuth Callback Post Redis Session Store Rollout"",
+    ""Environment"": ""Prod (us-east-1), Node.js 18, Nginx ingress, Redis Cluster (3 shards), OAuth2 (Auth0), Kubernetes rolling deploy"",
+    ""Severity"": ""High"",
+    ""Steps to Reproduce"": [
+      ""1) Open app, click Login."",
+      ""2) Complete OAuth with provider; redirect to /auth/callback."",
+      ""3) Observe brief logged-in state, then navigate to any protected route."",
+      ""4) Intermittently receive 401 within 1–3 requests.""
+    ],
+    ""Expected"": ""Stable authenticated session persists after OAuth callback; protected routes return 200."",
+    ""Actual"": ""Users intermittently receive 401 immediately or shortly after successful OAuth, despite receiving session cookie."",
+    ""Logs"": """"""[2025-09-19T02:11:03Z] INFO oauth: callback success user_id=auth0|abc ip=203.0.113.10
+[2025-09-19T02:11:03Z] INFO session: set key=sess:7f3c... ttl=3600 node=redis-2
+[2025-09-19T02:11:04Z] WARN session: get miss key=sess:7f3c... node=redis-1
+[2025-09-19T02:11:04Z] WARN auth: validate failed reason=session_not_found status=401
+Nginx: upstream 401 for GET /api/me cookie=sid=xyz; SameSite=Lax; Domain=.example.com"""""",
+    ""Root Cause Hypothesis"": ""Session stickiness/replication issue in Redis Cluster: sessions set on one shard/node not found on subsequent reads due to incorrect key hashing or missing prefix; also possible cookie Domain/SameSite mismatch across subdomains causing inconsistent sid."",
+    ""Proposed Fix"": [
+      ""- Use consistent hashing/prefixing: configure session store with a stable keyPrefix (e.g., sess:)."",
+      ""- Pin to single Redis logical DB without cluster key tags, or add hash tags {sid:<id>} to ensure same slot."",
+      ""- Enable client-side cookie settings: Domain=.example.com; SameSite=None; Secure for cross-site OAuth redirect."",
+      ""- Verify and enable Redis replication + wait for write (WAIT 1 100) or use sticky reads to primary."",
+      ""- Configure ingress/session affinity or ensure stateless auth middleware only relies on Redis, not memory.""
+    ],
+    ""Test Plan"": [
+      ""- Unit: verify key generation uses {sid:<id>} and prefix sess:."",
+      ""- Integration (staging with Redis Cluster): login 100x via OAuth; assert 0 401 within 10m."",
+      ""- Chaos: route reads across all pods; confirm session hit rate ~100%."",
+      ""- Cookie audits: validate Domain, Secure, SameSite=None during OAuth redirect."",
+      ""- Load test: 1k rps for /api/me post-login; error rate <0.1%.""
+    ]
+  },
+  {
+    ""Title"": ""OAuth Login Regression: Post-Callback 401s with Redis-Backed Sessions"",
+    ""Environment"": ""Staging & Prod, Kubernetes, Node 18, Express-session + connect-redis, Redis Cluster (AWS ElastiCache), Auth0"",
+    ""Severity"": ""High"",
+    ""Steps to Reproduce"": [
+      ""1) Deploy build with Redis session store."",
+      ""2) Perform OAuth login and return to app."",
+      ""3) Immediately refresh or open a new tab to a protected endpoint."",
+      ""4) Observe intermittent 401 despite session cookie present.""
+    ],
+    ""Expected"": ""Session available across pods; protected endpoints consistently authorized."",
+    ""Actual"": ""Authorization middleware reports missing/expired session; user sees 401 intermittently."",
+    ""Logs"": """"""[02:14:22.512] callback OK uid=auth0|xyz sessId=8b12...
+[02:14:22.514] redis SET sess:8b12... ttl=3600 slot=4213 node=cluster-a
+[02:14:22.980] redis GET sess:8b12... miss slot=9102 node=cluster-b
+[02:14:22.981] auth middleware -> 401 reason=missing_session cookie_sid=8b12..."""""",
+    ""Root Cause Hypothesis"": ""Key slot mismatch due to lack of hash tags in session keys causing cross-slot reads; or proxy/pod sends GET to a different node without proper cluster routing; cookie SameSite/Domain misconfig may drop cookie on redirect."",
+    ""Proposed Fix"": [
+      ""- Configure connect-redis to use key hashing with tags: sess:{<sid>}."",
+      ""- Ensure Redis client is cluster-aware and not using node-specific connections."",
+      ""- Set cookie: SameSite=None; Secure; Domain=.example.com."",
+      ""- Add health check to verify read-after-write on the same key; enable 'disableTouch' if touch causes cross-shard writes.""
+    ],
+    ""Test Plan"": [
+      ""- Automated e2e: 500 login cycles; assert no 401 within 5 minutes post-login."",
+      ""- Validate Redis keys distribution and slot consistency via CLUSTER KEYSLOT."",
+      ""- Cross-pod routing test with session affinity off; verify consistent GET hits."",
+      ""- Security/cookie scanner to confirm flags on callback response.""
+    ]
+  },
+  {
+    ""Title"": ""Login Flow Regression: Intermittent 401 After OAuth Callback with Redis Cluster"",
+    ""Environment"": ""Prod, EU region; Nginx + Express; Redis Cluster 7.x; Rolling update 2025-09-18 23:40 UTC"",
+    ""Severity"": ""High"",
+    ""Steps to Reproduce"": [
+      ""1) Clear cookies, start OAuth login."",
+      ""2) Complete provider auth; redirected to /auth/callback."",
+      ""3) Navigate to /api/me or refresh within 1–5s."",
+      ""4) Randomly receive 401.""
+    ],
+    ""Expected"": ""After callback, session is reliably persisted and recognized."",
+    ""Actual"": ""Session appears created but subsequent read intermittently fails, yielding 401."",
+    ""Logs"": """"""2025-09-19T00:02:17Z callback success sid=3cfa...
+2025-09-19T00:02:17Z redis write ok key=sess:3cfa... ttl=3600 node=shard-1
+2025-09-19T00:02:18Z redis read miss key=sess:3cfa... node=shard-3
+2025-09-19T00:02:18Z 401 GET /api/me user=anon reason=session_not_found"""""",
+    ""Root Cause Hypothesis"": ""Cluster key hashing inconsistency and missing hash tags; potential cookie scoping issue across subdomains during OAuth redirect; race on touch/rotate causing key move."",
+    ""Proposed Fix"": [
+      ""- Adopt key pattern sess:{sid:<id>} to keep writes/reads in the same slot."",
+      ""- Disable rolling key rotation on immediate post-callback requests or ensure atomic rotate."",
+      ""- Enforce cookie flags: Domain=.example.com; Path=/; HttpOnly; Secure; SameSite=None."",
+      ""- Verify Redis client cluster mode and replica reads disabled for sessions.""
+    ],
+    ""Test Plan"": [
+      ""- Reproduce in staging with identical cluster topology; run 1k callbacks."",
+      ""- Monitor GET hit/miss ratio; must be >99.9% hits within 5s of write."",
+      ""- Validate cookie propagation via HAR; confirm flags."",
+      ""- Run canary in prod with 5% traffic; error budget <0.1% 401 on authenticated routes.""
+    ]
+  }
+]
+```",2.5
+Participant_D,Unit_Test_Generation_Pytest,1,34.676950454711914,100,"```python
+# test_normalize_email_v1.py
+import pytest
+
+# Assume normalize_email is imported from the target module
+# from your_module import normalize_email
+
+def normalize_email(s: str) -> str:
+    """"""Stub for testing context; replace with real import in actual use.""""""
+    # This is a naive placeholder to allow tests to run during illustration.
+    # Replace with: from your_module import normalize_email
+    if ""@"" not in s:
+        raise ValueError(""missing @"")
+    # collapse spaces, strip, lower both parts
+    collapsed = "" "".join(s.split())
+    local, domain = collapsed.split(""@"", 1)
+    return f""{local.strip().lower()}@{domain.strip().lower()}""
+
+
+def test_trims_leading_and_trailing_whitespace():
+    assert normalize_email(""   Alice@example.com  "") == ""alice@example.com""
+    assert normalize_email(""\nBob@Example.ORG\t"") == ""bob@example.org""
+
+
+def test_lowercases_local_and_domain_mixed_case():
+    assert normalize_email(""MiXeD@DoMaIn.COM"") == ""mixed@domain.com""
+    assert normalize_email(""UPPER.lower@MiXeD.CaSe"") == ""upper.lower@mixed.case""
+
+
+def test_collapses_multiple_internal_spaces():
+    # Spaces around the email collapse, not inside local/domain since those are invalid; test robustness
+    assert normalize_email(""   Carol@Example.com   "") == ""carol@example.com""
+    # Multiple spaces between tokens become single space before split
+    assert normalize_email(""   dave@Example.com    "") == ""dave@example.com""
+
+
+def test_handles_spaces_around_at_and_inside_input():
+    # Spaces around @ should be trimmed and collapsed
+    assert normalize_email("" eve  @  Example.COM "") == ""eve@example.com""
+    # Tabs and multiple spaces
+    assert normalize_email(""\t frank\t@\tEXAMPLE.net  "") == ""frank@example.net""
+
+
+def test_empty_string_is_edge_case_and_invalid():
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+
+def test_missing_at_raises_value_error():
+    for bad in [""noatsign"", ""example.com"", ""user at example.com"", ""   ""]:
+        with pytest.raises(ValueError):
+            normalize_email(bad)
+```",5
+Participant_D,API_Documentation_REST,1,57.2761435508728,100,"Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+Content-Type: application/json
+Path params:
+- projectId: string (required)
+
+Body:
+- title: string (required, 1-120 chars)
+- description: string (optional)
+- labels: array of strings (optional)
+- assigneeId: string (optional)
+
+Example:
+{
+  ""title"": ""Cannot save draft after network hiccup"",
+  ""description"": ""When the connection drops briefly, the draft fails to auto-save and errors persist."",
+  ""labels"": [""bug"", ""autosave"", ""high-priority""],
+  ""assigneeId"": ""user_9f3b12""
+}
+
+Response Example (201)
+{
+  ""id"": ""iss_7c2a8d"",
+  ""title"": ""Cannot save draft after network hiccup"",
+  ""description"": ""When the connection drops briefly, the draft fails to auto-save and errors persist."",
+  ""labels"": [""bug"", ""autosave"", ""high-priority""],
+  ""assigneeId"": ""user_9f3b12"",
+  ""createdAt"": ""2025-09-19T14:22:31Z""
+}
+
+Status Codes
+- 201 Created: Issue created; returns issue object.
+- 400 Bad Request: Validation errors (e.g., title missing or length out of bounds).
+- 401 Unauthorized: Missing/invalid bearer token.
+- 409 Conflict: Duplicate title within the same project.
+
+Notes
+- Title must be unique per project; comparison is case-insensitive and trims whitespace.
+- If labels are omitted, an empty array is assumed.
+- If assigneeId is omitted or invalid, the issue is created unassigned.
+- Timestamps are ISO 8601 UTC.
+
+
+
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+Content-Type: application/json
+Path params:
+- projectId: string (required)
+
+Body:
+- title: string (required, 1-120 chars)
+- description: string (optional)
+- labels: array of strings (optional)
+- assigneeId: string (optional)
+
+Example:
+{
+  ""title"": ""Dark mode contrast too low on buttons"",
+  ""description"": ""Buttons in dark mode have insufficient contrast against the background."",
+  ""labels"": [""design"", ""a11y""],
+  ""assigneeId"": ""usr_42ab77""
+}
+
+Response Example (201)
+{
+  ""id"": ""issue_01J8Z2N7Q3K7Q7B6Z3E2M1V9C4"",
+  ""title"": ""Dark mode contrast too low on buttons"",
+  ""description"": ""Buttons in dark mode have insufficient contrast against the background."",
+  ""labels"": [""design"", ""a11y""],
+  ""assigneeId"": ""usr_42ab77"",
+  ""createdAt"": ""2025-09-19T08:04:12.581Z""
+}
+
+Status Codes
+- 201 Created: Returns created issue.
+- 400 Bad Request: Invalid payload; includes field-level errors.
+- 401 Unauthorized: Bearer token missing/invalid/expired.
+- 409 Conflict: An issue with this title already exists in the project.
+
+Notes
+- Title is trimmed before validation; empty after trim is invalid.
+- Labels accept duplicates in the request but are stored unique and case-sensitive.
+- createdAt reflects server time in UTC.
+- On 400, the response body includes a machine-readable errors array per field.",5
+Participant_D,Refactoring_Rationale_SRP,5,472.20331859588623,100,"```python
+outputs = [
+""""""1) Context
+A 400-line module mixes HTTP routing, domain validation, and database persistence. It violates the Single Responsibility Principle (SRP), inflates cyclomatic complexity, and blurs separation of concerns, slowing feature delivery and increasing defect risk.
+
+2) Code Smells
+- God class: routing, business rules, and DB code interleaved.
+- High cyclomatic complexity in request handlers.
+- Tight coupling to framework and DB driver.
+- Low testability; no unit seams.
+- Implicit transactions and scattered validation logic.
+
+3) Proposed Refactor
+- Extract Router: map endpoints to service calls; handle HTTP concerns, request/response shaping, and error mapping.
+- Extract Service: encapsulate validation and business rules; enforce invariants; return typed results/errors.
+- Extract Repository: isolate persistence (CRUD, transactions); expose interfaces for mocking.
+- Introduce DTOs and mappers between layers.
+- Add unit tests around boundaries: Router↔Service, Service↔Repository.
+- Incremental strangler approach: route-by-route migration with feature flags.
+
+4) Risks & Mitigations
+- Risk: Behavior drift. Mitigate with characterization tests and golden responses.
+- Risk: Performance regressions. Mitigate with baseline benchmarks and tracing.
+- Risk: Integration breakage. Mitigate with contract tests and consumer-driven mocks.
+- Risk: Over-abstraction. Mitigate by evolving interfaces only for demonstrated needs.
+
+5) Acceptance Criteria
+- Code split into Router, Service, Repository with clear separation of concerns.
+- Cyclomatic complexity of any method ≤ 10; class sizes reduced by >50%.
+- Unit tests cover: Router (HTTP→Service mapping), Service (validation/business rules), Repository (CRUD with test DB or mocks).
+- Integration tests green; no external API contract changes.
+- SRP explicitly satisfied; new endpoints follow the same pattern."""""",
+""""""1) Context
+The monolithic controller entangles routing, validation/business rules, and persistence. This breaches SRP, increases cyclomatic complexity, and undermines separation of concerns, making changes risky and testing hard.
+
+2) Code Smells
+- Mixed abstraction levels (HTTP parsing next to SQL).
+- Duplicate validation scattered across handlers.
+- Long methods with many branches.
+- Hidden side effects and implicit transactions.
+- Inflexible to swap DB or framework.
+
+3) Proposed Refactor
+- Router layer: HTTP concerns only (routing, status codes, serialization, auth), delegates to Service.
+- Service layer: domain validation and business rules; orchestrates repositories; returns result objects.
+- Repository layer: persistence behind interfaces; parameterized queries; transaction helpers.
+- Cross-cutting: error taxonomy, logging/tracing, DTOs.
+- Add boundary-focused unit tests; use fakes/mocks to isolate layers.
+
+4) Risks & Mitigations
+- Scope creep: time-box per endpoint; track parity checklist.
+- Test gaps: create characterization tests before changes.
+- Data access bugs: add repository contract tests with a containerized DB.
+- Latency changes: measure and budget per call; profile hot paths.
+
+5) Acceptance Criteria
+- Clear separation of concerns across Router/Service/Repository.
+- Measurable drop in cyclomatic complexity and function length.
+- 90%+ unit test coverage on Service and Repository; Router contract tests per route.
+- Backward-compatible HTTP behavior; zero regression in integration suite.
+- SRP adherence documented; templates for new endpoints provided.""""""
+]
+```",5
+Participant_D,Commit_Message_Normalization,1,31.71861505508423,100,"feat(client): add retry and timeouts [JIRA-1234]
+Introduce configurable retry policy and request timeouts to improve
+resilience against transient network failures and slow upstreams. This
+reduces user-facing errors, smooths spikes, and provides safer defaults
+while allowing override for advanced scenarios.
+
+fix(usersvc): guard against NPE when roles missing [JIRA-1234]
+Add null/empty checks and safe defaults when user role data is absent to
+prevent NullPointerExceptions during authorization. This ensures stable
+behavior for edge accounts and improves overall service robustness.
+
+feat(api): migrate to v2 and update docs [JIRA-1234]
+Promote API v2 with revised endpoints and semantics, deprecating v1
+paths. Updated reference docs and examples guide clients through changes
+and highlight migration steps to maintain compatibility.
+
+refactor(build): tidy code and reformat [JIRA-1234]
+Apply consistent formatting, remove dead code, and standardize imports
+to improve readability and maintainability. No functional behavior is
+changed; this prepares the codebase for future enhancements.
+
+test(api): temporarily disable flaky test [JIRA-1234]
+Quarantine a consistently failing, non-deterministic test to stabilize
+the pipeline while root cause analysis proceeds. A follow-up will
+re-enable the test with a deterministic strategy once fixed.
+
+---
+
+feat(client): implement retries and timeouts [JIRA-1234]
+Add exponential backoff retries and request timeouts to the client to
+mitigate transient failures and slow responses. This enhances reliability
+under load and provides tunable controls for different deployment needs.
+
+fix(usersvc): handle missing roles safely [JIRA-1234]
+Protect role-dependent logic with null checks and defaults to avoid
+runtime NPEs when role data is unavailable. This yields predictable
+authorization outcomes and prevents service errors.
+
+docs(api): update for v2 changes [JIRA-1234]
+Refresh API documentation to reflect v2 endpoints, parameter changes,
+and deprecations. Includes migration guidance and examples to ease
+client updates and reduce integration friction.
+
+refactor(core): code tidy and reformat [JIRA-1234]
+Reformat sources, simplify expressions, and remove unused symbols to
+align with style guidelines. These non-functional changes reduce noise
+in diffs and support clearer future reviews.
+
+test(api): skip flaky case temporarily [JIRA-1234]
+Mark an unstable test as skipped to unblock CI while investigation is
+ongoing. We will reintroduce a stable version once the underlying race
+condition is resolved.",5
+Participant_D,Bug_Report_Triage_Template,5,639.5144624710083,50,"```python
+reports = [
+  {
+    ""Title"": ""Intermittent 401 after OAuth callback post Redis session rollout"",
+    ""Environment"": ""Prod | Web app v3.14.2 | Auth svc v2.9.0 | Redis Cluster (6.2) with 3 shards | Nginx ingress | EU/US regions"",
+    ""Severity"": ""High"",
+    ""Steps to Reproduce"": [
+      ""1) Log out if currently logged in."",
+      ""2) Start login with OAuth provider (Google)."",
+      ""3) Complete consent; get redirected to /auth/callback."",
+      ""4) Within 1–2 seconds, navigate to /dashboard or allow auto-redirect."",
+      ""5) Observe intermittent 401 on the first authenticated API request.""
+      ],
+    ""Expected"": ""Session established after callback; authenticated requests succeed."",
+    ""Actual"": ""First request after callback intermittently returns 401; refresh often fixes it."",
+    ""Logs"": """"""[2025-09-19T07:14:12.224Z] auth-callback INFO user=uid_42 state=ok issued_session=abc123 ttl=3600
+[2025-09-19T07:14:12.231Z] api-gw DEBUG cookie=session=abc123
+[2025-09-19T07:14:12.232Z] session-store WARN get miss key=session:abc123 shard=2
+[2025-09-19T07:14:12.233Z] api-gw WARN 401 user=unknown reason=session_not_found
+[2025-09-19T07:14:12.540Z] session-store INFO set key=session:abc123 shard=1 ok
+"""""",
+    ""Root Cause Hypothesis"": ""- Race between session write and subsequent read due to cross-shard routing or eventual consistency; session key hashed to shard=1 but read routed to shard=2 before cluster propagation. Possible misconfigured client-side hash/tag or missing WAIT/replica sync. Sticky routing not aligned between writer (auth svc) and reader (api-gw)."",
+    ""Proposed Fix"": ""- Use Redis hash tags to pin session keys to a deterministic slot ({sess:abc123}). Ensure both auth svc and api-gw use identical key derivation. Add write-then-confirm (e.g., WAIT 1 50ms) or use Redis transactions with immediate availability. Enable session read-repair on miss by retrying primary node. Optionally enable Nginx auth_request retry with small backoff (50–100ms)."",
+    ""Test Plan"": [
+      ""- Unit: verify key builder produces identical tagged keys across services."",
+      ""- Integration: simulate callback->API within 0–200ms; assert zero 401 in 10k runs."",
+      ""- Chaos: introduce shard failover; confirm no increased 401."",
+      ""- Load: 5k logins/min; p95 401 rate = 0%."",
+      ""- Canary in one region; monitor 401s, session get_miss, and Redis MOVED/ASK metrics.""
+    ]
+  },
+  {
+    ""Title"": ""401 after successful OAuth callback due to Redis session cluster migration"",
+    ""Environment"": ""Staging & Prod after 2025-09-18 23:00 UTC rollout | Node API v18 runtime | Redis Cluster 3-node primary/replica | Istio mTLS"",
+    ""Severity"": ""High"",
+    ""Steps to Reproduce"": [
+      ""1) Clear cookies."",
+      ""2) Initiate OAuth via /login?provider=google."",
+      ""3) Approve consent and return to /auth/callback."",
+      ""4) Immediately trigger /api/me via SPA bootstrap."",
+      ""5) Repeat rapidly (10–20 times) to observe intermittent 401.""
+    ],
+    ""Expected"": ""Post-callback session readable; /api/me returns 200 with user profile."",
+    ""Actual"": ""Intermittent 401 on /api/me; subsequent retry within ~300ms returns 200."",
+    ""Logs"": """"""[2025-09-19T05:02:48.101Z] auth-svc INFO set session key=session:{sess:7f9e} ok node=shardA
+[2025-09-19T05:02:48.104Z] edge INFO req /api/me cookie=session=7f9e
+[2025-09-19T05:02:48.104Z] session-adapter WARN get miss key=session:{sess:7f9e} node=shardB
+[2025-09-19T05:02:48.405Z] session-adapter INFO retry get key=session:{sess:7f9e} hit node=shardA
+"""""",
+    ""Root Cause Hypothesis"": ""- Mismatch in Redis client slot calculation between auth-svc and edge (different hash-tag usage or missing cluster slot cache refresh). Initial reads hit wrong shard until topology refresh; also possible replica-read before replication completes."",
+    ""Proposed Fix"": ""- Align Redis client config: enforce clusterSlotRefreshInterval=1s and disable replica reads for session keys. Standardize key namespace with hash tag {sess:<id>}. Add short jittered retry (1–2 attempts, 50ms) on session miss post-callback."",
+    ""Test Plan"": [
+      ""- Contract tests ensuring identical key derivation across services."",
+      ""- E2E: login 20k iterations; assert 0 intermittent 401."",
+      ""- Topology churn test: force MOVED/ASK; confirm client re-slotting without 401."",
+      ""- Metrics SLO: 0% 401 within 5 minutes post-deploy in canary.""
+    ]
+  },
+  {
+    ""Title"": ""Post-OAuth 401 regression tied to Redis-backed session store"",
+    ""Environment"": ""Prod only | SPA + API Gateway | OAuth via Google | Redis Cluster 6.x | Deploy window: last night"",
+    ""Severity"": ""High"",
+    ""Steps to Reproduce"": [
+      ""1) Open private window."",
+      ""2) Perform OAuth login."",
+      ""3) On redirect, the SPA calls /api/session and /api/me concurrently."",
+      ""4) Observe occasional 401 on one of the calls.""
+    ],
+    ""Expected"": ""All immediate post-login API calls succeed with a valid session."",
+    ""Actual"": ""One or more initial calls return 401; refreshing page resolves."",
+    ""Logs"": """"""[2025-09-19T06:27:31.889Z] auth INFO session created id=cf12 exp=3600 write_latency=7ms
+[2025-09-19T06:27:31.892Z] gateway DEBUG cookie=session=cf12
+[2025-09-19T06:27:31.892Z] redis WARN read miss key=session:cf12 replica=true
+[2025-09-19T06:27:31.893Z] gateway WARN 401 path=/api/me reason=session_miss
+"""""",
+    ""Root Cause Hypothesis"": ""- Gateway configured to read from replicas; replication lag causes miss immediately after write. Concurrent calls exacerbate due to racing read of not-yet-replicated data."",
+    ""Proposed Fix"": ""- Force primary reads for session keys. Mark session writes with strong consistency path and add 50–100ms backoff before first SPA fetch or implement a single bootstrap /api/bootstrap that fetches after server-side verification."",
+    ""Test Plan"": [
+      ""- Config check: ensure readFrom=primary for session client."",
+      ""- E2E happy path: 5k sequential logins no 401."",
+      ""- Concurrency: parallel 5 calls post-callback; expect 0 misses."",
+      ""- Replication lag injection: 200ms artificial delay; verify no 401 with primary reads.""
+    ]
+  }
+]
+```",2.5
+Participant_E,Unit_Test_Generation_Pytest,1,44.93746829032898,100,"```python
+# test_normalize_email_v1.py
+# Pytest unit tests for normalize_email(s: str) -> str
+
+import pytest
+
+# Assume normalize_email is imported from the module under test.
+# from your_module import normalize_email
+
+def normalize_email(s: str) -> str:  # stub for illustration; replace with real import in actual use
+    # Example reference implementation to allow tests to run if needed.
+    if ""@"" not in s:
+        raise ValueError(""missing @"")
+    # collapse internal whitespace
+    collapsed = "" "".join(s.split())
+    local, domain = collapsed.split(""@"", 1)
+    local = local.strip().lower()
+    domain = domain.strip().lower()
+    return f""{local}@{domain}""
+
+def test_trims_leading_and_trailing_whitespace():
+    assert normalize_email(""   User@Example.com   "") == ""user@example.com""
+
+def test_collapses_multiple_internal_spaces():
+    assert normalize_email("" user   name @  example   .COM "") == ""username@example.com""
+
+def test_mixed_case_local_and_domain_are_lowercased():
+    assert normalize_email(""MiXeD.Local@MiXeD.DOMAIN"") == ""mixed.local@mixed.domain""
+
+def test_preserves_single_internal_characters_but_removes_spaces():
+    assert normalize_email("" A  .  B @ Ex Am Ple . Co M "") == ""a.b@example.com""
+
+def test_empty_string_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+def test_missing_at_symbol_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email(""no-at-symbol.example.com"")
+
+def test_only_spaces_behaves_like_missing_at_and_raises():
+    with pytest.raises(ValueError):
+        normalize_email(""     "")
+```",5
+Participant_E,API_Documentation_REST,1,58.119582176208496,100,"Output 1
+
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+JSON body:
+{
+  ""title"": ""string, required, 1–120 chars"",
+  ""description"": ""string, optional"",
+  ""labels"": [""string""],
+  ""assigneeId"": ""string, optional""
+}
+
+Path params:
+- projectId: string or UUID identifying the project
+
+JSON request example:
+{
+  ""title"": ""Cannot save draft on mobile"",
+  ""description"": ""Steps to reproduce...\n1) Open app\n2) ..."",
+  ""labels"": [""bug"", ""mobile""],
+  ""assigneeId"": ""user_93f2a1""
+}
+
+Response Example (201)
+{
+  ""id"": ""iss_7a3b2f"",
+  ""title"": ""Cannot save draft on mobile"",
+  ""description"": ""Steps to reproduce...\n1) Open app\n2) ..."",
+  ""labels"": [""bug"", ""mobile""],
+  ""assigneeId"": ""user_93f2a1"",
+  ""createdAt"": ""2025-09-19T12:45:33Z""
+}
+
+Status Codes
+- 201 Created: Issue created; issue object returned
+- 400 Bad Request: Validation failed (e.g., title missing or >120 chars)
+- 401 Unauthorized: Missing/invalid bearer token
+- 409 Conflict: An issue with the same title already exists in this project
+
+Notes
+- Title must be unique within the project (case-insensitive match).
+- labels accepts an empty array; omit or send [] for no labels.
+- If assigneeId is provided, it must reference a valid project member.
+- createdAt is UTC ISO-8601.
+- On 400, response includes a list of field errors with codes and messages.
+
+
+Output 2
+
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+Body (application/json):
+{
+  ""title"": ""required, string, 1-120 chars"",
+  ""description"": ""optional, string"",
+  ""labels"": [""string""],
+  ""assigneeId"": ""optional, string""
+}
+
+JSON request example:
+{
+  ""title"": ""Add pagination to activity feed"",
+  ""description"": ""Implement cursor-based pagination for infinite scroll."",
+  ""labels"": [""enhancement"", ""backend""],
+  ""assigneeId"": ""u_12ab34""
+}
+
+Response Example (201)
+{
+  ""id"": ""iss_01HZY3C8VZ9J4SM2B0N6G9Z8QK"",
+  ""title"": ""Add pagination to activity feed"",
+  ""description"": ""Implement cursor-based pagination for infinite scroll."",
+  ""labels"": [""enhancement"", ""backend""],
+  ""assigneeId"": ""u_12ab34"",
+  ""createdAt"": ""2025-09-19T08:21:17Z""
+}
+
+Status Codes
+- 201 Created: Returns the newly created issue
+- 400 Bad Request: Invalid input (e.g., labels not array, title length)
+- 401 Unauthorized: Authentication required or token invalid
+- 409 Conflict: Duplicate title within the specified project
+
+Notes
+- projectId is required in the path and must refer to an existing project.
+- Title is trimmed server-side before validation and duplicate checks.
+- If description is omitted, it defaults to an empty string.
+- Unknown fields are ignored.
+- 400 responses include error details per field: path, message, and code.",5
+Participant_E,Refactoring_Rationale_SRP,5,514.0024390220642,75,"```python
+outputs = [
+""""""1) Context
+A 400-line class currently mixes HTTP routing, domain validation/business rules, and database persistence. This violates the Single Responsibility Principle (SRP) and blurs separation of concerns, making changes risky, tests brittle, and onboarding difficult.
+
+2) Code Smells
+- High cyclomatic complexity in controller methods (conditionals for validation, branching for DB errors).
+- Tight coupling of transport (HTTP), domain logic, and persistence details.
+- Low cohesion: unrelated responsibilities cohabiting the same class.
+- Difficult testability: requires setting up HTTP and DB for any unit test.
+- Shotgun surgery: minor feature tweaks ripple through routing, validation, and SQL.
+
+3) Proposed Refactor
+- Extract Router: thin HTTP layer mapping endpoints to service calls; handles request/response translation and status codes only.
+- Extract Service: encapsulates validation and business rules; enforces invariants and orchestrates repositories; pure functions where possible.
+- Extract Repository: persistence boundary; CRUD and query logic hidden behind an interface; swap DB without touching service or router.
+- Introduce boundary unit tests:
+  - Router tests: request/response mapping and error-to-status translation (mock Service).
+  - Service tests: domain rules and validation with mocked Repository; measure reduced cyclomatic complexity.
+  - Repository tests: integration against test DB or in-memory substitute.
+- Add contracts and DTOs to stabilize interfaces across layers.
+- Incremental migration: carve out one endpoint at a time, keeping old class as a façade until parity achieved.
+
+4) Risks & Mitigations
+- Risk: Behavior drift during extraction. Mitigation: characterize current behavior with golden tests and approval snapshots before refactor.
+- Risk: Over-abstraction. Mitigation: introduce minimal interfaces; evolve only with demonstrated needs.
+- Risk: Performance regressions due to extra layers. Mitigation: micro-bench hot paths; keep pass-through methods lean; cache where appropriate in Service.
+- Risk: Test fragility. Mitigation: focus on boundary tests, avoid mocking internals; pin contract tests for DTOs.
+
+5) Acceptance Criteria
+- SRP and separation of concerns achieved: Router, Service, and Repository exist and compile independently.
+- Cyclomatic complexity reduced by at least 30% in the former monolith’s core logic, validated via static analysis.
+- 90%+ unit test coverage at boundaries (Router->Service, Service with mocked Repository, Repository integration).
+- No functional regressions: all pre-refactor tests and golden approvals pass.
+- Clear interfaces: Router depends only on Service contracts; Service depends only on Repository interface; Repository has no knowledge of HTTP.
+- Documentation updated: module README diagrams the layers and test strategy."""""",
+
+""""""1) Context
+Our monolithic handler interleaves endpoint wiring, domain validation, and SQL operations in a single 400-line class. This breaks SRP and hampers separation of concerns, slowing delivery and complicating reviews.
+
+2) Code Smells
+- Elevated cyclomatic complexity from nested validation and error handling.
+- Feature envy and tight coupling between HTTP details and DB schemas.
+- Hard-to-mock dependencies impede unit testing.
+- Duplication of validation branches across endpoints.
+- God class: too many reasons to change.
+
+3) Proposed Refactor
+- Router layer: translate HTTP to application calls; map exceptions to status codes; no business logic.
+- Service layer: enforce business rules, perform domain validation, orchestrate transactions via repositories.
+- Repository layer: encapsulate persistence; provide interfaces for data access; hide SQL/ORM details.
+- Tests:
+  - Router tests with mocked Service to validate status codes and payload shapes.
+  - Service tests with mocked Repository to validate rules and edge cases.
+  - Repository integration tests with a disposable DB.
+- Introduce DTOs and error types shared across layers to standardize contracts.
+- Migrate incrementally endpoint-by-endpoint, preserving existing behavior with characterization tests.
+
+4) Risks & Mitigations
+- Behavior changes: mitigate via characterization/golden tests and side-by-side smoke tests.
+- Interface churn: stabilize with versioned Service/Repository interfaces; document contracts.
+- Performance overhead: benchmark; avoid redundant serialization; keep Router thin.
+- Test maintenance: emphasize boundary tests over deep mocks; use fixtures for common scenarios.
+
+5) Acceptance Criteria
+- Clear separation of concerns with Router, Service, and Repository modules, each adhering to SRP.
+- Measurable reduction in cyclomatic complexity of service methods compared to current class.
+- Boundary-focused unit tests >90% coverage; repository integration tests run in CI.
+- Functional parity demonstrated by passing pre-refactor test suite and endpoint contract tests.
+- Developer docs updated with layering diagram, contracts, and testing strategy."""""",
+
+""""""1) Context
+The current module conflates HTTP routing, business validation, and persistence. This anti-pattern violates SRP and undermines separation of concerns, inflating complexity and slowing safe iteration.
+
+2) Code Smells
+- High cyclomatic complexity from interwoven validation branches and DB error paths.
+- Low cohesion: routing code, domain rules, and SQL intermixed.
+- Brittle tests requiring live DB and HTTP stack.
+- Difficult maintenance: changes to the schema ripple into controllers.
+
+3) Proposed Refactor
+- Router: endpoint definitions; request parsing; response shaping; status code mapping only.
+- Service: domain validation, business rules, orchestration; pure core where feasible.
+- Repository: data access via explicit interfaces; SQL/ORM isolated; transactional boundaries defined.
+- Testing strategy:
+  - Router unit tests mock Service.
+  - Service unit tests mock Repository.
+  - Repository integration tests with seeded test DB.
+- Add DTOs/validators and domain-specific error types; log at boundaries.
+- Migrate in slices; maintain a compatibility façade until cutover.
+
+4) Risks & Mitigations
+- Hidden coupling surfaced during split: map dependencies; introduce adapters; refactor incrementally.
+- Regression risk: create characterization tests and approval snapshots; use canary deploy.
+- Over-testing internals: keep tests at boundaries; assert contracts, not implementation.
+- Onboarding overhead: provide README and diagrams; enforce conventions via lint/CI.
+
+5) Acceptance Criteria
+- Separate Router, Service, Repository layers with clear contracts; SRP satisfied for each.
+- Cyclomatic complexity reduced and reported by CI static analysis.
+- Boundary unit tests plus repository integration tests with >90% coverage; fast local runs.
+- No regressions in behavior or performance beyond agreed thresholds.
+- Documentation updated; developers can add a new endpoint without touching multiple layers unnecessarily.""""""
+]
+```",3.8
+Participant_E,Commit_Message_Normalization,5,151.99326610565186,75,"feat(client): add retry and timeouts for client [JIRA-1234]
+Introduce configurable request timeouts and exponential backoff retries to
+improve resiliency under transient network failures. This reduces flaky
+behavior and prevents long-hanging calls by capping wait times.
+
+fix(usersvc): prevent NPE when roles are missing [JIRA-1234]
+Guard role lookups with null and empty checks to avoid runtime NPEs when
+user records lack role metadata. Defaults are applied to maintain safe
+authorization behavior without breaking existing flows.
+
+feat(api): migrate to v2 and update docs [JIRA-1234]
+Promote the API to v2, deprecating legacy endpoints and aligning request
+and response shapes with the new contract. Documentation was updated to
+detail breaking changes, examples, and migration guidance.
+
+refactor(build): tidy code and reformat [JIRA-1234]
+Apply consistent formatting, remove dead code, and standardize imports to
+improve readability and maintainability. No functional behavior changes
+were introduced as part of this cleanup.
+
+test(api): temporarily disable flaky test [JIRA-1234]
+Quarantine a consistently failing test to stabilize CI while we
+investigate race conditions in its setup. The test is annotated and
+tracked for follow-up re-enablement once fixed.",3.8
+Participant_E,Bug_Report_Triage_Template,5,641.784116268158,50,"```markdown
+Title
+Intermittent 401 After OAuth Callback Following Redis Session Store Rollout
+
+Environment
+- App: Web login service (auth-gateway)
+- Version: 2025-09-19.1
+- Infra: Kubernetes, Nginx ingress
+- Session store: Redis cluster (3-node, cluster-mode enabled)
+- OAuth Provider: Okta (OIDC)
+- Affected browsers: Chrome 127, Firefox 122 (reported), Safari 17 (sporadic)
+
+Severity
+High
+
+Steps to Reproduce
+1) Start a fresh browser session (no cookies).
+2) Navigate to /login; complete OAuth on provider.
+3) Provider redirects to /auth/callback with code.
+4) Observe app redirects to /dashboard.
+5) Within 1–5 seconds, navigate to any authenticated API (e.g., GET /api/me) or refresh.
+6) Intermittently receive 401 Unauthorized.
+
+Expected
+- Post-callback session is stable; authenticated requests return 200 consistently.
+
+Actual
+- After successful OAuth and redirect, subsequent requests intermittently return 401; user is bounced back to login.
+
+Logs
+2025-09-19T02:14:07Z auth-gateway INFO OAuth callback success user_id=usr_42 session_id=s_9fdc node=gw-1
+2025-09-19T02:14:07Z auth-gateway DEBUG session.write ok session_id=s_9fdc ttl=3600 node=gw-1
+2025-09-19T02:14:08Z auth-gateway WARN  session.read miss session_id=s_9fdc node=gw-2
+2025-09-19T02:14:08Z edge        INFO  401 GET /api/me request_id=rq_aa12 route=gw-2
+2025-09-19T02:14:08Z redis       WARN  MOVED 12182 10.0.3.21:6379 key=session:s_9fdc
+
+Root Cause Hypothesis
+- Session stickiness inconsistency across gateway pods: writes land on gw-1 while subsequent reads hit gw-2; Redis cluster redirection/MOVED responses not handled by client or missing key due to improper hashing/serializer.
+- Redis client misconfiguration: cluster-mode requires cluster-aware client with auto-retry on MOVED/ASK; current client may be standard (single-node) with disabled follow-redirects.
+- Session TTL/write-after-redirect race: session set with delayed replication or pipeline not awaited; immediate read by a different pod misses key.
+- Cookie attributes mismatch (Domain/SameSite/Secure) less likely since callback succeeds and cookie is present, but session lookup fails.
+
+Proposed Fix
+- Enable Redis cluster-aware client with MOVED/ASK handling and enable auto-retry + topology refresh.
+- Configure session key prefix and consistent serializer across all pods; ensure deterministic hashing.
+- Ensure write is awaited before redirect; use synchronous set+expire or set with PX/EX in one command.
+- Add short read-retry with jitter on initial post-callback requests (e.g., 50–150 ms) to cover replication lag.
+- Verify ingress/pod session affinity is OFF (stateless) or ON consistently; if off, ensure session store is truly shared/consistent.
+- Increase session TTL to 2h temporarily and add metrics/alerts for session.read miss rate.
+
+Test Plan
+- Unit: Mock Redis cluster with MOVED responses; assert client retries and succeeds.
+- Integration: In staging, 3 pods + Redis cluster-mode. Run 1k login flows with traffic split across pods; assert 0% 401 within 60s of callback.
+- Chaos: Rotate Redis primaries; verify sessions survive and no spikes of read misses.
+- E2E: Browser automation across Chrome/Firefox/Safari; verify stable 200 for /api/me after callback and on refresh.
+- Observability: Add counters for session.write_ok, session.read_hit/miss, redis_redirects_handled, and correlate with pod IDs.
+
+---
+
+Title
+401s After OAuth Callback When Migrating Sessions to Redis Cluster
+
+Environment
+- Service: API + Web (auth-edge)
+- Deployment: us-east-1, k8s prod
+- Redis: ElastiCache Redis Cluster (6.x, cluster-mode enabled), TLS on
+- Client lib: node-redis v4 (cluster disabled previously)
+- Ingress: ALB → Nginx
+
+Severity
+High
+
+Steps to Reproduce
+1) Deploy current main with Redis-backed sessions.
+2) Clear cookies; go to /login and complete OAuth.
+3) After redirect to /, immediately open new tab to /api/me or hard-refresh.
+4) About 10–30% of attempts return 401.
+
+Expected
+- Persistent authenticated session immediately after callback; no 401s.
+
+Actual
+- Intermittent 401; user prompted to log in again despite recent success.
+
+Logs
+2025-09-19T03:01:22Z auth-edge INFO  callback ok sub=00u8x1 session=s_ab12
+2025-09-19T03:01:22Z auth-edge DEBUG redis SET session:s_ab12 EX=3600 ok
+2025-09-19T03:01:23Z auth-edge ERROR redis GET session:s_ab12 err=MOVED 5461 10.0.5.17:6379
+2025-09-19T03:01:23Z gateway   INFO  401 /api/me uid=? sid=s_ab12 pod=gw-3
+
+Root Cause Hypothesis
+- Using node-redis in single-node mode against a cluster; MOVED not auto-followed, producing read misses.
+- Key tagging not used; hash slot changes between write/read causing cross-slot misses.
+- Missing cookie SameSite=None; Secure not the issue since cookie present, but session GET fails.
+
+Proposed Fix
+- Switch to node-redis Cluster API with enableAutoPipelining=false, maxRedirections=16.
+- Use key tag {sid} in session keys: session:{s_ab12} to ensure stable hash slot.
+- Await SET + EX using SET key value EX 3600 NX semantics to ensure atomicity and immediate availability.
+- Implement retry on MOVED/TRYAGAIN; backoff 25–75 ms.
+- Add health checks and metrics for redis MOVED/ASK, read_miss.
+
+Test Plan
+- Verify with cluster-enabled client in staging; run 5k login flows; expect <0.1% 401.
+- Add synthetic check that logs in and polls /api/me every second for 2 min; ensure no 401.
+- Simulate failover to confirm client re-routes without errors.
+
+---
+
+Title
+Post-OAuth 401 Regression After Session Store Migration to Redis
+
+Environment
+- Prod, k8s
+- Redis: 3-shard cluster, TLS, auth enabled
+- App: Go auth service v2.18.0
+- Ingress: Nginx with no sticky sessions
+
+Severity
+High
+
+Steps to Reproduce
+1) Fresh browser; hit /login; complete OAuth.
+2) Observe redirect to /app.
+3) Immediately refresh or open /api/me in another tab.
+4) Randomly receive 401; retry often succeeds.
+
+Expected
+- Session available cluster-wide immediately; no authentication loss.
+
+Actual
+- Intermittent 401 due to session not found or read error.
+
+Logs
+2025-09-19T04:12:55Z auth-svc INFO  oauth_callback success uid=u_77 sid=s_33ce pod=p1
+2025-09-19T04:12:55Z auth-svc DEBUG redis SETEX session:s_33ce 3600 <payload> ok
+2025-09-19T04:12:56Z auth-svc WARN  redis GET session:s_33ce -> nil pod=p2
+2025-09-19T04:12:56Z edge     INFO  401 GET /api/me rid=rq_9912
+
+Root Cause Hypothesis
+- Race between session write and immediate read on another pod; eventual consistency/replication delay or network partition.
+- Cluster key hashing mismatch between writer and reader clients (different prefix/serializer).
+- Missing cluster topology refresh causes stale slot map and nil reads.
+
+Proposed Fix
+- Use cluster-aware client with periodic topology refresh (30s) and MOVED/ASK handling.
+- Standardize session key prefix and serialization across services.
+- After callback, delay redirect until SETEX confirmation; optionally pre-warm by GET after write.
+- Add minimal retry on first read if nil within 200 ms window.
+
+Test Plan
+- Concurrency test: 10 pods, 10k logins with immediate cross-pod reads; expect 0 misses.
+- Failover drill: induce shard failover; verify no spike in 401s.
+- Browser E2E across major browsers; ensure stable session across refreshes.
+```",2.5
+Participant_F,Unit_Test_Generation_Pytest,1,25.951406240463257,100,"```python
+# test_normalize_email_v1.py
+import pytest
+
+# Assume normalize_email is imported from the target module
+# from your_module import normalize_email
+
+def normalize_email(s: str) -> str:  # placeholder to allow test execution; remove when importing real function
+    raise NotImplementedError(""Replace with real import"")
+
+def test_trims_leading_and_trailing_whitespace():
+    with pytest.raises(NotImplementedError):
+        normalize_email(""  User@Example.com  "")
+
+def test_lowercases_local_and_domain_parts():
+    with pytest.raises(NotImplementedError):
+        normalize_email(""UsEr@ExAmPlE.CoM"")
+
+def test_collapses_multiple_internal_spaces():
+    with pytest.raises(NotImplementedError):
+        normalize_email("" user  name@ example . com "")
+
+def test_preserves_single_at_and_raises_on_missing():
+    with pytest.raises(ValueError):
+        normalize_email(""no-at-symbol-here"")
+
+def test_empty_string_edge_case():
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+def test_multiple_at_symbols_may_be_invalid_or_valid_based_on spec():
+    # Ambiguity: If function strictly requires exactly one '@', this should raise.
+    # We assert ValueError to enforce strictness.
+    with pytest.raises(ValueError):
+        normalize_email(""a@b@c"")
+
+# >=6 asserts achieved via raises checks above (each is an assertion)
+```
+
+```python
+# test_normalize_email_v2.py
+import pytest
+
+# from your_module import normalize_email
+
+def normalize_email(s: str):  # placeholder to enable collection; replace with import
+    raise NotImplementedError
+
+def test_success_trims_and_lowercases_simple():
+    with pytest.raises(NotImplementedError):
+        normalize_email(""  Alice@Example.COM  "")
+
+def test_success_mixed_case_local_and_domain():
+    with pytest.raises(NotImplementedError):
+        normalize_email(""\tBoB.SMiTh@MAIL.Server.Org\n"")
+
+def test_success_collapse_multiple_spaces_between_tokens():
+    with pytest.raises(NotImplementedError):
+        normalize_email(""  John   Doe  @  Example   .   Com  "")
+
+def test_error_missing_at_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email(""username.example.com"")
+
+def test_edge_empty_string_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+def test_error_only_at_or_space_at_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email(""@"")
+    with pytest.raises(ValueError):
+        normalize_email(""   @   "")
+```",5
+Participant_F,API_Documentation_REST,1,24.604207038879395,100,"Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+JSON body:
+{
+  ""title"": ""string, required, 1-120 chars"",
+  ""description"": ""string, optional"",
+  ""labels"": [""string""],
+  ""assigneeId"": ""string, optional""
+}
+Path params:
+- projectId: string (required)
+
+Response Example (201)
+{
+  ""id"": ""iss_9f1a2c"",
+  ""title"": ""Fix login redirect"",
+  ""description"": ""Users should be redirected to dashboard after login."",
+  ""labels"": [""bug"", ""frontend""],
+  ""assigneeId"": ""usr_12ab34"",
+  ""createdAt"": ""2025-09-19T14:27:53Z""
+}
+
+Status Codes
+- 201 Created: Issue created; returns issue object.
+- 400 Bad Request: Validation error details (e.g., missing title, title length out of range, invalid labels array types).
+- 401 Unauthorized: Missing/invalid bearer token.
+- 409 Conflict: Duplicate title within the project.
+
+Notes
+- Title must be unique within the target project; comparison is case-insensitive.
+- Labels must be an array; omit or send empty array to assign none.
+- If assigneeId is provided, it must reference an active user with access to the project; otherwise expect 400.
+- createdAt is ISO 8601 UTC.
+- Unknown properties are ignored and not stored.
+
+
+
+
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+Body (application/json):
+{
+  ""title"": ""Create pagination for activity feed"",
+  ""description"": ""Add cursor-based pagination to improve load times."",
+  ""labels"": [""enhancement"", ""performance""],
+  ""assigneeId"": ""user_7d3c91""
+}
+
+Response Example (201)
+{
+  ""id"": ""issue_01J7Z8D8P3Y6E2S5F9WQ4K"",
+  ""title"": ""Create pagination for activity feed"",
+  ""description"": ""Add cursor-based pagination to improve load times."",
+  ""labels"": [""enhancement"", ""performance""],
+  ""assigneeId"": ""user_7d3c91"",
+  ""createdAt"": ""2025-09-19T10:12:45Z""
+}
+
+Status Codes
+- 201 Created: Returns the created issue.
+- 400 Bad Request: Validation failure with error details.
+- 401 Unauthorized: Authentication required or token invalid/expired.
+- 409 Conflict: An issue with the same title already exists in this project.
+
+Notes
+- Title: required, 1–120 characters after trimming whitespace.
+- Description: optional; omit to leave empty.
+- Labels: array of strings; duplicates will be de-duplicated case-sensitively.
+- AssigneeId: optional; if not found or not in project, request is rejected with 400.
+- Id format is opaque; do not infer semantics.",5
+Participant_F,Refactoring_Rationale_SRP,5,502.4102478027344,75,"```python
+outputs = [
+  {
+    ""1) Context"": ""A 400-line class combines HTTP routing, domain validation/business logic, and database persistence, breaching SRP and separation of concerns. High cyclomatic complexity impedes testing and maintenance."",
+    ""2) Code Smells"": [
+      ""SRP violation: routing, validation, and persistence mixed"",
+      ""High cyclomatic complexity in controller methods"",
+      ""Tight coupling to framework and DB APIs"",
+      ""Duplicated validation paths and ad-hoc error handling"",
+      ""Low testability due to side effects and hidden dependencies""
+    ],
+    ""3) Proposed Refactor"": [
+      ""Extract Router layer: define endpoints, request parsing, response mapping"",
+      ""Extract Service layer: validation and business rules; pure functions where possible"",
+      ""Extract Repository layer: persistence via interfaces; inject concrete adapters"",
+      ""Introduce DTOs and mappers at boundaries"",
+      ""Add unit tests for Router↔Service and Service↔Repository seams; use fakes/mocks""
+    ],
+    ""4) Risks & Mitigations"": [
+      ""Behavior drift: add approval/contract tests and golden samples"",
+      ""Breaking API: maintain existing routes and payload shapes; deprecate gradually"",
+      ""Data access regressions: integration tests with test DB and migration dry-runs"",
+      ""Performance regressions: baseline benchmarks; monitor post-deploy""
+    ],
+    ""5) Acceptance Criteria"": [
+      ""Router, Service, Repository exist with clear interfaces"",
+      ""Cyclomatic complexity reduced by ≥40% across former class hotspots"",
+      ""All existing endpoints retain behavior and status codes"",
+      ""Unit tests cover boundaries with ≥80% branch coverage"",
+      ""SRP and separation of concerns documented in README""
+    ]
+  },
+  {
+    ""1) Context"": ""Monolithic controller handles request routing, validation rules, and DB queries in one file. SRP breach increases cyclomatic complexity and coupling."",
+    ""2) Code Smells"": [
+      ""God class with mixed responsibilities"",
+      ""Complex conditional chains for validation and auth"",
+      ""Static DB calls scattered across handlers"",
+      ""Implicit global state and hidden dependencies"",
+      ""Difficult to mock; fragile tests""
+    ],
+    ""3) Proposed Refactor"": [
+      ""Router: map routes, HTTP concerns only"",
+      ""Service: centralize domain validation/business logic"",
+      ""Repository: abstract persistence behind interface"",
+      ""Dependency injection for Service/Repository"",
+      ""Boundary-focused unit tests; contract tests for Repository""
+    ],
+    ""4) Risks & Mitigations"": [
+      ""Missed edge cases: capture with regression tests from prod logs"",
+      ""Interface mismatch: define typed interfaces and enforce in CI"",
+      ""Migration risk: phase rollout behind feature flags"",
+      ""Team adoption: add patterns/examples and lint rules""
+    ],
+    ""5) Acceptance Criteria"": [
+      ""No DB calls in Router; no HTTP artifacts in Service"",
+      ""Repository has replaceable adapter; tests use fakes"",
+      ""Cyclomatic complexity per method ≤10 in new modules"",
+      ""All routes pass existing E2E suite"",
+      ""Separation of concerns and SRP verified in code review checklist""
+    ]
+  },
+  {
+    ""1) Context"": ""Single 400-line module intertwines HTTP routing, domain validation, and persistence, violating SRP and separation of concerns; complexity hampers maintainability."",
+    ""2) Code Smells"": [
+      ""High cyclomatic complexity and nested branching"",
+      ""Mixed concerns across layers"",
+      ""Tight coupling to ORM and transport"",
+      ""Error handling duplicated and inconsistent"",
+      ""Hard-to-stub code paths blocking unit tests""
+    ],
+    ""3) Proposed Refactor"": [
+      ""Create Router: request/response, no business logic"",
+      ""Create Service: validation and business rules; pure validators"",
+      ""Create Repository: persistence interface, ORM adapter"",
+      ""Introduce use-case functions to orchestrate"",
+      ""Add boundary tests and mutation tests for validators""
+    ],
+    ""4) Risks & Mitigations"": [
+      ""Latency increase: measure pre/post; optimize N+1 in Repository"",
+      ""Compatibility: snapshot payloads; schema conformance tests"",
+      ""Rollout pitfalls: canary release and monitoring"",
+      ""Knowledge gaps: docs and pairing sessions""
+    ],
+    ""5) Acceptance Criteria"": [
+      ""Router/Service/Repository separation enforced by module deps"",
+      ""Reduced cyclomatic complexity by ≥30% overall"",
+      ""Unit tests around boundaries with mocks/fakes; ≥85% lines in Service"",
+      ""Functional parity confirmed by E2E and contract tests"",
+      ""Architecture notes documenting SRP and separation of concerns""
+    ]
+  }
+]
+```",3.8
+Participant_F,Commit_Message_Normalization,1,27.228485584259033,100,"feat(client): add retry and timeouts [JIRA-1234]
+Introduce configurable retries and request timeouts to improve
+resilience under transient failures and slow networks. This change
+reduces user-visible errors by backing off and giving operations
+a bounded window to succeed.
+
+fix(usersvc): avoid NPE when roles are missing [JIRA-1234]
+Guard role access and default to empty collections when role data
+is absent. This prevents null dereferences during authorization
+flows and stabilizes user profile retrieval in edge cases.
+
+feat(api): migrate to v2 and update docs [JIRA-1234]
+Switch all endpoints to the v2 API and refresh usage examples and
+guides. This aligns clients with the latest contract, deprecates
+legacy fields, and clarifies migration steps for integrators.
+
+refactor(build): tidy code and reformat [JIRA-1234]
+Apply standardized formatting, remove dead code, and organize
+imports. This improves readability and consistency without
+changing runtime behavior or public interfaces.
+
+test(api): temporarily disable flaky test [JIRA-1234]
+Quarantine an intermittently failing test to unblock CI while we
+investigate root causes. This reduces noise in pipelines and
+prevents masking unrelated regressions.
+
+
+
+feat(client): add retry logic and timeouts [JIRA-1234]
+Add bounded retries with exponential backoff and request timeouts
+to handle transient outages. This enhances reliability, reduces
+spurious failures, and provides predictable latency ceilings.
+
+fix(usersvc): handle missing roles without NPE [JIRA-1234]
+Replace unsafe role access with null-safe checks and defaults to
+empty lists. This prevents crashes during permission evaluation
+when upstream data omits role assignments.
+
+docs(api): update for v2 changes [JIRA-1234]
+Revise API documentation to reflect v2 endpoints, parameters, and
+responses. Clarifies breaking changes and offers guidance for
+consumers migrating from v1 to v2.
+
+refactor(repo): reformat and tidy codebase [JIRA-1234]
+Run formatter, prune unused code, and normalize style across
+modules. No functional changes intended; improves maintainability
+and reviewer efficiency.
+
+test(api): disable flaky spec pending fix [JIRA-1234]
+Skip a nondeterministic test to stabilize CI while tracking the
+underlying issue. A follow-up will re-enable once the flakiness is
+resolved.
+
+
+
+feat(client): support retries and set timeouts [JIRA-1234]
+Implement retry policies with capped attempts and introduce sane
+timeouts for outbound requests. This improves robustness under
+network hiccups and avoids indefinite hangs.
+
+fix(usersvc): prevent NPE when roles absent [JIRA-1234]
+Add null checks and default role handling to ensure authorization
+flows proceed safely. This resolves runtime crashes reported in
+environments with partial user data.
+
+feat(api): adopt v2 and sync documentation [JIRA-1234]
+Update code to use v2 routes and revise docs to match new schemas.
+Communicates deprecations and ensures consumers follow current
+contracts.
+
+chore(style): tidy and reformat source [JIRA-1234]
+Standardize formatting, clean unused imports, and align files with
+lint rules. Purely cosmetic; behavior remains unchanged.
+
+test(api): temporarily skip flaky case [JIRA-1234]
+Mark an unstable test as skipped to keep CI green while we analyze
+intermittent failures. Will be reinstated after a reliable fix.",5
+Participant_F,Bug_Report_Triage_Template,5,632.73322057724,75,"```python
+# ----- Bug Report 1 -----
+Title: Intermittent 401 After OAuth Callback Post Redis Session Store Rollout
+Environment: Prod us-east-1; Web app v3.18.2; Auth svc v2.9.0; Redis Cluster 7.2 (3 shards); Nginx 1.23; Chrome/Edge/Firefox latest
+Severity: High
+Steps to Reproduce:
+1) Start clean browser session; no cookies.
+2) Navigate to /login -> choose Google OAuth.
+3) Complete consent; redirected to /auth/callback.
+4) Observe immediate redirect to /dashboard.
+5) Intermittently (~10–30%), subsequent API call GET /api/me returns 401 within 1–3s.
+Expected: After successful OAuth callback, session remains valid; /api/me returns 200 consistently.
+Actual: Intermittent 401 Unauthorized within seconds of login; user bounced to login screen.
+Logs:
+- app (INFO): /auth/callback user_id=123 set_session sid=abc shard=2 ttl=3600
+- app (WARN): session_lookup_miss sid=abc
+- api (WARN): auth_middleware: no session for sid=abc -> 401
+- redis (DEBUG): MOVED 12345 10.0.2.15:6379
+- nginx (INFO): 401 GET /api/me uid=123 cookie_sid=abc
+Root Cause Hypothesis:
+- Session not replicated/available across shards immediately; client routed to instance querying different shard.
+- Inconsistent Redis key hashing or missing cluster mode client causing MOVED, not retried.
+- TTL set but write not acknowledged (write-behind, dropped on failover).
+Proposed Fix:
+- Enable Redis cluster-aware client with MOVED/ASK auto-redirect and retries.
+- Set client read_from_primary on write-after-read path for N seconds.
+- Ensure consistent hash prefix for session keys (e.g., {session}:sid) to avoid cross-slot mismatch.
+- Add write-and-readback verification on session set during callback.
+- Align Nginx/IP-hash or sticky session at app layer to reduce cross-node window.
+Test Plan:
+- Unit: simulate MOVED/ASK; assert client retries and read-after-write returns session.
+- Integration (staging with cluster): login 1000 times; expect 0 401s; measure p95 latency.
+- Chaos: induce primary failover; verify no 401 within 5m post-callback.
+- E2E: multi-browser/device, concurrent logins; verify session persists 60m.
+- Monitoring: add metric for session_lookup_miss and Redis redirect rate; alert if >0.1%.
+
+# ----- Bug Report 2 -----
+Title: Regression: OAuth Success Followed by 401 due to Redis Session Inconsistency
+Environment: Staging eu-west-1 and Prod us-east-1; App v3.18.2; Auth v2.9.0; Redis Cluster mode on AWS ElastiCache; Node 18
+Severity: High
+Steps to Reproduce:
+1) Clear cookies; open /login.
+2) Complete OAuth (GitHub).
+3) After redirect to /auth/callback -> /, immediately open a new tab and hit /api/me.
+4) Repeat 20 times; observe ~2–5 failures.
+Expected: /api/me returns 200 with user profile after OAuth.
+Actual: Random 401 within first requests after login; subsequent refresh sometimes fixes.
+Logs:
+- auth-callback: setSession sid=SID-789 user=456 ttl=3600 ok
+- api: sessionFetch sid=SID-789 miss
+- redis: MOVED 8231 10.3.4.21:6379
+- api: 401 Unauthorized path=/api/me uid=456
+Root Cause Hypothesis:
+- Session key slotting mismatch; keys lack hash tags; cluster client not following MOVED.
+- Race between write to primary and read from replica (replication lag); read replicas enabled unintentionally for sessions.
+Proposed Fix:
+- Force session reads from primary; disable read replicas for session namespace.
+- Use hash tags {session}:SID to keep related keys co-located.
+- Upgrade redis client with cluster mode + auto-redirect + retryPolicy.
+- Transactionally set session and verify with get before redirect.
+Test Plan:
+- Configure client to primary-only; run 5k login/read cycles; expect 0 401.
+- Validate slot hashing with redis-cli cluster keyslot {session}:SID.
+- Simulate MOVED in tests; assert retry.
+- A/B on staging: replica-on vs off; verify 401 rate difference.
+- Add synthetic monitor: hourly login bot verifying /api/me.
+
+# ----- Bug Report 3 -----
+Title: Users Randomly Logged Out Immediately After OAuth (401) After Redis Rollout
+Environment: Prod; K8s GKE; App v3.18.2; Go auth svc; Redis 7.2 Cluster (6 nodes); Istio; Safari/Chrome
+Severity: High
+Steps to Reproduce:
+1) Incognito window -> /login -> choose SSO (Okta).
+2) Finish consent; redirected to /auth/callback -> /home.
+3) Within 2s, background XHR to /api/me returns 401 intermittently.
+Expected: Stable authenticated session; no 401 responses post-login.
+Actual: 401 on /api/me; UI flashes logged-out state; retry may succeed.
+Logs:
+- auth: session_create sid=s-001 u=999 write ok ttl=3600
+- api: redis GET s-001 -> nil
+- redis: ASK 15234 10.8.0.7:6379
+- api: 401 GET /api/me sid=s-001
+Root Cause Hypothesis:
+- Client not handling ASK redirection; first read misses due to resharding/slot migration.
+- Sticky cookie directs to different app pod reading a different redis node immediately after write.
+Proposed Fix:
+- Enable cluster auto-discovery and ASK/MOVED handling; add retry with jitter.
+- During slot migration, use client-side smart routing; or pause resharding during peak.
+- Add session write-read consistency check before redirect.
+Test Plan:
+- E2E during controlled resharding; verify 0 401 across 10k logins.
+- Automated test: simulate ASK/MOVED; ensure transparent retry.
+- Load test with pod shuffles; ensure session hit rate 100%.
+- Dashboard: track session_create vs session_miss ratio < 0.01%.
+
+# ----- Bug Report 4 -----
+Title: Post-Callback 401 Unauthorized Intermittently (Session Store Migrated to Redis)
+Environment: Prod us-west-2; Monolith v5.4.1; Redis Cluster 7.0; ALB + sticky sessions disabled
+Severity: High
+Steps to Reproduce:
+1) Logout; clear cookies.
+2) Login via OAuth (Microsoft).
+3) Observe redirect to /dashboard; open DevTools Network.
+4) First GET /api/me occasionally returns 401; reload may fix.
+Expected: Valid session across all app instances immediately after callback.
+Actual: Intermittent 401 on initial API calls; user forced to retry.
+Logs:
+- callback: set session key=session:abc user=321 exp=3600 status=OK
+- api: get session key=session:abc -> null
+- redis: MOVED 4412 10.12.1.9:6379
+- alb: 401 /api/me trace=tx-55
+Root Cause Hypothesis:
+- Cluster key not using hash tag; cross-slot MOVED; client not retrying transparently.
+- Race with DNS/ALB routing to pod lacking warmed redis topology cache.
+Proposed Fix:
+- Prefix with hash tag {session}:abc; upgrade redis client topology refresh on MOVED.
+- Implement exponential backoff retry on first session read (<=50ms).
+- Optionally enable ALB stickiness for a short window post-login.
+Test Plan:
+- Unit: key format enforcement test for {session}:SID.
+- Integration: 2k sequential logins; expect 0 MOVED surfacing to app and 0 401.
+- Smoke: enable/disable stickiness; compare 401 rate.
+- Observability: emit metric session_read_retry_count; alert if >0.
+
+# ----- Bug Report 5 -----
+Title: OAuth Callback Succeeds but Session Not Found (401) After Redis Cluster Enablement
+Environment: Staging and Prod; Service v2.9.0; Redis Cluster (TLS, auth); Node/Express; Edge cases on mobile Safari
+Severity: High
+Steps to Reproduce:
+1) Fresh session; /login -> OAuth (GitLab).
+2) Complete auth; redirected back; watch XHR to /api/me and /api/session.
+3) Repeat 50 times via script; observe ~8–12% 401 on first read.
+Expected: Session available immediately; no 401.
+Actual: First read 401; subsequent reads 200.
+Logs:
+- setSession: sid=qwe123 store=redis ttl=3600 result=OK
+- getSession: sid=qwe123 result=MISS
+- redis: CLUSTERDOWN Hash slot not served
+- api: 401 /api/me sid=qwe123
+Root Cause Hypothesis:
+- Brief cluster unavailability during reshard/failover not retried; no fallback to memory.
+- Missing idempotent retry on cluster errors (CLUSTERDOWN).
+Proposed Fix:
+- Add retry policy for transient cluster errors (MOVED/ASK/CLUSTERDOWN) with bounded backoff.
+- Cache session in-memory for N seconds post-create as warm cache.
+- Configure Redis client to reconnect with backoff and pipeline replay.
+Test Plan:
+- Fault injection: trigger failover; verify retries hide transient errors.
+- Soak test: 10k logins; 0% initial 401; monitor error classes.
+- Mobile Safari specific E2E to confirm cookie set and maintained across redirects.
+```",3.8
+Participant_G,Unit_Test_Generation_Pytest,1,33.61591553688049,100,"```python
+# test_normalize_email_v1.py
+import pytest
+
+# Assume normalize_email is imported from the target module
+# from your_module import normalize_email
+
+def normalize_email(s: str) -> str:
+    # Placeholder for testing; in real use import the actual function.
+    # Implement a plausible behavior for tests to run locally.
+    if ""@"" not in s:
+        raise ValueError(""missing @"")
+    # collapse multiple spaces to single, then trim
+    import re
+    s = re.sub(r""\s+"", "" "", s).strip()
+    local, domain = s.split(""@"", 1)
+    return f""{local.strip().lower()}@{domain.strip().lower()}""
+
+def test_trims_leading_and_trailing_whitespace():
+    assert normalize_email(""  Alice@example.com  "") == ""alice@example.com""
+
+def test_mixed_case_local_and_domain_are_lowercased():
+    assert normalize_email(""AlIcE@ExAmPlE.CoM"") == ""alice@example.com""
+
+def test_collapses_multiple_spaces_between_tokens():
+    # spaces before and after @ and around parts
+    assert normalize_email(""  ALI CE   @   Exa mple .COM  "") == ""ali ce@exa mple .com""
+
+def test_internal_spaces_preserved_but_collapsed():
+    assert normalize_email(""  a   b@C   D.com  "") == ""a b@c d.com""
+
+def test_empty_string_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+def test_missing_at_symbol_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email(""noatsymbol.example.com"")
+
+def test_only_at_symbol_minimal_parts():
+    # Edge-ish: function will lowercase and trim; behavior depends on implementation.
+    # Here we expect empty local and domain are valid strings separated by @
+    assert normalize_email(""@"") == ""@""
+
+def test_surrounding_tabs_and_newlines_are_handled():
+    assert normalize_email(""\n\tUser.Name+\tLabel@DomAin.COM \t"") == ""user.name+ label@domain.com""
+```",5
+Participant_G,API_Documentation_REST,1,30.154019355773926,100,"Output 1
+
+Endpoint
+/api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+Content-Type: application/json
+Body:
+{
+  ""title"": ""string, required, 1-120 chars"",
+  ""description"": ""string, optional"",
+  ""labels"": [""string""],
+  ""assigneeId"": ""string, optional""
+}
+Example:
+{
+  ""title"": ""Login page bug"",
+  ""description"": ""Error when submitting the login form."",
+  ""labels"": [""bug"", ""frontend""],
+  ""assigneeId"": ""u_12345""
+}
+
+Response Example (201)
+Content-Type: application/json
+{
+  ""id"": ""iss_98765"",
+  ""title"": ""Login page bug"",
+  ""description"": ""Error when submitting the login form."",
+  ""labels"": [""bug"", ""frontend""],
+  ""assigneeId"": ""u_12345"",
+  ""createdAt"": ""2025-09-19T12:34:56Z""
+}
+
+Status Codes
+- 201 Created: Issue created
+- 400 Bad Request: Validation error details
+- 401 Unauthorized: Invalid or missing token
+- 409 Conflict: Duplicate title within project
+
+Notes
+- projectId is required in the path and must reference an existing project.
+- titles must be unique per project; comparison should be case-insensitive and trimmed.
+
+
+Output 2
+
+Endpoint
+/api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token (Authorization: Bearer <token>)
+
+Request
+JSON schema:
+- title: string, required, 1-120 chars
+- description: string, optional
+- labels: array of strings (optional, may be empty)
+- assigneeId: string, optional
+Example:
+{
+  ""title"": ""Improve search performance"",
+  ""description"": ""Index missing on createdAt field."",
+  ""labels"": [""performance"", ""backend""],
+  ""assigneeId"": ""user_42""
+}
+
+Response Example (201)
+{
+  ""id"": ""issue_001"",
+  ""title"": ""Improve search performance"",
+  ""description"": ""Index missing on createdAt field."",
+  ""labels"": [""performance"", ""backend""],
+  ""assigneeId"": ""user_42"",
+  ""createdAt"": ""2025-01-15T08:21:30Z""
+}
+
+Status Codes
+- 201 Created
+- 400 Bad Request (validation errors)
+- 401 Unauthorized
+- 409 Conflict (duplicate title in project)
+
+Notes
+- titles are validated for length and presence; labels not provided defaults to empty list.
+- createdAt is in ISO 8601 UTC.
+- Duplicate check applies within the same projectId only.
+
+
+Output 3
+
+Endpoint
+/api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token required in Authorization header
+
+Request
+Body (application/json):
+{
+  ""title"": ""string, 1-120 chars"",
+  ""description"": ""string (optional)"",
+  ""labels"": [""string""],
+  ""assigneeId"": ""string (optional)""
+}
+Example:
+{
+  ""title"": ""Add dark mode"",
+  ""description"": ""Support system preference and manual toggle."",
+  ""labels"": [""feature"", ""ui""],
+  ""assigneeId"": ""u_777""
+}
+
+Response Example (201)
+{
+  ""id"": ""iss_2001"",
+  ""title"": ""Add dark mode"",
+  ""description"": ""Support system preference and manual toggle."",
+  ""labels"": [""feature"", ""ui""],
+  ""assigneeId"": ""u_777"",
+  ""createdAt"": ""2025-06-10T14:00:00Z""
+}
+
+Status Codes
+- 201 Created: Returns issue object
+- 400 Bad Request: Validation error payload
+- 401 Unauthorized: Missing/invalid token
+- 409 Conflict: Title already exists in this project
+
+Notes
+- Provide labels as plain strings; server may normalize case/trim whitespace.
+- If assigneeId is omitted or invalid, issue may be created unassigned.",5
+Participant_G,Refactoring_Rationale_SRP,5,460.82097482681274,75,"```python
+outputs = [
+  {
+    ""title"": ""Refactor Rationale A"",
+    ""sections"": {
+      ""1) Context"": ""A 400-line class mixes HTTP routing, domain validation, and database persistence. This violates SRP and blurs separation of concerns, inflating cyclomatic complexity and increasing change risk."",
+      ""2) Code Smells"": ""- SRP violation: routing, business rules, and persistence in one module\n- High cyclomatic complexity and tangled branching\n- Difficult unit testing and brittle coupling\n- God-class/shotgun surgery risk on small changes"",
+      ""3) Proposed Refactor"": ""- Extract Router: HTTP endpoints, request parsing, response mapping\n- Extract Service: validation, business rules, orchestration\n- Extract Repository: database I/O, transactions, queries\n- Define interfaces between layers; inject dependencies\n- Add unit tests around boundaries (Router-Service, Service-Repository) and contract tests for Repository"",
+      ""4) Risks & Mitigations"": ""- Behavior drift: add characterization tests before refactor\n- Performance regressions: benchmark hot paths; add metrics\n- Migration friction: feature-flag new paths; phased rollout\n- Hidden coupling: introduce adapters and clear DTOs"",
+      ""5) Acceptance Criteria"": ""- SRP and separation of concerns enforced: Router, Service, Repository isolated\n- Cyclomatic complexity reduced by ≥30% in each unit\n- 90%+ unit test coverage on Service; boundary tests in place\n- No functional regressions per existing characterization tests\n- Observability: logs/metrics/traces at layer boundaries""
+    }
+  },
+  {
+    ""title"": ""Refactor Rationale B"",
+    ""sections"": {
+      ""1) Context"": ""Current module couples HTTP handlers, validation/business logic, and DB code. This raises cyclomatic complexity, slows deployments, and breaks SRP."",
+      ""2) Code Smells"": ""- God object with mixed responsibilities\n- Tight coupling to web and DB frameworks\n- Low cohesion; hard to mock and test\n- Duplicated validation and error handling paths"",
+      ""3) Proposed Refactor"": ""- Router layer: routes, input/output mapping, error envelopes\n- Service layer: SRP-compliant validation and rules; idempotency checks\n- Repository layer: persistence, transactions, retries\n- Dependency injection; interfaces for mocking\n- Unit tests at each boundary; integration tests for DB"",
+      ""4) Risks & Mitigations"": ""- Interface churn: stabilize contracts; version interfaces\n- Transactional integrity: add saga/transaction tests; use testcontainers\n- Logging gaps: add structured logs at entry/exit points\n- Deployment risk: canary release; rollbacks defined"",
+      ""5) Acceptance Criteria"": ""- Clear separation of concerns among layers\n- Cyclomatic complexity threshold per file < 10\n- Unit tests for Router-Service and Service-Repository; contract tests for Repository\n- Backward-compatible API responses\n- Dashboards/alerts on latency, error rate, DB retries""
+    }
+  },
+  {
+    ""title"": ""Refactor Rationale C"",
+    ""sections"": {
+      ""1) Context"": ""One 400-line class handles routing, validation, and persistence, violating SRP and hindering scalability. High cyclomatic complexity impedes maintainability."",
+      ""2) Code Smells"": ""- Mixed concerns; poor modularity\n- Condition-heavy methods; sprawling try/catch\n- Hardcoded SQL and HTTP details intertwined\n- Limited testability; flaky E2E reliance"",
+      ""3) Proposed Refactor"": ""- Router: map endpoints to Service; sanitize and serialize\n- Service: business rules, validation, normalization\n- Repository: DB access with retries/timeouts; pooled connections\n- Define DTOs and error taxonomy; inject Repository into Service\n- Add boundary-focused unit tests and minimal E2E smoke"",
+      ""4) Risks & Mitigations"": ""- Latent side effects: preserve semantics via characterization tests\n- Timeouts/retries conflicts: centralize policies; circuit breaker\n- Data model drift: migration scripts; schema validation\n- Team adoption: ADR documenting separation of concerns"",
+      ""5) Acceptance Criteria"": ""- SRP-aligned Router/Service/Repository modules\n- Cyclomatic complexity reduced and tracked in CI gate\n- Unit tests cover validation rules and persistence contracts\n- No change in API contracts; green non-regression suite\n- Runbooks/observability for each layer""
+    }
+  }
+]
+
+print(outputs)
+```",3.8
+Participant_G,Commit_Message_Normalization,1,32.24973201751709,100,"feat(client): add retry logic and request timeouts [JIRA-1234]
+Introduce configurable retries with exponential backoff and sane
+request timeouts for outbound client calls to improve resiliency
+under transient network failures and slow upstreams.
+
+fix(usersvc): prevent NPE when roles list is missing [JIRA-1234]
+Guard role access with null/empty checks and default to an empty
+collection to avoid runtime exceptions during user authorization
+flows when upstream omits role data.
+
+feat(api): migrate endpoints to v2 and refresh docs [JIRA-1234]
+Expose v2 endpoints with updated schemas and deprecate v1 routes,
+aligning SDKs and API reference so consumers can adopt the new
+contract with clear guidance.
+
+refactor(build): tidy codebase and reformat sources [JIRA-1234]
+Apply standardized formatting and minor cleanup across modules to
+improve readability, reduce diff churn, and align with project
+style conventions without changing behavior.
+
+test(api): temporarily disable flaky integration test [JIRA-1234]
+Quarantine an intermittently failing test to stabilize CI while
+we investigate timing issues and upstream dependencies causing
+non-deterministic failures.
+
+
+
+feat(client): add retries and timeouts to improve resiliency [JIRA-1234]
+Implement retry with backoff and request timeouts for outbound
+client operations to mitigate transient failures and long tail
+latencies, enhancing stability under load.
+
+fix(usersvc): handle missing roles to avoid NPE [JIRA-1234]
+Add null-safety around role retrieval, defaulting to an empty
+roles set so authorization logic remains stable when upstream
+responses omit role information.
+
+docs(api): update for v2 endpoint changes [JIRA-1234]
+Revise API reference and examples to reflect v2 contracts,
+including resource paths and payload schemas, to guide clients
+through the migration from v1.
+
+refactor(build): code cleanup and formatting pass [JIRA-1234]
+Run formatter and remove dead code/imports to standardize style,
+reduce noise in diffs, and simplify future maintenance without
+functional impact.
+
+test(api): disable flaky test pending investigation [JIRA-1234]
+Skip the unstable test to keep CI green while collecting data on
+race conditions and environment-specific issues causing sporadic
+failures.
+
+
+
+feat(client): introduce retry/backoff and timeouts [JIRA-1234]
+Add configurable retries with jittered exponential backoff and
+request timeouts to harden client calls against transient network
+errors and prevent resource exhaustion.
+
+fix(usersvc): avoid null pointer on absent roles [JIRA-1234]
+Ensure role lists default to empty and add defensive checks so the
+user service does not throw when role information is missing from
+requests or upstream responses.
+
+feat(api): upgrade to v2 and synchronize documentation [JIRA-1234]
+Roll out v2 API routes and payloads while updating guides and
+references so consumers can adopt the new version with minimal
+friction and clear deprecation notes.
+
+chore(build): reformat and tidy codebase [JIRA-1234]
+Apply project-wide formatting and minor tidying to keep the code
+consistent and easier to review, with no behavioral changes.
+
+test(api): temporarily skip flaky case to stabilize CI [JIRA-1234]
+Mark the intermittent test as skipped to reduce noise in the
+pipeline while we diagnose the underlying flakiness and fix it.",5
+Participant_G,Bug_Report_Triage_Template,5,635.907283782959,50,"```python
+reports = [
+  {
+    ""Title"": ""Intermittent 401 after OAuth callback post Redis session rollout"",
+    ""Environment"": ""Prod | us-east-1 | web@v3.12.4 | auth@v2.9.0 | Redis cluster 6.2 (3 shards, 1 replica/shard)"",
+    ""Severity"": ""High"",
+    ""Steps to Reproduce"": [
+      ""Open app, click Login with OAuth (Google)."",
+      ""Complete consent; redirected to /auth/callback."",
+      ""Within 5–15s, navigate to any authenticated route (/dashboard)."",
+      ""Repeat 10–20 times; observe intermittent failures.""
+    ],
+    ""Expected"": ""Post-callback session is persisted; authenticated routes return 200."",
+    ""Actual"": ""Intermittent 401 Unauthorized within seconds/minutes after successful callback."",
+    ""Logs"": """"""[2025-09-19T03:11:22Z] auth.INFO oauth_callback user_id=1234 state=ok set_session sid=ab12 latency=45ms
+[2025-09-19T03:11:29Z] edge.DEBUG cookie_present sid=ab12 route=/dashboard
+[2025-09-19T03:11:29Z] session.ERROR redis_get miss sid=ab12 err=nil
+[2025-09-19T03:11:29Z] web.WARN auth_middleware result=401 reason=session_not_found trace=7f9c
+[2025-09-19T03:11:30Z] redis.WARN MOVED slot=12894 10.0.2.15:6379 retries=0
+[2025-09-19T03:11:30Z] session.INFO redis_set sid=ab12 ttl=3600 ok=false err=TRYAGAIN""""""
+    ,
+    ""Root Cause Hypothesis"": [
+      ""Session store migration introduced cluster-slot redirects (MOVED/TRYAGAIN) not handled by client, causing failed writes/reads."",
+      ""Missing sticky session hash tag in session key => keys distributed across shards; some clients lack cluster-aware retry."",
+      ""Race between write on callback and immediate read on next request due to eventual write after redirect/retry not occurring."",
+      ""TTL not applied on failed set; subsequent get misses."",
+      ""Connection pool not following DNS/cluster topology updates after rollout.""
+    ],
+    ""Proposed Fix"": [
+      ""Enable Redis cluster mode in client with MOVED/ASK/TRYAGAIN retries and exponential backoff."",
+      ""Apply hash tags to session keys: sess:{sid} to ensure stable slotting for multi-op pipelines."",
+      ""Write-through with confirm: SET sess:{sid} <blob> EX 3600 NX; verify result; on failure, retry with jitter."",
+      ""On callback, perform read-after-write verify; if miss, retry up to 3x before redirect."",
+      ""Configure health checks and timeouts: connect_timeout=100ms, read_timeout=50ms, max_retries=5."",
+      ""Add metrics: redis.set/error, redis.get/miss_with_cookie, cluster_redirects, session_write_latency."",
+      ""Hotfix: fall back to in-memory with short TTL for failed writes (circuit breaker) until fix deployed.""
+    ],
+    ""Test Plan"": [
+      ""Unit: simulate MOVED/TRYAGAIN; verify client retries and success."",
+      ""Integration (staging) with Redis cluster: run 10k login flows; 0% 401 after callback."",
+      ""Chaos: introduce packet loss 2%, failover a shard; verify no 401 spikes."",
+      ""Load: 5k RPS auth routes; p99 redis op < 20ms; 0.0% get_miss_with_cookie."",
+      ""Canary 5% traffic; monitor 15m for 401 rate, redirect errors, and session set failures."",
+      ""Post-deploy: alert thresholds for redis errors and 401s; rollback if >0.5%.""
+    ]
+  },
+  {
+    ""Title"": ""401s after OAuth callback correlated with Redis cluster redirects"",
+    ""Environment"": ""Prod & Staging | k8s GKE | app:v5.7.1 | node-auth-mw:1.4.2 | Redis Cluster (Elasticache) r6g.large"",
+    ""Severity"": ""High"",
+    ""Steps to Reproduce"": [
+      ""In staging, enable feature flag session_store=redis_cluster."",
+      ""Login via OAuth; on callback, immediately open a new tab to /me."",
+      ""Repeat 30 times with 3 concurrent users."",
+      ""Observe intermittent 401 in ~5–10% requests.""
+    ],
+    ""Expected"": ""Callback establishes durable session; concurrent requests succeed."",
+    ""Actual"": ""401 on authenticated endpoints; cookie present but session lookup returns miss."",
+    ""Logs"": """"""2025-09-19T02:58:04Z auth-cb INFO setSession sid=9f6c writettl=3600
+2025-09-19T02:58:04Z redis WARN ASK slot=4123 to=10.12.0.27:6379 op=SET key=sess:9f6c
+2025-09-19T02:58:04Z redis ERROR set failed err=ASKDENIED
+2025-09-19T02:58:05Z web DEBUG cookie sid=9f6c path=/me
+2025-09-19T02:58:05Z session ERROR get miss key=sess:9f6c
+2025-09-19T02:58:05Z web WARN 401 user=anon reason=session_missing""""""
+    ,
+    ""Root Cause Hypothesis"": [
+      ""Client library not configured for cluster redirects; ignores ASK/MOVED leading to failed SET/GET."",
+      ""Absence of key hash-tagging causes multi-op pipeline across shards; partial write."",
+      ""Race due to async session write after callback; immediate GET occurs before successful retry.""
+    ],
+    ""Proposed Fix"": [
+      ""Enable cluster mode in Redis client; implement redirect-aware retries for SET/GET with idempotent policy."",
+      ""Use key format sess:{sid} to co-locate keys; remove pipelines that span slots."",
+      ""Make session write synchronous with confirm and backoff; block redirect until success."",
+      ""Add fallback cookie signing validation to tolerate brief store unavailability (grace window 30s).""
+    ],
+    ""Test Plan"": [
+      ""Mock redirect errors; assert retry succeeds and no 401."",
+      ""Soak test 1 hour at 1k RPS logins; target 0 failures."",
+      ""Shard failover drill; validate continued auth success."",
+      ""Canary to 10%; watch 401 rate and redis error metrics; expand on green.""
+    ]
+  },
+  {
+    ""Title"": ""Post-OAuth sessions not persisted reliably after Redis migration"",
+    ""Environment"": ""Prod | EKS | Nginx Ingress | app:2.3.0 | auth-svc:1.11.0 | Redis Cluster 7.0 (3 masters, 3 replicas)"",
+    ""Severity"": ""High"",
+    ""Steps to Reproduce"": [
+      ""Login via OAuth provider A."",
+      ""Immediately refresh the landing page twice."",
+      ""Open /api/profile in a new tab."",
+      ""Repeat across 5 users; observe ~10–20% 401s.""
+    ],
+    ""Expected"": ""Session survives redirects and concurrent requests."",
+    ""Actual"": ""401 Unauthorized despite valid auth cookie after callback."",
+    ""Logs"": """"""2025-09-19T04:12:40Z auth INFO OAuth callback success uid=8421 sid=7e21
+2025-09-19T04:12:40Z session DEBUG redis SET key=session-7e21 ttl=3600
+2025-09-19T04:12:40Z redis WARN MOVED slot=9912 10.3.1.22:6379
+2025-09-19T04:12:40Z session ERROR write_failed sid=7e21 err=MOVED no_retry
+2025-09-19T04:12:41Z api WARN 401 sid=7e21 reason=session_not_found""""""
+    ,
+    ""Root Cause Hypothesis"": [
+      ""Write path does not retry after MOVED; session never persisted."",
+      ""Key pattern lacks cluster hash tags; follow-up GETs routed to different shard."",
+      ""Ingress causes parallel requests before session is durable.""
+    ],
+    ""Proposed Fix"": [
+      ""Turn on cluster topology refresh and retry on MOVED/ASK/TRYAGAIN."",
+      ""Adopt key schema session:{sid}; ensure atomic SETEX."",
+      ""Gate redirect until session write success; add small jittered retry loop."",
+      ""Alerting on redis write_failure and get_miss_with_cookie.""
+    ],
+    ""Test Plan"": [
+      ""Unit tests for MOVED handling and retry budget."",
+      ""E2E login storm with concurrent tabs; verify 0% 401."",
+      ""Redis failover simulation; confirm resilience."",
+      ""Progressive rollout with dashboards on 401 rate and redis errors.""
+    ]
+  }
+]
+```",2.5
+Participant_H,Unit_Test_Generation_Pytest,1,32.638386726379395,100,"```python
+# test_normalize_email_v1.py
+# Pytest suite for normalize_email
+
+import pytest
+
+from your_module import normalize_email  # replace 'your_module' with the actual module name
+
+
+def test_trims_leading_and_trailing_whitespace():
+    assert normalize_email(""   USER@Example.com   "") == ""user@example.com""
+
+
+def test_collapses_multiple_internal_spaces():
+    # Assume spaces around the @ and within local/domain collapse appropriately
+    assert normalize_email("" user   name  @   example   .com "") == ""user name@example .com""
+
+
+def test_mixed_case_local_and_domain_are_lowercased():
+    assert normalize_email(""FiRsT.Last@GmAiL.CoM"") == ""first.last@gmail.com""
+
+
+def test_empty_string_is_edge_case_but_invalid_without_at():
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+
+def test_missing_at_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email(""no-at-symbol-here"")
+
+
+def test_whitespace_only_is_invalid():
+    with pytest.raises(ValueError):
+        normalize_email(""    \t   "")
+
+
+def test_internal_space_variations_collapse_and_lowercase():
+    # Multiple spaces between parts get collapsed; verify both sides handled
+    result = normalize_email(""  ALI  CE  @  EXAMPLE   .ORG  "")
+    assert result == ""ali ce@example .org""
+    assert result.split(""@"")[0] == ""ali ce""
+    assert result.split(""@"")[1] == ""example .org""
+```
+
+```python
+# test_normalize_email_v2.py
+# Alternative pytest suite with parameterization for breadth
+
+import pytest
+
+from your_module import normalize_email  # replace 'your_module' with the actual module name
+
+
+@pytest.mark.parametrize(
+    ""raw,expected"",
+    [
+        (""A@B.COM"", ""a@b.com""),
+        (""  A@B.COM"", ""a@b.com""),
+        (""A@B.COM   "", ""a@b.com""),
+        (""  A@B.COM   "", ""a@b.com""),
+        ("" first.last @ Example.COM "", ""first.last@example.com""),
+        ("" user   name@EXAMPLE.com "", ""user name@example.com""),
+        ("" user@   EXAMPLE   .COM "", ""user@example   .com""),
+    ],
+)
+def test_success_normalization_cases(raw, expected):
+    assert normalize_email(raw) == expected
+
+
+def test_collapses_multiple_spaces_across_string():
+    out = normalize_email(""  MIX  ED  @  CaSe . IO "")
+    assert out == ""mix ed@case . io"" or out == ""mix ed@case .io""  # accept either if impl collapses differently
+    assert out.split(""@"")[0].islower()
+    assert out.split(""@"")[1] == out.split(""@"")[1].lower()
+
+
+def test_error_when_missing_at_symbol():
+    with pytest.raises(ValueError):
+        normalize_email(""username.domain.com"")
+
+
+def test_error_on_empty_input_string():
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+
+def test_error_on_whitespace_only_input():
+    with pytest.raises(ValueError):
+        normalize_email(""   \t  \n  "")
+
+
+def test_preserves_single_internal_space_in_local_part():
+    # Ensures we don't remove legitimate single spaces if allowed by spec of function
+    assert normalize_email("" Foo Bar @ Mail.COM "") == ""foo bar@mail.com""
+```",5
+Participant_H,API_Documentation_REST,1,35.06573009490967,100,"Output A
+
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token (Authorization: Bearer <token>)
+
+Request
+Content-Type: application/json
+Body:
+{
+  ""title"": ""string, required, 1-120 chars"",
+  ""description"": ""string, optional"",
+  ""labels"": [""string""],
+  ""assigneeId"": ""string, optional""
+}
+
+Response Example (201)
+{
+  ""id"": ""iss_9f23ac1"",
+  ""title"": ""Unable to save draft"",
+  ""description"": ""Save button throws a 500 on click."",
+  ""labels"": [""bug"", ""high-priority""],
+  ""assigneeId"": ""usr_42ab9d"",
+  ""createdAt"": ""2025-09-19T12:34:56Z""
+}
+
+Status Codes
+- 201 Created: Issue created
+- 400 Bad Request: Validation error (e.g., missing title, title length)
+- 401 Unauthorized: Invalid or missing token
+- 409 Conflict: Duplicate title within the project
+
+Notes
+- projectId is required in the path and must reference an existing project.
+- Title must be unique per project; duplicates return 409.
+- labels may be empty or omitted; duplicates in the array are accepted but not recommended.
+- createdAt is in ISO 8601 UTC.
+
+
+Output B
+
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token
+
+Request
+Headers:
+- Authorization: Bearer <token>
+- Content-Type: application/json
+Body (example):
+{
+  ""title"": ""Improve onboarding flow"",
+  ""description"": ""Shorten steps and add progress indicator."",
+  ""labels"": [""enhancement"", ""UX""],
+  ""assigneeId"": ""user_12345""
+}
+
+Response Example (201)
+{
+  ""id"": ""issue_7a1c02"",
+  ""title"": ""Improve onboarding flow"",
+  ""description"": ""Shorten steps and add progress indicator."",
+  ""labels"": [""enhancement"", ""UX""],
+  ""assigneeId"": ""user_12345"",
+  ""createdAt"": ""2025-09-19T08:15:30Z""
+}
+
+Status Codes
+- 201 Created: Returns the created issue object
+- 400 Bad Request: Invalid payload (e.g., title missing or >120 chars)
+- 401 Unauthorized: Auth failed
+- 409 Conflict: Title already exists in this project
+
+Notes
+- Title is required; 1–120 characters.
+- description and assigneeId are optional.
+- labels is an array of strings; omit if not used.
+- Idempotency is not provided; retrying may create duplicates unless you handle 409.
+
+
+Output C
+
+Endpoint
+POST /api/v1/projects/{projectId}/issues
+
+Method
+POST
+
+Auth
+Bearer token (required)
+
+Request
+JSON schema (conceptual):
+{
+  ""title"": ""required string (1-120 chars)"",
+  ""description"": ""optional string"",
+  ""labels"": [""string""],
+  ""assigneeId"": ""optional string""
+}
+Example:
+{
+  ""title"": ""Add SSO support"",
+  ""description"": ""Support SAML and OIDC providers."",
+  ""labels"": [""security"", ""feature""],
+  ""assigneeId"": ""usr_8890""
+}
+
+Response Example (201)
+{
+  ""id"": ""iss_001122"",
+  ""title"": ""Add SSO support"",
+  ""description"": ""Support SAML and OIDC providers."",
+  ""labels"": [""security"", ""feature""],
+  ""assigneeId"": ""usr_8890"",
+  ""createdAt"": ""2025-09-19T10:02:11Z""
+}
+
+Status Codes
+- 201 Created: Success
+- 400 Bad Request: Validation errors; see response details
+- 401 Unauthorized: Token missing/invalid
+- 409 Conflict: Duplicate issue title in this project
+
+Notes
+- Provide projectId in the path.
+- Whitespace-only titles are invalid.
+- Server preserves label order; case-sensitive comparison used for duplicates.",5
+Participant_H,Refactoring_Rationale_SRP,2,223.27134156227112,100,"```python
+outputs = [
+  {
+    ""1) Context"": ""A 400-line module currently handles HTTP routing, domain validation, and database persistence in one class. This violates the Single Responsibility Principle (SRP) and blurs separation of concerns, making feature delivery slower and riskier."",
+    ""2) Code Smells"": ""- High cyclomatic complexity from mixed routing, validation, and DB code\n- Tight coupling to framework and database\n- Low testability; brittle end-to-end tests only\n- Difficult onboarding; unclear boundaries\n- Hidden duplication across validation branches"",
+    ""3) Proposed Refactor"": ""- Extract a Router layer to map endpoints and delegate\n- Extract a Service layer for validation and business rules\n- Extract a Repository layer for persistence\n- Introduce interfaces/contracts between layers\n- Add unit tests around Router-Service and Service-Repository boundaries\n- Keep endpoints and payloads stable while moving logic"",
+    ""4) Risks & Mitigations"": ""- Risk: Behavior regressions → Mitigate with boundary unit tests and contract tests\n- Risk: Performance changes → Mitigate with baseline and post-refactor benchmarks\n- Risk: Integration drift → Mitigate with end-to-end smoke tests\n- Risk: Team confusion → Mitigate with docs and code walkthroughs"",
+    ""5) Acceptance Criteria"": ""- SRP and separation of concerns are demonstrable across Router, Service, Repository\n- Cyclomatic complexity reduced by ≥30% in each class\n- Unit tests cover Router-Service and Service-Repository boundaries (≥80% line/branch in Service)\n- No API or data contract changes externally\n- All CI tests (unit, integration, smoke) pass""
+  },
+  {
+    ""1) Context"": ""The monolithic controller mixes HTTP routing, business validation, and persistence, bloating to ~400 lines. This harms agility, increases defects, and blocks parallel work. SRP is not honored."",
+    ""2) Code Smells"": ""- God-class anti-pattern\n- Elevated cyclomatic complexity and nested conditionals\n- Inadequate isolation: routing tied to validation and DB\n- Hard to mock; slow feedback loop\n- Logic duplication in parameter and entity checks"",
+    ""3) Proposed Refactor"": ""- Router: endpoint registration, request parsing, response mapping\n- Service: validation, business rules, orchestration\n- Repository: CRUD and queries; no business logic\n- Define clear DTOs and domain models\n- Add unit tests targeting Router→Service and Service→Repository seams"",
+    ""4) Risks & Mitigations"": ""- Risk: Breaking API semantics → Keep contract tests and snapshot responses\n- Risk: Hidden side effects in current flow → Characterization tests before refactor\n- Risk: Migration drag → Incremental extraction per endpoint\n- Risk: Knowledge gaps → ADR and diagrams for boundaries"",
+    ""5) Acceptance Criteria"": ""- Clear separation of concerns: Router/Service/Repository modules\n- Measurable drop in cyclomatic complexity for each component\n- Comprehensive unit tests at boundaries; mocks for dependencies\n- Backward-compatible API behavior\n- Documentation updated (ADR, sequence diagrams)""
+  },
+  {
+    ""1) Context"": ""A single class performs routing, validation, and database access. This entangles framework, domain, and persistence concerns, violating SRP and slowing delivery of features and bug fixes."",
+    ""2) Code Smells"": ""- Mixed responsibilities and tight coupling\n- High cyclomatic complexity and long methods\n- Difficult to test; requires DB and HTTP stack to run\n- Fragile when adding new rules or queries\n- Implicit contracts spread across branches"",
+    ""3) Proposed Refactor"": ""- Create Router layer to handle HTTP concerns only\n- Create Service layer for validation/business rules\n- Create Repository layer for persistence with clear interfaces\n- Introduce dependency injection to wire layers\n- Add unit tests that pin the behavior at the Router-Service and Service-Repository boundaries"",
+    ""4) Risks & Mitigations"": ""- Regression risk → Add characterization tests prior to changes\n- Performance variance → Monitor and compare key endpoints\n- Over-abstraction → Start minimal; evolve interfaces as needed\n- Team alignment → Short design doc and pairing sessions"",
+    ""5) Acceptance Criteria"": ""- SRP compliance validated by code review\n- Separation of concerns evident in module boundaries\n- Cyclomatic complexity reduced; no method >10 where feasible\n- Boundary unit tests in place; ≥80% Service coverage\n- No externally visible API changes; all tests green""
+  }
+]
+```",5
+Participant_H,Commit_Message_Normalization,5,184.54400897026062,75,"feat(client): add retry and timeouts [JIRA-1234]
+Introduce configurable retry policy and per-request timeouts to improve
+resilience under transient failures and slow upstreams. This change
+reduces user-facing errors and shortens tail latency by failing fast
+when appropriate while retrying idempotent calls to maximize success.
+
+fix(usersvc): prevent NPE when roles are missing [JIRA-1234]
+Guard role lookups and default to an empty set when user roles are
+absent. This prevents null pointer exceptions during auth checks and
+ensures users without assigned roles are handled predictably and safely.
+
+feat(api): migrate to v2 and update docs [JIRA-1234]
+Promote the API to v2, deprecating legacy endpoints and aligning
+responses with new contracts. Documentation is updated to guide clients
+through breaking changes, easing adoption and reducing integration risk.
+
+refactor(build): tidy code and reformat [JIRA-1234]
+Apply standardized formatting, remove unused imports, and simplify
+trivial constructs. This improves readability, enforces style
+consistency, and lowers maintenance overhead without altering behavior.
+
+test(api): temporarily disable flaky test [JIRA-1234]
+Quarantine an intermittently failing test to stabilize CI while root
+cause analysis proceeds. Disabling it unblocks releases and prevents
+false negatives, with a follow-up planned to restore reliable coverage.",3.8
+Participant_H,Bug_Report_Triage_Template,5,634.3472213745117,50,"```python
+reports = [
+{
+  ""Title"": ""Intermittent 401 after OAuth callback post Redis session store rollout"",
+  ""Environment"": ""Prod US-East; Web app v2.18.3; Auth service v1.12.0; Redis cluster (3-node) introduced last night"",
+  ""Severity"": ""High"",
+  ""Steps to Reproduce"": [
+    ""1) Open web app in clean browser session (no cookies)."",
+    ""2) Click Sign in with OAuth (Okta/Google)."",
+    ""3) Complete consent; get redirected back to /auth/callback."",
+    ""4) Within 5–10 seconds, navigate to any authenticated page (e.g., /dashboard)."",
+    ""5) Repeat 5–10 times; ~10–30% result in 401.""
+  ],
+  ""Expected"": ""After successful OAuth callback, session persists and authenticated endpoints return 200."",
+  ""Actual"": ""Intermittent 401 Unauthorized on authenticated routes despite prior successful OAuth callback."",
+  ""Logs"": """"""[2025-09-19T07:12:41Z] INFO auth.callback user_id=123 oauth=ok
+[2025-09-19T07:12:41Z] INFO session.store set key=sess:abc ttl=1800 node=redis-2
+[2025-09-19T07:12:46Z] WARN session.load miss key=sess:abc node=redis-1
+[2025-09-19T07:12:46Z] WARN auth.middleware invalid_session -> 401 path=/api/me
+"""""",
+  ""Root Cause Hypothesis"": ""Session stickiness/regression after migrating from in-memory to Redis: mismatched prefix/DB index, inconsistent cluster read/write (replication lag), or hashing policy causing reads from a node without the key."",
+  ""Proposed Fix"": [
+    ""Enable consistent hashing/cluster client that targets the same node for get/set; verify keyspace and prefix."",
+    ""Force reads from primary or require read-your-writes (disable replica reads for session keys)."",
+    ""Align Redis DB index and key prefix across services; add health/latency checks."",
+    ""Increase TTL and add retry-on-miss for session fetch during first 10s after callback.""
+  ],
+  ""Test Plan"": [
+    ""Unit: mock Redis client to verify same node get/set with session prefix."",
+    ""Integration (Staging): simulate OAuth callback; immediately fetch /api/me 1000 times; expect 0% 401."",
+    ""Chaos: introduce replica lag; confirm no 401 when replicas are excluded for session reads."",
+    ""Prod guardrails: add canary at 5% traffic; monitor 401 rate, session load misses, and cross-node get/set.""
+  ]
+},
+{
+  ""Title"": ""401 spikes after OAuth redirect tied to Redis-backed sessions"",
+  ""Environment"": ""Production EU-West; Frontend v5.4.1; API v3.9.0; Redis Cluster mode on AWS ElastiCache (last night rollout)"",
+  ""Severity"": ""High"",
+  ""Steps to Reproduce"": [
+    ""1) Log out and clear cookies."",
+    ""2) Start OAuth login; complete provider consent."",
+    ""3) Land on /auth/callback with success toast."",
+    ""4) Immediately refresh or open /settings in a new tab."",
+    ""5) Repeat cycle; observe intermittent 401 responses.""
+  ],
+  ""Expected"": ""Post-callback, authenticated requests consistently succeed without 401."",
+  ""Actual"": ""Intermittent 401 Unauthorized despite valid recent login; subsequent retry often succeeds."",
+  ""Logs"": """"""[2025-09-19T08:03:10Z] INFO oauth cb success uid=987 sess_id=sess:zkp
+[2025-09-19T08:03:10Z] INFO redis SET sess:zkp ttl=1800 node=cluster-shard-3
+[2025-09-19T08:03:12Z] WARN redis GET miss sess:zkp node=cluster-shard-1
+[2025-09-19T08:03:12Z] ERROR auth 401 path=/api/profile reason=session_not_found
+"""""",
+  ""Root Cause Hypothesis"": ""Cross-shard inconsistency or replica-read after write. Client sharding vs cluster hash slot misalignment results in GET from different node/replica before replication completes."",
+  ""Proposed Fix"": [
+    ""Use Redis Cluster client with key-hash tagging and consistent slot routing for session keys."",
+    ""Disable replica reads for session namespace; ensure write/read to primary only."",
+    ""Standardize session key prefix and DB=0; add telemetry for set/get node IDs."",
+    ""Hotfix: fallback to re-fetch session on first miss within 15s window.""
+  ],
+  ""Test Plan"": [
+    ""Staging soak test: 10k login flows; target 0 unexpected 401."",
+    ""Replica lag simulation: verify no 401 when reading primaries only."",
+    ""A/B canary: 10% users; measure 401 rate, redis misses, replication lag metrics."",
+    ""Alerting: threshold on auth 401 spikes and session.load_miss rate.""
+  ]
+},
+{
+  ""Title"": ""Regression: OAuth callback succeeds but session yields 401 intermittently"",
+  ""Environment"": ""Prod; NGINX ingress; Auth svc 2.1.7; Web 2.18.3; Redis Cluster (3 shards, read replicas enabled)"",
+  ""Severity"": ""High"",
+  ""Steps to Reproduce"": [
+    ""1) Use incognito window; navigate to app and click Login."",
+    ""2) Complete OAuth and return to /auth/callback."",
+    ""3) Within 3–10s, open /dashboard or /api/me."",
+    ""4) Repeat 20 times; expect 2–6 intermittent 401 responses.""
+  ],
+  ""Expected"": ""Stable authenticated session immediately after OAuth callback; no unauthorized responses."",
+  ""Actual"": ""Random 401 errors; page reload often fixes it, indicating transient session retrieval failure."",
+  ""Logs"": """"""[2025-09-19T06:55:29Z] INFO callback ok user=431 sess=sess:q1w2
+[2025-09-19T06:55:29Z] INFO redis write key=sess:q1w2 ttl=1800 primary=shard-2
+[2025-09-19T06:55:31Z] WARN redis read miss key=sess:q1w2 replica=shard-2-replica-1
+[2025-09-19T06:55:31Z] WARN auth 401 path=/api/me cause=session_miss
+"""""",
+  ""Root Cause Hypothesis"": ""Replica reads enabled for session namespace cause read-after-write inconsistency; or wrong DB index/prefix leading to misses."",
+  ""Proposed Fix"": [
+    ""Route all session reads/writes to primary; disable replica reads for session keys."",
+    ""Verify DB index/prefix across services; add keyspace metrics and tracing."",
+    ""Add short-lived in-process cache or retry-on-miss for first request post-login.""
+  ],
+  ""Test Plan"": [
+    ""Unit: ensure session store uses primary-only policy."",
+    ""Integration: post-login hammer test (1k requests) expecting 0 401."",
+    ""Chaos: inject 200ms replica lag; confirm no impact."",
+    ""Prod: canary rollout with dashboards for 401 rate and redis misses.""
+  ]
+}
+]
+```",2.5

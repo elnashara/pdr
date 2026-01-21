@@ -1,0 +1,797 @@
+participant_name,task_name,iteration_count,time_spent_sec,final_score,final_output,satisfaction_score
+Participant_A,Creative_Writing,5,899.6283557415009,50,"```python
+stories = [
+    # Story 1
+    """"""At Barton Crescent the air was so abundantly civil that even a sigh must be issued with permission. Miss Eliza Hartley, possessed of good sense and moderate fortune, was invited to her aunt’s tea, where the conversation, steeped in cream and caution, revolved around Mr. Pembroke—newly come into the neighborhood and newly rumored to be rich.
+
+“My dear Eliza,” said Mrs. Willoughby, smoothing the nap of propriety from her sleeve, “you will find Mr. Pembroke’s principles as polished as his boots. He admires steady conduct in a lady.”
+
+“I shall endeavor to appear steady only where I am so,” Eliza replied.
+
+Their exchange was interrupted by Mr. Pembroke himself, who bowed with a conscientious gravity. “Miss Hartley, I have long hoped for an introduction.” His manner declared importance; his eyes betrayed it.
+
+“We are happy to indulge such hopes,” Mrs. Willoughby murmured.
+
+A quadrille was arranged for the following evening, during which Mr. Pembroke, after two cautious turns and a blameless compliment to Eliza’s execution of a chasse, confided: “I am obliged to you, ma’am, for your candor. My aunt mistakes calculation for prudence. I prefer a character that is decidedly honest.”
+
+Eliza, suspecting a test, said only, “Honesty is a luxury to which even the poor are entitled.”
+
+The next morning produced a sealed letter—Mrs. Willoughby’s hand, Mr. Pembroke’s seal—containing a draft for Eliza’s brother, whose improvident debts had lately distressed the family. A note appended explained that Mr. Pembroke, for whom delicacy was a second conscience, wished to spare public embarrassment and to earn, if not affection, at least the tranquility due to benevolence.
+
+Eliza returned the draft at once. “Sir,” she wrote, “the relief you propose to our circumstances is too easily mistaken for a claim upon our gratitude. I choose to be thankful only where I am free.”
+
+At dinner, Mrs. Willoughby expostulated. “Child, this is not pride; it is poverty with opinions.”
+
+Eliza answered, “It is judgment with obligations.” To Mr. Pembroke, in person, she said: “I cannot accept assistance disguised as delicacy.”
+
+He looked almost pleased. “Then you accept me only as I am? Very well. May I entreat your advice instead? I have long meant to support the school at Ashfield; your brother shall manage its accounts—publicly, transparently.”
+
+The arrangement satisfied necessity without encumbering gratitude. Mrs. Willoughby, after reflecting that philanthropy is the neatest form of romance, permitted herself to be charmed. Mr. Pembroke asked, and in time obtained, Eliza’s consent; not by purchasing it, but by deserving it. Thus the family learned that a favor, to be truly generous, must leave its recipient still at liberty; and that respect is the only coin that never depreciates in polite society."""""",
+
+    # Story 2
+    """"""The assembly at Nethercombe was notable chiefly for the mellow obstinacy of the candles, which declined to expire, and for Lady Davenant, who never did. Miss Marianne Fielding, modest, attentive, and not given to fashionable astonishments, sat beside her mother when Colonel Ashe approached with a bow that had weathered two campaigns and emerged quite victorious.
+
+“Miss Fielding,” said he, “your conversation last week has haunted me in the gentlest manner. I am come to request another haunting.”
+
+“I had not meant to be spectral, Colonel,” Marianne smiled, “but if civility is to be our cemetery, I will walk quietly in it.”
+
+Lady Davenant, whose ear was a net for social fish, summoned Marianne an hour later. “My dear, the Colonel is a man of consequence. He has shown me a document—an annuity—for your mother, should a closer connection be formed. It is, I confess, delicate.”
+
+Marianne’s color rose. “Delicacy, when pecuniary, is easily misunderstood.”
+
+“Child,” Lady Davenant replied, “misunderstanding is the principal sauce of marriage.”
+
+The difficulty was this: Marianne’s younger brother, Thomas, had been indiscreet in cards, and the Colonel, who had known him in town, was in possession of certain knowledge that could assist—whether by silence or by settlement—if Marianne would accept him with as much haste as good breeding allows.
+
+When the Colonel called, she received him with gratitude and resistance. “Sir, I wish you every happiness that can be purchased with money. I doubt only whether mine is among them.”
+
+He considered. “Then allow me to purchase nothing. Let me rather earn.” He proposed to pay Thomas’s creditors in full, not privately, but by establishing a debtor’s society in Nethercombe, where all accounts would be audited and published monthly—his own foremost.
+
+Marianne hesitated. “Your generosity is severe.”
+
+“It must be,” he said; “the gentler sort is often merely convenient.”
+
+They agreed; Thomas, shamed into industry, learned to reckon. The annuity was replaced by an endowment to the grammar school, Lady Davenant calling it romance’s sober cousin. In a month, the Colonel repeated his address; this time Marianne accepted with a composure that looked remarkably like joy.
+
+The moral was soon quoted in every drawing-room: that kindness offered as a secret becomes a leash; made public as principle, it is a path. And polite society, so quick to whisper, discovered that the loudest declaration of virtue is accountability."""""",
+
+    # Story 3
+    """"""When Mr. Ellison of Greymere took possession of his aunt’s small estate, the parish rejoiced in the arrival of a fortune that promised raffles and ribbons. Miss Charlotte Grey, whose mind bore as neat a hem as her gowns, observed the enthusiasm without joining in it.
+
+“Charlotte,” cried her cousin Henrietta at breakfast, “Mr. Ellison is the civilest creature. He praised our pianoforte, which is an object known chiefly by endurance.”
+
+“Civility is often a polite way of measuring silence,” Charlotte returned.
+
+That evening a select company assembled at Greymere. Mr. Ellison, between an elegant tea service and an inelegant portrait of his aunt, spoke warmly of improvement. “I am persuaded,” said he, “that the poor are never so happy as when they are efficiently directed.”
+
+“Then let them direct us for a day,” Charlotte answered, “and we shall soon discover how efficiently happiness can be managed.”
+
+The company laughed—politely. Later, he sought her near the window. “Miss Grey, I am not insensible to the needs of your brother’s farm; the fences look discouragingly philosophical. Allow me to supply timber.”
+
+“My brother’s fences are an argument,” she said, “but not one to be concluded by your purse.”
+
+Two days after, the steward appeared with timber and a receipt marked Gift. Charlotte returned both. Mr. Ellison called, disappointed. “Why must you resist? Is pride your harvest?”
+
+“It is independence,” she replied. “Pride is what remains when independence is sold.”
+
+He paced. “Would you have me indifferent, then?”
+
+“I would have you just. Lend, if you please, at a rate that respects our labor and your own.”
+
+He considered. “Very well—let us be partners.” A contract was drawn that assigned profits to improvements and named the tenantry as claimants before either family touched a shilling. Charlotte signed; her brother blushed into diligence.
+
+In a month the fences stood, the fields recovered their conversation with the wind, and Mr. Ellison, discovering that esteem is the most affectionate of inconveniences, asked leave to persevere in it. Charlotte did not refuse.
+
+The neighborhood pronounced it a romance, by which they meant an arrangement that spared them the trouble of disapproval. The lesson, however, was plainer: charity that seeks gratitude purchases only silence; justice that invites consent purchases respect—and sometimes, unexpectedly, love.""""""
+]
+
+print(""\n\n---\n\n"".join(stories))
+```",2.5
+Participant_A,Technical_Explanation,5,163.7542164325714,75,"Option 1 (≈120 words)
+Convolutional neural networks (CNNs) process inputs using learned filters (kernels) that slide across spatial dimensions to compute feature maps via convolution. Early layers learn local patterns (edges, textures); deeper layers combine them into higher-level features. Each convolution computes a weighted sum within a receptive field, plus bias, followed by a nonlinearity (e.g., ReLU). Stride and padding control resolution; pooling or strided convolutions downsample to increase invariance and reduce compute. Feature maps are stacked across channels and often followed by normalization and dropout. Classification heads use global pooling and fully connected layers. Training uses backpropagation: gradients flow through convolutions via correlation with flipped kernels, updated by SGD/Adam. Weight sharing in kernels reduces parameters and exploits translation equivariance.
+
+Option 2 (≈120 words)
+A CNN applies convolutional layers where small learnable kernels scan the input to produce feature maps capturing local structure. Convolution implements shared weights: the same kernel processes all spatial positions, enabling translation equivariance and parameter efficiency. Nonlinearities (ReLU), normalization, and pooling/strides build hierarchical representations while controlling spatial resolution. Multiple kernels per layer learn different features; deeper layers aggregate larger receptive fields to model complex patterns. During training, backpropagation computes gradients of the loss with respect to outputs, propagates them through activations and convolutions, and accumulates per-kernel gradients via sliding-window correlations. Optimizers update kernel weights and biases. Final layers (global average pooling, fully connected) map features to class probabilities with softmax, trained end-to-end.
+
+Option 3 (≈120 words)
+CNNs learn hierarchical features via convolutions: small filters (kernels) slide over inputs to compute dot products within local receptive fields, forming channel-wise feature maps. Padding preserves size; stride controls downsampling; pooling or strided convs reduce spatial dimensions and add invariance. Nonlinear activations and normalization stabilize and increase expressivity. Multiple kernels per layer capture diverse patterns; stacking layers expands effective receptive fields to represent complex structures. Training uses backpropagation: the loss gradient flows from output to input, computing gradients w.r.t. activations and kernel parameters. For each kernel, the gradient equals the convolution (correlation) of upstream gradients with input patches; input gradients are computed via kernel-rotated convolutions. Parameters are updated via SGD/Adam.",3.8
+Participant_A,Business_Executive_Summary,5,230.46451091766357,75,"Version A
+Executive Summary – Q2 Performance
+
+Financials:
+- Revenue: $2.0M
+- Costs: $1.2M
+- Profit: $0.8M
+- Profit margin: 40%
+
+Key Growth Areas:
+- Enterprise segment expanded 18% quarter-over-quarter, driven by upsell and renewals.
+- New product line contributed 12% of total revenue with strong early adoption.
+- International sales grew 15%, led by EMEA distribution partners.
+
+Challenges:
+- Customer acquisition costs rose 9% due to higher paid media rates.
+- Supply chain lead times impacted hardware attach, delaying ~$150K in recognized revenue.
+- Churn concentrated in SMB accounts, indicating pricing sensitivity and onboarding gaps.
+
+Operational Highlights:
+- Sales cycle shortened from 74 to 68 days after CRM and playbook updates.
+- Gross margin maintained at 60% despite input cost volatility.
+
+Recommendation for Next Quarter:
+- Rebalance spend from broad paid media to targeted ABM to reduce CAC by 10–15%.
+- Accelerate SMB onboarding and value messaging to curb churn below 3%.
+- Secure secondary suppliers for critical components to mitigate lead-time risk.
+- Expand EMEA partner enablement to sustain international growth.
+
+Version B
+Q2 Executive Summary
+
+Financial Results:
+- Revenue: $2M
+- Costs: $1.2M
+- Profit: $0.8M
+- EBITDA margin approximates 38–40%
+
+Growth Drivers:
+- Top-10 accounts delivered 55% of revenue with 20% expansion in services.
+- Digital channel conversion improved 2.4 pp after funnel optimization.
+- Cross-sell rate increased to 27%, aided by bundled pricing.
+
+Headwinds:
+- Marketing efficiency softened; CPL up 11% in paid search.
+- Implementation backlog extended average go-live by 10 days.
+- Two enterprise deals slipped to Q3, pressuring linearity.
+
+Operational Notes:
+- NPS improved from 46 to 51; support ticket resolution time down 12%.
+- Unit economics remain strong: LTV/CAC at 4.1x, above target.
+
+Recommendation for Next Quarter:
+- Prioritize enterprise deal closure with executive sponsorship and milestone tracking.
+- Shift 15% of marketing budget to higher-ROI content syndication and webinars.
+- Add implementation capacity (2 FTE) to clear backlog and protect revenue recognition.
+
+Version C
+Q2 Performance Overview
+
+Financial Summary:
+- Revenue: $2M
+- Costs: $1.2M
+- Profit: $0.8M
+- Cash position stable; no variance to plan.
+
+Growth Highlights:
+- Recurring revenue up 14%, increasing visibility.
+- Partner ecosystem sourced 22% of bookings, up from 15%.
+- North America steady; EMEA and APAC accounted for 60% of new logo wins.
+
+Primary Challenges:
+- Price discounting to win competitive deals compressed ASP by 3%.
+- Procurement delays in the public sector elongated cycles.
+- Data integration issues created 5% of support escalations.
+
+Efficiency and Risk:
+- COGS controlled via renegotiated vendor terms; costs held at $1.2M.
+- Pipeline coverage at 3.1x entering Q3 but concentrated in two verticals.
+
+Recommendation for Next Quarter:
+- Implement value-based pricing to reduce discounting and lift ASP.
+- Diversify pipeline across at least two additional verticals to reduce concentration risk.
+- Invest in data integration tooling and documentation to lower escalations and improve retention.",3.8
+Participant_B,Creative_Writing,5,805.9456572532654,75,"```python
+outputs = [
+    {
+        ""title"": ""A Delicate Particular"",
+        ""story"": (
+            ""The rain had the kindness to moderate just as the Stanhope carriage rolled to a genteel halt before Ashenford House. ""
+            ""Miss Lydia Hartley stepped down with a composure that belied the quickness of her heart; for within, at Mrs. Bromley's musicale, ""
+            ""she must decide a matter on which peace—or comfort—might depend.\n\n""
+            ""\""My dear Miss Hartley,\"" cried Mrs. Bromley, sailing forward in silk, \""you are radiant despite the weather. Pray tell me you bring fine opinions as well as a fine ear, for Mr. Dornton attempts Handel.\""\n\n""
+            ""\""If he attempts Handel, ma'am,\"" Lydia returned, smiling, \""I shall attempt patience.\""\n\n""
+            ""Mr. Dornton, lately enriched by a mercantile windfall, bowed to Lydia with a flattering seriousness, as if all prosperity were destined for her private convenience. ""
+            ""Close by, Captain Meredith—whose fortunes were rumoured to be as lean as his courage was ample—watched in a silence that had more substance than talk.\n\n""
+            ""In the interval between arias, Mrs. Bromley contrived to place them together. \""You know, Miss Hartley,\"" she said with innocent ferocity, ""
+            ""\""that affection without security is a romance, and security without affection is a calculation. In this room we are all accountants.\""\n\n""
+            ""\""Some of us are poets still,\"" said Captain Meredith. \""We do sums only when the moon is eclipsed.\""\n\n""
+            ""\""And you, Miss Hartley?\"" asked Mr. Dornton gently. \""Do you not value a steady roof above a moonlit rapture?\""\n\n""
+            ""Lydia coloured. Her father’s estate persisted in being both respectable and insupportable—respectable in lineage, insupportable in repair. ""
+            ""The roof leaked in three bedrooms; a pane in the west window shook like an old tooth. Yet Captain Meredith’s letters had taught her to read rain as music and hardship as a sort of clarity.\n\n""
+            ""\""I value a roof,\"" she said at last, \""but I cannot like one that falls on a stranger’s house.\""\n\n""
+            ""Mr. Dornton smiled, unoffended. \""A stranger? Madam, I am industrious; I may even be agreeable. I promise an honest regard.\""\n\n""
+            ""\""Honesty is a handsome promise,\"" the Captain said, a touch unsteady. \""But there is a kind which, when spoken, costs the speaker dear. I would not have Miss Hartley purchase my sincerity with a lifetime’s regret.\""\n\n""
+            ""\""Nor I your comfort with my silence,\"" Lydia replied. \""Gentlemen, I am pressed by a decision: to relieve our leaking roof by accepting a fortune, or to keep faith with a heart that has only courage to recommend it.\""\n\n""
+            ""Mrs. Bromley, who had not meant to preside over a confession, fluttered her fan. \""My dear, genteel people never confess; they merely imply with elegance.\""\n\n""
+            ""\""Then let me be ungenteel for one moment,\"" Lydia said, steady now. \""Mr. Dornton, I esteem you. Captain, I love you. But I shall not accept either, if acceptance must be the price of my integrity. ""
+            ""I will not make a bargain where a vow ought to stand free.\""\n\n""
+            ""A hush followed, of the sort that distinguishes courage from mischief. Mr. Dornton bowed more deeply than before. ""
+            ""\""Miss Hartley, I am not so vain as to desire a mercenary triumph. Should you ever prefer my company without necessity’s hand at your back, I shall be proud to call.\""\n\n""
+            ""The Captain’s eyes spoke the gratitude his pride could not phrase. He said only, \""You have given me an example, if not an answer. I must earn both.\""\n\n""
+            ""Mrs. Bromley sighed. \""Well, if we must do without an engagement, at least let us have a duet. The public tolerates honor best when set to music.\""\n\n""
+            ""And so they sang—Lydia between prudence and affection, choosing neither by compulsion, but reserving herself for the day when choice might be not a rescue, but a gift. ""
+            ""In this, she learned that delicacy is not timidity, and that the proper roof for a heart is character; where that is sound, the rain may fall without offence.""
+        ),
+        ""keywords"": [""polite society dialogue"", ""moral dilemma"", ""integrity"", ""esteem"", ""affection""]
+    },
+    {
+        ""title"": ""The Pineapple at Haverly Hall"",
+        ""story"": (
+            ""Haverly Hall displayed a pineapple on a silver dish as if the tropics themselves had bent to Hampshire. ""
+            ""Mrs. Penrith’s winter assembly was thus declared a success before the first cup of syllabub. ""
+            ""Miss Elinor Gray, whose mother counted economies by pins and candles, tried not to admire a fruit that cost a month of prudence.\n\n""
+            ""\""You must taste it, Miss Gray,\"" urged Mr. Harbury, the master of the pineapple and other oddities. ""
+            ""\""I could not enjoy abundance if it did not make a friend of me.\""\n\n""
+            ""\""Your abundance is very civil, sir,\"" Elinor replied, \""but I am already acquainted with hunger, and fear I may be unfaithful to it.\""\n\n""
+            ""Captain Ashford, whose fortune never troubled him by being present, approached with an air that had nothing of display. ""
+            ""He greeted Mr. Harbury as a benefactor, Elinor as a confidante, and the pineapple with a bow.\n\n""
+            ""\""Miss Gray,\"" said Mr. Harbury, low and direct, \""I am sensible of your family situation. Permit me the pleasure of relieving what a pineapple cannot. ""
+            ""If you honour me, everything under my roof is yours, including the roof.\""\n\n""
+            ""Elinor felt the offer settle about her like a heavy shawl—warm, well-made, and not at all her own. ""
+            ""Mrs. Penrith arrived, fluttering. \""My dear, you have enchanted Mr. Harbury. Captain, do try to be equally enchanted, if only in self-defence.\""\n\n""
+            ""\""I am enchanted,\"" the Captain said, smiling, \""but not competitive. I bring nothing to rival a pineapple, unless constancy should ripen out of season.\""\n\n""
+            ""\""Constancy may be sweet,\"" returned Mr. Harbury, \""but it will not mend a leaking flue.\""\n\n""
+            ""\""Nor will a pineapple mend a conscience,\"" Elinor said, more sharply than she intended. \""Forgive me. I speak rudely when frightened, and generosity is sometimes terrifying.\""\n\n""
+            ""Mr. Harbury’s expression softened. \""Let me be less terrifying. I will not purchase esteem; I only request the privilege of earning it. ""
+            ""If you cannot like me now, like me by degrees.\""\n\n""
+            ""Elinor glanced at Captain Ashford, who studied the floor as if his fortune were hidden there. ""
+            ""\""Sir,\"" she told Mr. Harbury, \""to marry you would be to cure every practical ill—and invite a subtler one, if I did it from gratitude instead of affection. ""
+            ""To refuse you is to leave my mother in need and myself in doubt. What is a dutiful daughter to prefer: comfort without love, or love without comfort?\""\n\n""
+            ""Mrs. Penrith, alarmed at morality invading her supper, clapped her hands for a country-dance. ""
+            ""But the room heard Elinor, and the pineapple looked suddenly dearer to no one.\n\n""
+            ""\""Prefer what you can respect in the morning,\"" Captain Ashford said quietly. \""I will endeavour to become respectable to your heart as well as the world.\""\n\n""
+            ""Mr. Harbury inclined his head. \""And I will endeavour not to mistake gratitude for regard. We shall both be better men for your hesitation, Miss Gray.\""\n\n""
+            ""Elinor took a single taste of the fruit—bright, surprising, and not sustaining. ""
+            ""She set down her fork with a smile that owed nothing to hunger. The dilemma was not solved; it was preserved, like the pineapple itself: ""
+            ""a luxury to be approached sparingly, and only when one could afford the sweetness.""
+        ),
+        ""keywords"": [""polite society dialogue"", ""moral dilemma"", ""gratitude vs affection"", ""esteem"", ""constancy""]
+    },
+    {
+        ""title"": ""A Letter Misdelivered"",
+        ""story"": (
+            ""The letter arrived at tea: a cream envelope that pretended innocence and achieved havoc. ""
+            ""Miss Marian Fielding broke the seal under the expectant gaze of Mrs. Temple, her aunt, and Mr. Lacey, whose attention was as constant as a clock’s chime.\n\n""
+            ""\""Heavens,\"" cried Mrs. Temple, \""you are pale. If the news is dreadful, conceal it; if delightful, share it; I cannot abide middling sensations.\""\n\n""
+            ""\""It is a proposal,\"" Marian managed. \""From Mr. Redford. He writes with generosity and propriety—two virtues that, when united, have been known to carry a household by storm.\""\n\n""
+            ""Mr. Lacey coloured, though he had not the comfort of any claim. He had been poor too long to be eloquent about it.\n\n""
+            ""\""Mr. Redford’s estates are the envy of Derbyshire,\"" Mrs. Temple declared. \""And you have a younger brother to educate and a roof that refuses any rational conversation. ""
+            ""Marian, gratitude is a fine love when no other presents itself.\""\n\n""
+            ""\""Aunt,\"" Marian said softly, \""I received another letter this morning—misdelivered, but not misread. It was from Mr. Lacey to his sister, and it spoke of me as of a landscape: with feeling but at a distance. ""
+            ""I returned it, of course—but it has not returned me to myself.\""\n\n""
+            ""Mr. Lacey’s voice was low. \""I wrote without presumption. My poverty should be felt by me alone.\""\n\n""
+            ""\""Poverty is too talkative to be kept silent,\"" Mrs. Temple observed. \""I hear it every time the wind complains at the windows.\""\n\n""
+            ""\""Mr. Redford offers more than comfort,\"" Marian continued. \""He offers consequence. The house would be secure; Henry could read Virgil indoors, and the roof would listen. ""
+            ""Yet if I accept him while my heart is entangled in scruples, do I not cheat both of us?\""\n\n""
+            ""\""Scruples are respectable cousins of cowardice,\"" Mrs. Temple said briskly. \""Do not let them move in.\""\n\n""
+            ""\""They are also guardians of sincerity,\"" Mr. Lacey replied. \""Miss Fielding should not marry a fortune merely to rescue her family, unless she can also rescue her peace.\""\n\n""
+            ""Marian looked between them—the one brisk and prudent, the other tender and uncertain. ""
+            ""\""I will not make a virtue of necessity,\"" she said at last. \""If I accept Mr. Redford, it must be from esteem; if I refuse him, it must be from integrity, not infatuation. ""
+            ""I will ask him for time, and use it to discover whether my heart can grow towards him without being trained like ivy upon a wall.\""\n\n""
+            ""Mrs. Temple sighed. \""I abhor time; it turns dramatic scenes into domestic ones. But very well.\""\n\n""
+            ""Mr. Lacey’s bow was almost a benediction. \""May your decision leave you able to respect yourself in both poverty and plenty. In either case, I shall remain your friend—though I reserve the right to hope.\""\n\n""
+            ""The kettle hissed; the roof creaked; and Marian, folding both letters, felt the quiet heroism of delaying happiness for the sake of deserving it. ""
+            ""In that pause, she discovered a principle as serviceable as any fortune: that choice, to be just, must be made where gratitude and desire can meet without disguises.""
+        ),
+        ""keywords"": [""polite society dialogue"", ""moral dilemma"", ""esteem"", ""integrity"", ""proposal""]
+    }
+]
+print(outputs)
+```",3.8
+Participant_B,Technical_Explanation,3,94.4770097732544,100,"Option 1:
+CNNs process data (e.g., images) using convolution: small filters/kernels slide across the input, computing dot products to produce feature maps that capture local patterns like edges and textures. Stacking layers builds hierarchical features (low-level to high-level). Nonlinearities (e.g., ReLU) and pooling compress and stabilize representations. During training, backpropagation computes gradients of the loss with respect to weights in each filter via the chain rule; gradients are convolved back through layers, and optimizers (e.g., SGD) update kernel weights and biases to improve task performance.
+
+Option 2:
+A convolutional neural network replaces dense connections with convolutional layers where learnable kernels scan the input, sharing weights spatially to detect features regardless of position. Each kernel yields a feature map; depth increases the number of learned patterns. Pooling layers downsample, while activations add nonlinearity. Backpropagation propagates errors from the output to earlier layers, computing gradients for each kernel by correlating upstream gradients with local input patches, enabling iterative updates that refine filters to recognize class-relevant structures.
+
+Option 3:
+In a CNN, convolution applies small kernels across the input to extract local features with weight sharing, making the model efficient and translation-aware. Multiple kernels per layer form a bank of detectors; deeper layers combine earlier features into complex motifs. Pooling and strides reduce spatial resolution while preserving salient signals. Backpropagation uses the chain rule to obtain gradients for kernel weights and feature maps; these gradients are accumulated over all positions where a kernel is applied, then used by an optimizer to adjust parameters and minimize the training loss.",5
+Participant_B,Business_Executive_Summary,5,194.93751621246338,75,"Version 1 – Executive Summary (Q2)
+- Financials: Revenue $2.0M; Costs $1.2M; Profit $0.8M; Profit margin 40%.
+- Growth areas: Enterprise subscriptions (+18% QoQ), North America mid-market (+12%), add-on analytics (+22% attach rate).
+- Challenges: Lengthening sales cycles in EMEA, higher cloud hosting costs, onboarding bottlenecks driving churn risk in SMB.
+- Operational notes: Gross margin stable; CAC improved 6%; sales pipeline coverage 3.1x; NPS 41 (flat).
+- Risks: Currency headwinds, vendor price increases, talent retention in sales engineering.
+Recommendation for next quarter: Prioritize enterprise expansion and analytics upsell; accelerate onboarding automation; renegotiate cloud contracts; focus EMEA enablement to shorten cycles; maintain disciplined CAC while increasing pipeline by 15%.
+
+Version 2 – Quarterly Executive Brief (Q2)
+- Results: Revenue $2M; Costs $1.2M; Profit $0.8M. Strong unit economics with healthy cash conversion.
+- Key growth drivers: Product-led expansion in analytics, partner-sourced deals, renewals with tiered pricing.
+- Headwinds: Deal slippage in regulated sectors, elevated support tickets post-release, rising infrastructure spend.
+- Highlights: Win rate +3 pts; churn 1.8% (within target); average deal size +9%.
+- Focus areas: Improve deployment time, optimize cost-to-serve, deepen partner certifications.
+Recommendation for next quarter: Double down on analytics cross-sell, introduce deployment playbooks to reduce time-to-value, and implement cost optimization (reserved instances, storage tiering) to protect margin.
+
+Version 3 – Q2 Executive Overview
+- Financial summary: $2.0M revenue; $1.2M costs; $0.8M profit; 40% margin.
+- Growth: Mid-market expansion, usage-based uplift, and improved digital funnel conversion.
+- Challenges: EMEA macro softness, support backlog, and cloud egress fees impacting COGS.
+- Performance notes: Pipeline health steady; onboarding CSAT dipped; feature adoption rising in data tooling.
+- Mitigations: Targeted enablement, SLA triage, and FinOps guardrails.
+Recommendation for next quarter: Scale mid-market campaigns, launch guided onboarding to lift CSAT and retention, and execute FinOps program to reduce unit costs by 8–10%.
+
+Version 4 – Executive Snapshot (Q2)
+- Financials: Revenue $2M; Costs $1.2M; Profit $0.8M.
+- What worked: Enterprise renewals at higher tiers; channel momentum; analytics add-ons.
+- What hindered: Longer approvals in healthcare; support strain after major release; cloud cost creep.
+- Metrics: Gross margin resilient; LTV/CAC above 4x; time-to-close increased by 7 days.
+- Actions underway: Release hardening, partner training, contract consolidation with cloud vendor.
+Recommendation for next quarter: Emphasize renewals and upsell in enterprise, streamline approvals with sector-specific security packages, and lock in cloud savings via multi-year commitments.
+
+Version 5 – Board-Facing Q2 Summary
+- Outcome: $2.0M revenue, $1.2M costs, $0.8M profit; tracking to plan.
+- Momentum: Analytics attach strength, North America demand, improved pricing realization.
+- Pressure points: EMEA delays, SMB churn risk from slow onboarding, infrastructure cost inflation.
+- Execution: Marketing efficiency up; product reliability improving; service utilization near capacity.
+Recommendation for next quarter: Invest selectively in enterprise sales capacity, implement automated onboarding to cut ramp by 30%, and advance cost optimization to preserve the 40% margin while growing pipeline coverage to 3.5x.",3.8
+Participant_C,Creative_Writing,5,620.8932616710663,50,"```python
+stories = [
+    # Story 1 (approx. 380 words)
+    """"""At Harrington Lodge, where the gravel was always newly raked and the tea never scalding, Miss Elinor Ware found herself pressed by attentions that could not be mistaken, and counsel that could not be welcomed. Mr. Pembroke, a gentleman of nimble conversation and respectable consequence, had been observed to linger, and Mrs. Ware thought lingering the surest preface to fortune.
+
+“My dear Elinor,” said her mother, arranging the ribbons of a bonnet which had never required so much attention, “you ought to consider how few people are allowed the comfort of a settled income.”
+
+“I consider,” said Elinor, “that comfort ought to be settled upon truth first—and money thereafter.”
+
+“Fie! You speak like a heroine; and heroines eat air, which affords the most meagre nourishment.”
+
+They were interrupted by the arrival of Mr. Pembroke himself, who bore the useful awkwardness of a man convinced of his acceptability. After being seated and supplied with civility, he addressed Elinor with a gravity that required endurance.
+
+“Miss Ware,” he began, “I have, in the possession of my heart and the approbation of our friends, every inducement to be frank. Might I hope—”
+
+“Sir,” she said, colouring but not shrinking, “you may hope for my sincerity.”
+
+He smiled as if the gift were already his. “I shall be explicit. My aunt has promised the Sunningdale property upon my marriage. It is a circumstance worthy of your prudence.”
+
+“It is worthy of my attention,” Elinor replied, “but perhaps not of my esteem.”
+
+He laughed gently, as one indulging a child. “Esteem will follow convenience.”
+
+“Not in my experience,” said Elinor.
+
+Mrs. Ware fluttered in the background like a conscience she had not invited. “My love, Mr. Pembroke speaks of security. Security is the proper guardian of happiness.”
+
+“Security without honour is a jailor,” Elinor said quietly.
+
+The gentleman paused. “Am I to infer an objection?”
+
+“Only this: I was told last night, by Mrs. Grey—who is easily alarmed but seldom mischievous—that the Sunningdale tenants have been pressed into leases that oblige them to improvements they cannot afford. Is it true?”
+
+Mr. Pembroke’s countenance altered. “Madam, the estate must be advanced.”
+
+“Then I must not be,” Elinor answered.
+
+He rallied with astonishment. “Would you cast away prosperity for the scruples of a cottage?”
+
+“I would cast away myself if I could not keep my conscience,” she said.
+
+He rose, bowed with a coolness that argued future triumphs elsewhere, and withdrew.
+
+Mrs. Ware was all exclamations; Elinor all calm. She took up her work and threaded her needle.
+
+“My dear,” cried her mother at last, “what is to become of us?”
+
+“Exactly what we deserve,” Elinor replied, “if we prefer what is right to what is merely ready.” And in time, though neither Sunningdale nor its promises returned, peace—being far less costly—came and stayed."""""",
+
+    # Story 2 (approx. 420 words)
+    """"""The assembly at Highwood was remarkable only for its music, which could scarcely be heard, and its conversation, which could never be escaped. Miss Marianne Arden, pretty enough to be useful and sensible enough to be troublesome, was there under the vigilant care of her aunt, Mrs. Larkins, who measured choice by curtain length and consequence by carriage wheels.
+
+Mr. Tilbury, a gentleman whose politeness was exact and whose fortune was reported to be elastic, attached himself to Miss Arden with all the industry of a man convinced that taste may be improved by perseverance. He danced twice, praised the candles, and admired the temper of the floor, which he declared not to be slippery, a recommendation he bestowed with the air of a philosopher.
+
+“Miss Arden,” said he, when the set obliged them to pause, “it would gratify me to know that you consider prudence a kind of romance. There is nothing so tender as a well-managed income.”
+
+“There is much tenderness that is not to be added,” Marianne said, smiling, “and much income that cannot be managed.”
+
+Her aunt swept near. “My love, Mr. Tilbury is all propriety.”
+
+“Propriety may be admirable,” Marianne replied, “but it does not always converse.”
+
+After the ball, Mrs. Larkins presented her strongest arguments. “A dowry is a delicate plant, Marianne, and yours is of the most modest bloom. Mr. Tilbury will water it.”
+
+“I am more afraid,” Marianne said, “that he will prune me.”
+
+Days later, a letter arrived from Marianne’s cousin, Mr. Edwin Hale, lately returned from the North. His fortunes were uncertain; his spirits, clearer. He confessed to having purchased a parcel of land at an imprudent price, trusting a partner whose integrity had proved imaginative. He asked no aid, only the comfort of her opinion.
+
+Mr. Tilbury, who had heard, for news travels on feet more nimble than friendship, called the next morning with advice that sounded very like triumph. “Miss Arden, will you not be glad to exchange the hazard of speculative connections for the solid ground of my protection?”
+
+Marianne coloured. “Sir, there is a protection that makes the protected feel very small.”
+
+“Indeed,” he said, astonished, “I intend you to be very safe.”
+
+“And I intend to be very honest,” she answered. “I cannot accept a fortune that prefers my cousin’s ruin to my comfort.”
+
+Mrs. Larkins gasped. “He has not ruined Mr. Hale!”
+
+“No,” Marianne said gently, “but he wishes me to consider that ruin a convenient argument.”
+
+Mr. Tilbury bowed with the injury of a man misunderstood by everyone but himself and withdrew.
+
+In time, Mr. Hale recovered more steadily than Mr. Tilbury’s pride; and Marianne, who had chosen affection over arrangement, discovered that happiness is never so polite as when it has nothing to prove and everything to keep.""""""
+]
+print(""\n\n---\n\n"".join(stories))
+```",2.5
+Participant_C,Technical_Explanation,5,124.24790334701538,75,"Option 1:
+A convolutional neural network (CNN) applies learnable filters (kernels) over input tensors via convolution: each kernel slides spatially, computing dot products to produce feature maps that capture local patterns. Stacking layers grows receptive fields; nonlinearities (e.g., ReLU), pooling/strides, and normalization shape invariances and reduce resolution. Early layers learn edges/textures; deeper layers compose higher-level features. Parameters are the kernel weights (and biases). During training, a loss (e.g., cross-entropy) is minimized via backpropagation: gradients flow from output to earlier layers using the chain rule, including through convolution operations (implemented as cross-correlation in practice), updating filters with optimizers like SGD/Adam.
+
+Option 2:
+CNNs extract hierarchical features by convolving inputs with small kernels, each acting as a pattern detector shared across spatial locations. Convolution produces feature maps; stride and pooling downsample, while padding preserves spatial size. Nonlinearities enable expressive compositions, and residual/normalization layers stabilize deep stacks. Training uses backpropagation: compute loss, then propagate gradients through all operations (conv, activation, pooling), accumulating partial derivatives w.r.t. each kernel. Weight sharing reduces parameters and enforces translation equivariance; learned filters progress from local edges to class-specific motifs.
+
+Option 3:
+In a CNN, convolution replaces dense connections: a kernel slides over the input, performing local dot products to yield activation maps. Weight sharing across positions makes the model parameter-efficient and translation-equivariant. Multiple filters per layer detect diverse features; deeper layers expand receptive fields via stacking, stride, and pooling. Classification heads (global pooling or flatten + MLP) map features to outputs. Backpropagation computes gradients through every layer, including the convolution operator, and updates kernel weights to minimize the loss, enabling filters to specialize to discriminative patterns.
+
+Option 4:
+CNNs model images (or sequences) with localized, shared filters. Each convolution layer applies multiple kernels to produce feature maps; padding, stride, and dilation control resolution and receptive field. Nonlinearities and pooling/downsamples build invariance and reduce compute. The network’s parameters are kernel weights and biases. Training uses backpropagation with the chain rule: gradients of the loss w.r.t. outputs are convolved with inputs (and vice versa) to obtain updates for each kernel. Over training, filters evolve from simple edge/texture detectors to task-specific, high-level features.
+
+Option 5:
+A CNN processes data by convolving it with small learned kernels, producing feature maps that highlight local correlations. Stacked conv blocks (conv + norm + activation, sometimes pooling) progressively enlarge receptive fields and compose features. Stride/pooling reduce spatial size; padding preserves dimensions. Weight sharing across locations enforces translation equivariance and reduces parameters. Backpropagation computes derivatives through convolution and nonlinearities, adjusting kernel weights via gradient-based optimizers to minimize a loss, yielding hierarchical representations useful for classification or detection.",3.8
+Participant_C,Business_Executive_Summary,5,171.40768766403198,100,"Version A
+Executive Summary — Q2 Performance
+
+Financials: Revenue $2.0M; Costs $1.2M; Profit $0.8M. Gross margin held at 40%, reflecting disciplined cost control and sustained demand.
+
+Key Growth Areas:
+- Enterprise subscriptions expanded via upsell and improved retention.
+- Digital channels delivered higher conversion and lower CAC.
+- Strategic partnerships opened two new verticals with favorable unit economics.
+
+Challenges:
+- Lengthening sales cycles in mid-market segments.
+- Supply constraints in onboarding and customer success capacity.
+- Price pressure from new entrants in two core geographies.
+
+Recommendation for Next Quarter:
+Prioritize enterprise pipeline velocity, invest in onboarding capacity, and execute targeted price optimization while protecting flagship SKUs. Maintain prudent OPEX, allocate incremental spend to digital acquisition with proven ROI, and advance two partnership pilots to full rollout.
+
+Version B
+Executive Summary — Q2 Results
+
+Financial Highlights: Revenue $2M; Costs $1.2M; Profit $0.8M. Performance met plan with resilient margins and strong cash generation.
+
+Growth Drivers:
+- Product-led growth increased self-serve adoption and ARPU.
+- International expansion delivered outsized contribution in EMEA.
+- Cross-sell of adjacent modules boosted account penetration.
+
+Operational Challenges:
+- Hiring lag in technical support impacted time-to-value.
+- Legacy infrastructure created latency spikes during peak usage.
+- Regulatory reviews extended procurement timelines for public-sector deals.
+
+Recommendation:
+Focus on customer experience by accelerating support hiring and infrastructure modernization. Double down on EMEA go-to-market, formalize a cross-sell playbook, and institute deal desks for regulated sectors. Maintain cost discipline to safeguard the $0.8M profit trajectory.
+
+Version C
+Q2 Executive Summary
+
+Financial Overview: Revenue $2M; Costs $1.2M; Profit $0.8M, consistent with targeted 40% margin.
+
+Growth Highlights:
+- Top-tier accounts expanded through bundled pricing.
+- Marketing automation improved MQL-to-SQL conversion.
+- Partner-led implementations reduced churn risk.
+
+Headwinds:
+- Competitive discounting compressed win rates in SMB.
+- Prolonged onboarding created backlog and delayed revenue recognition.
+- FX volatility modestly affected international receipts.
+
+Recommendation:
+Refine pricing to defend value in SMB, augment onboarding resources to clear backlog, and hedge near-term FX exposure. Continue investment in automation and partner enablement to sustain growth while preserving margin.",5
+Participant_D,Creative_Writing,5,657.8953769207001,50,"```python
+outputs = [
+    # Story 1
+    """"""At Rosemere, where every teacup resembled a small opinion and every opinion aspired to public office, Miss Elinor Brooke found her principles very much courted by circumstance. It began with a letter, conveyed at breakfast between marmalade and moral instruction, in which Mr. Dalton, a gentleman of unblemished manners and uncertain prosperity, proposed a private engagement of the heart.
+
+“Dear Elinor,” said Mrs. Brooke, whose clarity of mind was often mistaken for kindness, “a girl may marry for affection, but she must live by arithmetic.”
+
+“Elinor must live by truth, Mama,” cried her younger sister Lydia, who preferred the agreeable audacity of sincerity to the quiet comfort of compliance.
+
+The object of dispute soon presented himself at the Hartwell assembly-rooms, where the chandeliers were persuaded to sparkle by merely being observed. Mr. Dalton bowed with that conscientious care which attends a man who pays interest on every gesture.
+
+“Miss Brooke,” he said, “may I hope that you have considered my offer?”
+
+Before Elinor could reply, Mr. Hartwell, heir to Rosemere’s largest impatience and its second-largest fortune, approached with a smile that appeared to settle any conversation into his advantage. “Miss Brooke, my mother would be gratified if you would honour our table on Thursday. We delight in agreeable company—especially when it is elegant and instructive.”
+
+“I am rarely both,” Elinor replied. “But I aspire to the latter.”
+
+At home, Mrs. Brooke drew the moral like a curtain: “Mr. Hartwell is a certainty. Mr. Dalton is an argument. A family cannot be warmed by an argument.”
+
+Elinor walked in the garden, where even the hedges seemed to counsel prudence, and found Mr. Dalton awaiting her with an anxious hopefulness that did him no fashion, but all honour. “If your heart reproves me,” he said, “I shall withdraw; but I cannot desire your hand unless it comes with your esteem.”
+
+“It comes with both,” she answered, then stopped. “Yet my family has claims which affection cannot cancel. I must either displease those I love, or betray the truth I profess.”
+
+When Thursday arrived, she went to Rosemere with a calm that was almost courage. Mr. Hartwell sat her by the window, as if the view could flatter her into consent. He spoke of estates as other men speak of sunsets, with a sentiment meant to disguise the calculation beneath.
+
+“Sir,” Elinor said, “I am honored by your regard, but I cannot marry where my conscience is a mere ornament.”
+
+Mr. Hartwell colored, then laughed. “A rare lady, who bargains for a soul.”
+
+That evening, Elinor told her mother of her resolve. There were tears, some recriminations, and finally a silence in which love recovered its self-respect.
+
+Her marriage to Mr. Dalton was not lavish enough to earn compliments from strangers, but it was sufficiently honest to deserve them. In time even Mrs. Brooke admitted that a household may be heated by truth, provided the hearth is tended. Thus Elinor learned that prudence without principle is only a more polished distress, and that the heart, properly engaged, is the best accountant in polite society."""""",
+
+    # Story 2
+    """"""The drawing-room at Netherby Hall had lately adopted a higher tone, as if the pianoforte felt moral responsibility for each note. Miss Marianne Fielding, with a fortune of moderate pretensions and an aunt of considerable ones, was to be disposed of in a manner that did justice to both. Her suitors were two: Mr. Archibald Swithin, who had three carriages and a vocabulary to match, and Mr. James Pritchard, who walked when he could, and read when he must.
+
+“My dear Marianne,” said Aunt Temple, “inclination is a blossom; judgment, the fruit. One cannot dine upon flowers.”
+
+“One can starve upon fruit that never ripens,” Marianne returned, not defiantly, but with the melancholy good breeding that makes refusal sound like apology.
+
+At tea, Mr. Swithin leaned toward her with practiced gentility. “Miss Fielding, I have purchased a new phaeton of such delicacy that gravity has become an impertinence. You must allow me to instruct you in its defiance.”
+
+“I am excessively obliged,” she said, “but I am already acquainted with gravity’s persistence.”
+
+Mr. Pritchard arrived shortly thereafter, bringing his habitual awkwardness and, as a contraband, sincerity. “Miss Fielding,” he began, “I have been to the school, as you suggested. The roof leaks. I have written the subscription list, though I fear it will be thought unfashionable to repair children.”
+
+“It is far more fashionable to repair appearances,” she said, with a glance that forgave him his candour.
+
+The dilemma unfolded like a fan: elegant, public, and capable of cutting if mismanaged. Aunt Temple rehearsed the sums with pious arithmetic; Mr. Swithin rehearsed his virtues with equal exactness; and Marianne rehearsed her silence, which grew heavier each day.
+
+At the Netherby assembly, the violins argued for romance, and the company, who were never difficult to persuade in what did not concern them, agreed. Mr. Swithin requested the first set. Mr. Pritchard, who never presumed but often hoped, stood aside.
+
+“Sir,” Marianne said to Mr. Swithin as they danced, “do you approve of charity?”
+
+“Immoderately,” he replied, “provided it is well-dressed and keeps early hours.”
+
+“Then you will not think me ill-bred,” she said, stopping with gentle firmness, “if I confess that my heart is pledged to a cause whose pockets are empty, and to a gentleman whose coat is not.”
+
+Aunt Temple gasped; the violins faltered; Mrs. Bloomfield dropped a whisper of historic consequence. Mr. Pritchard, pale and astonished, advanced no claim but the truth that was written in his look.
+
+Marianne turned to her aunt. “You entrusted me with your affection that I might spend it wisely. I cannot buy happiness with another’s tears. If prudence will not protect me in this, conscience must.”
+
+There was a pause during which society examined its reflection. At length Aunt Temple, who loved her niece too well to be forever fashionable, said, “If we must be poor, let us be respectable in it.”
+
+They married under a roof repaired by subscriptions and rain. The phaeton continued to defy gravity; Marianne preferred to defy pretence. She discovered that a modest household, conducted with honour, is the only extravagance that never demands apology.""""""
+]
+print(outputs)
+```",2.5
+Participant_D,Technical_Explanation,3,85.98265027999878,100,"Option A:
+CNNs apply learned filters (kernels) via convolution to extract local, translationally shared features from inputs (e.g., images). Each kernel slides spatially, computing dot-products to produce feature maps; stacking layers builds hierarchical representations (edges → textures → parts → objects). Nonlinearities (e.g., ReLU), pooling/striding control capacity and spatial resolution. Parameters are the kernel weights and biases. Training uses backpropagation with SGD/variants: compute loss gradients w.r.t. outputs, backprop through convolution (using correlations to accumulate gradients over sliding windows), update kernel weights, and propagate gradients to earlier layers via the chain rule. Padding preserves spatial size; dilation expands receptive fields.
+
+Option B:
+A CNN replaces dense matrix multiplications with convolutions: small kernels convolve over the input, sharing weights across spatial positions to exploit locality and reduce parameters. Multiple filters per layer detect different patterns, producing feature maps; deeper layers compose these into higher-level abstractions. Stride, padding, and pooling regulate resolution and receptive fields. During backpropagation, gradients are computed for each kernel by correlating the upstream gradient with the corresponding input patches; input gradients are obtained by convolving the flipped kernels with the upstream gradients. Optimizers update kernel weights to minimize a task loss.
+
+Option C:
+Convolutional layers perform sliding-window linear operations: a k×k kernel computes dot-products with local patches to yield feature maps; many kernels run in parallel across channels. Nonlinear activations and normalization stabilize and increase expressivity; pooling or strided convolution achieves downsampling. CNNs leverage weight sharing and locality for efficiency and inductive bias. Backpropagation differentiates through convolution: dL/dW is the sum over spatial positions of input patches multiplied by the upstream gradient; dL/dX is the convolution of upstream gradients with rotated kernels. End-to-end training tunes kernels to detect increasingly complex features.",5
+Participant_D,Business_Executive_Summary,5,205.51205372810364,75,"Version 1
+
+Executive Summary – Q2 Performance
+
+Financial Overview:
+- Revenue: $2.0M
+- Costs: $1.2M
+- Profit: $0.8M
+- Margin: 40%
+
+Key Growth Areas:
+- Enterprise subscriptions expanded across healthcare and fintech, driven by improved onboarding and SLA guarantees.
+- Product-led growth accelerated via a streamlined trial-to-paid funnel and pricing alignment for mid-market.
+- Channel partnerships contributed steady bookings, particularly in APAC, supported by localized enablement.
+
+Operational Highlights:
+- Gross margin stability from disciplined vendor renegotiations and targeted cloud cost optimization.
+- Feature velocity improved with modular releases and reduced deployment friction.
+- Customer success motion strengthened, lifting net revenue retention and lowering logo churn.
+
+Challenges:
+- Sales cycle elongation in the upper-mid segment due to security review backlogs.
+- Pipeline concentration risk with three outsized deals creating forecast volatility.
+- Marketing attribution gaps hindering precise ROI allocation across campaigns.
+
+Recommendation for Next Quarter:
+- Prioritize security/compliance automation to compress procurement timelines.
+- Diversify top-of-funnel with targeted ABM and refreshed content to reduce concentration risk.
+- Invest in advanced attribution and tighter RevOps hygiene to sharpen forecast accuracy.
+- Maintain disciplined spend while reallocating to high-velocity segments to protect the 40% margin.
+
+Keywords: Q2 revenue $2M, costs $1.2M, profit $0.8M, executive tone, key growth areas, challenges, recommendation.
+
+—
+
+Version 2
+
+Executive Summary – Q2 Results and Outlook
+
+Financials:
+- Q2 Revenue: $2M
+- Q2 Costs: $1.2M
+- Q2 Profit: $0.8M
+- Profit Margin: 40%
+
+Growth Drivers:
+- Strong upsell in core platform tiers; seat expansion in existing enterprise accounts.
+- Geographic momentum in EMEA with improved partner activation and co-marketing.
+- Product differentiation via analytics add-ons, increasing ARPU and reducing discounting.
+
+Headwinds:
+- Procurement slowdowns in public sector leading to deal slippage.
+- Elevated cloud egress costs in two regions, pressuring unit economics.
+- Limited sales coverage in strategic accounts, constraining multi-threaded entry.
+
+Operational Notes:
+- On-time delivery improved; support backlog reduced by 18%.
+- Churn contained through proactive QBRs and enhanced onboarding.
+- Cash efficiency improved as payback period shortened by one month.
+
+Recommendation for Next Quarter:
+- Expand strategic account coverage and formalize multi-threading playbooks.
+- Implement cloud cost governance and regional data routing to curb egress fees.
+- Deepen EMEA partner enablement and introduce verticalized messaging for public sector.
+- Preserve cost discipline to sustain the $0.8M profit while funding high-impact growth.
+
+Keywords included: Q2 revenue $2M, costs $1.2M, profit $0.8M, growth areas, challenges, recommendation.
+
+—
+
+Version 3
+
+Q2 Executive Brief
+
+Headline Financials:
+- Revenue: $2M
+- Costs: $1.2M
+- Profit: $0.8M
+- EBITDA margin consistent with expectations.
+
+Momentum:
+- Mid-market adoption accelerated via simplified packaging and self-serve upgrades.
+- Data products and AI-assisted features increased engagement and conversion.
+- Renewals strong; net retention buoyed by cross-sell of workflow modules.
+
+Constraints:
+- Deal velocity impacted by increased InfoSec scrutiny and legal redlines.
+- Marketing mix inefficient; paid channels outperform but at rising CAC.
+- Talent gaps in solutions engineering slowed complex implementations.
+
+Operational Performance:
+- Reliability metrics improved; SLA adherence above 99.9%.
+- Unit economics healthy; COGS reduced through reserved capacity planning.
+- Governance enhanced with clearer pipeline stage definitions and exit criteria.
+
+Recommendation for Next Quarter:
+- Automate security questionnaires and standardize MSA terms to reduce friction.
+- Rebalance marketing spend toward proven segments; test intent-based programs.
+- Hire and ramp solutions engineers in priority regions; codify implementation playbooks.
+- Sustain margin discipline to protect the $0.8M profit while pursuing focused expansion.
+
+Required phrases: Q2 revenue $2M, costs $1.2M, profit $0.8M. Executed.",3.8
+Participant_E,Creative_Writing,5,626.5692472457886,50,"```python
+stories = [
+    # Story 1
+    """"""At Ashcombe House, where opinions were served as punctually as tea, Miss Elinor Arden found herself the subject of elegant concern. The drawing room, softened by a peach-coloured light, received a guest whose arrival was both a courtesy and a caution: Mr. Davenant, of respectable fortune and irreproachable manner, determined to propose.
+
+“My dear Miss Arden,” he began, smoothing the cuff that required no smoothing, “I trust you are well—indeed, I dare hope you are in the particular felicity that might render a gentleman persevering.”
+
+“I am frequently well, sir,” Elinor said, smiling as one smiles upon a child nearly resolved to do mischief, “though felicity is a seasonable visitor and not a tenant.”
+
+Her aunt, Mrs. Pryde, fluttered at the edge of usefulness. “Mr. Davenant possesses three fine carriages, Elinor, and not one unhandsome relation. Can you imagine the advantage of a family gathering unmarred by awkward conversation?”
+
+“Why, aunt,” Elinor replied, “such perfection must be suspicious. Even conversation requires a pebble to sparkle.”
+
+It was then Mr. Lyle Harrington entered—late, unannounced, and entirely uninvited save by the warmth in Elinor’s eyes. He carried a letter of a length to alarm a chimney, and a look of contrition.
+
+“Miss Arden,” said he, “if candour has any rights among friends, you must hear a confession before you accept any promise. A gentleman entrusted me with knowledge harmful to Mr. Davenant’s interests—knowledge I might use unfairly. I cannot let it sway you.”
+
+Mr. Davenant stiffened, as if spines were the true dowry of men. “Sir, you importune the lady.”
+
+Elinor lifted a hand. “Pray, both of you—let us remember that civility is a lantern, not a lie. Mr. Harrington, your confession implies a second: that you had intended silence.”
+
+“I intended it,” he said, “till I saw your aunt’s contentment arranging your future with the dexterity of a butler arranging dessert. I cannot win you by discretion that is only cowardice.”
+
+Mrs. Pryde gasped, as if the word cowardice were a draught, not a syllable. “Elinor, weigh your prospects.”
+
+Elinor studied the fire, where one bold flame leapt and then regretted it. “Mr. Davenant, do you fear the truth?”
+
+“I respect it,” he answered carefully, “when it is well-bred.”
+
+“Truth,” Elinor said, “is never poor company, even when it arrives without gloves.” She turned to Mr. Harrington. “What is the knowledge you renounce?”
+
+“That Mr. Davenant’s debt is heavier than his reticence,” he said, “and that his country estate is mortgaged to the rafters.”
+
+Davenant coloured. “To expose it would be ungentlemanly.”
+
+“To conceal it would be ungenerous,” Elinor replied, “for marriage is a conversation of years; one must begin it with proper grammar. Sir, I wish you better fortune and franker days.”
+
+Davenant bowed and withdrew. Mrs. Pryde sank into the sofa, an emblem of upholstery in distress. “Elinor, you refuse security for sincerity.”
+
+“I prefer a future that may improve,” Elinor said gently, taking Harrington’s arm, “to a present arranged upon false confidence. If we are poor, we shall at least be honest; and if we are honest, we may yet be rich in company.”
+
+Thus the matter ended—not with triumph, but with clarity; and in that modest light they walked, discovering that moral comfort is the best of carriages, and will carry two."""""",
+
+    # Story 2
+    """"""The assembly at Greylark was of that lively order which encourages opinions to dress in their best and promenade. Miss Marianne Vance, whose hand was solicited as often for a reel as for advice, found herself between two suitors and one sermon disguised as a compliment.
+
+“Miss Vance,” said Sir Oliver Pencombe, “your judgment, like your complexion, inclines to the fair. Permit me to speak of a calendar that must soon appoint a day particularly charming.”
+
+“Sir,” Marianne replied, “I have no quarrel with calendars; they possess the prudence of refusing to hurry.”
+
+Across the room, Mr. James Elcott, a gentleman of modest fortune and well-chosen words, prepared a bow that intended a lifetime. He had discovered that love, like a piano, must be tuned before it can be played in public.
+
+Mrs. Brereton, Marianne’s godmother, marshalled her smile. “My dear, Sir Oliver offers a carriage with springs so refined that even disappointment would travel comfortably. There is also the matter of the Pencombe library—chosen volumes that never contradict their owner.”
+
+“A silent library?” Marianne said. “I fear it would not suit me.”
+
+Sir Oliver’s sleeve sighed with importance. “I own,” he added, “some business particulars—small sums, trifling embarrassments—that do not signify. What signifies is propriety; and propriety, Miss Vance, is a cloak that never goes out of fashion.”
+
+Mr. Elcott approached, hat in hand but spirit in evidence. “Propriety without conscience is only a cloak in summer—handsome, but insufferable. Sir Oliver, may I hope you will forgive the plainness of a poor man?”
+
+“Always,” Sir Oliver said, “when it forgets to be plain.”
+
+The musicians began. A waltz rose like warm bread, consoling and irresistible. Marianne, uncertain, turned to the window where the night had the good sense to be simple.
+
+“Sir Oliver,” she said steadily, “before I consent to your calendar, I must ask—did you not purchase, at last quarter-day, a mortgage that presses upon Mr. Elcott’s widowed sister? It seems a busy sort of propriety, to call so often when sorrow is already at home.”
+
+Colour climbed Sir Oliver’s cheek like a trespasser. “Business requires decision.”
+
+“Business requires daylight,” Marianne answered.
+
+He bowed, the geometry of retreat. Mrs. Brereton fluttered her fan. “Child, you dismiss a title for a principle!”
+
+Marianne’s smile was small but serviceable. “Then I am at least properly dressed.”
+
+She turned to Mr. Elcott. “Sir, were I to prefer comfort today, I should have misery tomorrow. I will not enter a happiness hired by another woman’s rent. If our future is to be earned, let it be paid in kindness.”
+
+Mr. Elcott, astonished into hope, murmured, “I shall work every hour as though gratitude kept the time.”
+
+“Then we shall be punctual together,” she said. And though the room resumed its noise, a quieter music presided—the knowledge that a woman’s heart may choose not the tallest fortune, but the firmest ground.""""""
+]
+
+print(""\n\n---\n\n"".join(stories))
+```",2.5
+Participant_E,Technical_Explanation,1,28.365915060043335,100,"Option A:
+Convolutional neural networks learn spatially local, translation-aware features by sliding small learnable filters (kernels) over inputs to produce feature maps. Each convolution computes dot products between the kernel weights and local input patches, sharing the same parameters across all locations to reduce complexity and exploit locality. Nonlinearities (e.g., ReLU) and pooling or strided convolutions introduce invariance and downsample feature maps. Stacked layers form hierarchical representations: early filters detect edges/textures; deeper ones capture parts and objects. During training, backpropagation computes gradients of the loss with respect to kernel weights via the chain rule, using convolution/correlation operations for efficient gradient flow, and updates parameters with optimizers like SGD.
+
+Option B:
+A CNN replaces fully connected layers with convolutional layers that apply small kernels across the width/height (and channels) of an image, producing activations that reflect local pattern matches. Parameter sharing means one kernel scans all positions, yielding feature maps and strong inductive bias for translation. Nonlinearities and normalization stabilize and enrich representations, while pooling or strides reduce spatial resolution and receptive field grows with depth. Training uses backpropagation: gradients are propagated from output to input, computing weight gradients by convolving input patches with upstream errors, and computing input gradients by convolving flipped kernels with those errors.
+
+Option C:
+In a CNN, filters (kernels) are tensors that, when convolved with the input, produce feature maps measuring the presence of learned motifs at each location. Multiple filters per layer capture different motifs; stacking layers composes them into higher-level features. Padding and stride control spatial size; dilation expands receptive fields. Activations (e.g., ReLU), pooling, and residual connections shape the information flow. Learning uses backpropagation: the loss gradient flows through convolutions via efficient cross-correlation, yielding gradients for each kernel and for inputs; shared weights accumulate gradients across all spatial positions before optimization updates them.",5
+Participant_E,Business_Executive_Summary,5,174.12398529052734,75,"Option 1
+Executive Summary — Q2 Performance
+- Financials: Revenue $2.0M; Costs $1.2M; Profit $0.8M (40% margin).
+- Growth Areas: Enterprise subscriptions (+18% QoQ), upsell in existing accounts (+12%), and partner-driven pipeline acceleration (cycle time -9%).
+- Challenges: Rising cloud hosting costs (+7%), uneven conversion in SMB channel, and talent constraints in data engineering.
+- Operational Highlights: NRR at 116%; churn 2.3%; on-time delivery 95%; CSAT 4.6/5.
+- Risk Watchlist: Currency fluctuations, vendor pricing resets in Q3, and dependency on two top partners.
+
+Recommendation for Next Quarter
+- Prioritize enterprise roadmap features tied to active pipeline; expand usage-based pricing pilots; renegotiate cloud contracts; selectively hire in data engineering; reduce low-yield SMB spend and reallocate to partner co-marketing with measurable MQL targets.
+
+Option 2
+Executive Summary — Q2 Results
+- Revenue: $2M
+- Costs: $1.2M
+- Profit: $0.8M
+- Key Growth: Product-led expansion (seat growth +15%), healthcare and fintech vertical wins, and improved win rate in deals >$100k.
+- Key Challenges: Support ticket backlog in EMEA, margin pressure from third-party data, and slower implementation throughput.
+
+Recommendation for Q3
+- Tighten gross margin via data vendor consolidation; add EMEA support capacity; fast-track vertical playbooks; maintain disciplined quota coverage while pausing non-core experiments.
+
+Option 3
+Q2 Snapshot
+- Revenue: $2.0M
+- Costs: $1.2M
+- Profit: $0.8M
+- Growth Drivers: New AI features lifted ARPU; channel partnerships opened two strategic accounts; renewal health improved with value-based packaging.
+- Challenges: Infrastructure cost creep, elongated security reviews in regulated industries, and limited brand awareness in new regions.
+
+Recommendation
+- Lock multi-year deals with pricing escalators; invest in security certifications to shorten cycles; negotiate reserved-capacity cloud pricing; run targeted brand campaigns in two priority geographies.
+
+Option 4
+Quarterly Executive Brief — Q2
+- Financials: Revenue $2M; Costs $1.2M; Profit $0.8M.
+- Momentum: Pipeline coverage at 3.1x, sales velocity up 10%, and onboarding times down 12%.
+- Frictions: API reliability incidents, fragmented analytics stack, and inconsistent partner enablement.
+
+Recommendation for Next Quarter
+- Fund reliability sprints; unify analytics to a single BI layer; formalize partner certification; maintain cost discipline to preserve a 40% profit margin.
+
+Option 5
+Q2 Executive Summary
+- Revenue: $2M; Costs: $1.2M; Profit: $0.8M.
+- Strengths: Strong enterprise demand, higher attachment of premium support, and improved cross-sell into existing logos.
+- Weaknesses: Gross margin compression in cloud-heavy workloads, longer onboarding for complex integrations, and hiring lag in solutions architecture.
+
+Recommendation
+- Expand capacity in solutions architecture; implement capacity reservations for cloud services; refine onboarding playbooks; concentrate marketing on top three ICP profiles to maximize ROI.",3.8

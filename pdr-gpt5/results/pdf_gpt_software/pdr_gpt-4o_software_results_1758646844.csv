@@ -1,0 +1,1913 @@
+participant_name,task_name,iteration_count,time_spent_sec,final_score,final_output,satisfaction_score
+Participant_A,Unit_Test_Generation_Pytest,1,41.91621160507202,100,"```python
+# test_normalize_email.py
+
+import pytest
+from normalize_email_module import normalize_email
+
+def test_normalize_email_whitespace():
+    assert normalize_email(""  example@domain.com  "") == ""example@domain.com""
+
+def test_normalize_email_mixed_case():
+    assert normalize_email(""eXaMPLe@DoMaiN.CoM"") == ""example@domain.com""
+
+def test_normalize_email_multiple_spaces():
+    assert normalize_email(""  example@  domain.  com  "") == ""example@domain.com""
+
+def test_normalize_email_empty_string():
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+def test_normalize_email_missing_at_symbol():
+    with pytest.raises(ValueError):
+        normalize_email(""exampledomain.com"")
+
+def test_normalize_email_extra_spaces_in_local_and_domain():
+    assert normalize_email(""  ex ample@do  main.com  "") == ""example@domain.com""
+
+def test_normalize_email_leading_trailing_spaces():
+    assert normalize_email("" example @ domain . com "") == ""example@domain.com""
+```
+
+### Explanation:
+
+1. **test_normalize_email_whitespace**: Verifies that leading and trailing whitespace are removed correctly.
+2. **test_normalize_email_mixed_case**: Ensures the function correctly normalizes uppercase letters to lowercase.
+3. **test_normalize_email_multiple_spaces**: Checks that multiple spaces within email parts are collapsed.
+4. **test_normalize_email_empty_string**: Confirms the function raises a `ValueError` when given an empty string.
+5. **test_normalize_email_missing_at_symbol**: Ensures the function raises a `ValueError` when no '@' symbol is present.
+6. **test_normalize_email_extra_spaces_in_local_and_domain**: Tests normalization of spaces within both local and domain parts.
+7. **test_normalize_email_leading_trailing_spaces**: Verifies handling of spaces improperly placed around components.",5
+Participant_A,API_Documentation_REST,1,40.51623177528381,100,"**Endpoint**  
+`POST /api/v1/projects/{projectId}/issues`
+
+**Method**  
+POST
+
+**Auth**  
+Bearer token
+
+**Request**  
+The request must be a JSON object containing the following fields:
+- `title`: A string representing the title of the issue. It is required and must be between 1 and 120 characters.
+- `description`: An optional string providing additional details about the issue.
+- `labels`: An optional array of strings for categorizing the issue.
+- `assigneeId`: An optional string that specifies the ID of the user to whom the issue is assigned.
+
+**JSON Request Example:**
+```json
+{
+  ""title"": ""Fix login bug"",
+  ""description"": ""Users are unable to log in with valid credentials."",
+  ""labels"": [""bug"", ""urgent""],
+  ""assigneeId"": ""user_12345""
+}
+```
+
+**Response Example (201)**  
+Upon successful creation of the issue, the server will respond with a JSON object containing the following fields:
+- `id`: A unique identifier for the created issue.
+- `title`: The title of the issue as provided in the request.
+- `description`: The description of the issue as provided in the request.
+- `labels`: An array of labels attached to the issue.
+- `assigneeId`: The ID of the user to whom the issue is assigned, if provided.
+- `createdAt`: The timestamp indicating when the issue was created.
+
+**JSON Response Example:**
+```json
+{
+  ""id"": ""issue_67890"",
+  ""title"": ""Fix login bug"",
+  ""description"": ""Users are unable to log in with valid credentials."",
+  ""labels"": [""bug"", ""urgent""],
+  ""assigneeId"": ""user_12345"",
+  ""createdAt"": ""2023-10-20T14:48:00Z""
+}
+```
+
+**Status Codes**  
+- `201 Created`: The issue has been successfully created.
+- `400 Bad Request`: There was a validation error. The response will contain error details.
+- `401 Unauthorized`: Authentication is required and has failed or has not yet been provided.
+- `409 Conflict`: The issue could not be created due to a duplicate title within the same project.
+
+**Notes**  
+- The `title` field must be unique within the project identified by `{projectId}`. If a duplicate title is detected, a `409 Conflict` status will be returned.
+- The API requires a valid Bearer token for authorization. Ensure that your token has the necessary permissions to create issues within the specified project.
+- The format for timestamps follows the ISO 8601 standard.",5
+Participant_A,Refactoring_Rationale_SRP,1,62.2197470664978,100,"# Refactoring Rationale
+
+## 1) Context
+
+The current system includes a monolithic class responsible for HTTP routing, domain validation, and database persistence. This class is approximately 400 lines long and serves as a critical entry point for handling incoming requests and managing data operations. However, its mixed responsibilities complicate both its functionality and maintainability. In particular, adherence to the Single Responsibility Principle (SRP) is significantly lacking, which hinders further extension and testing of the module.
+
+## 2) Code Smells
+
+Several code smells are apparent:
+
+- **Violation of SRP**: The class is responsible for too many distinct activities, including routing, validation, and database access. This violates the SRP, making it harder to understand, test, and modify parts in isolation.
+
+- **High Cyclomatic Complexity**: The intermingling of various responsibilities creates complex logic flows and conditional branches, leading to higher cyclomatic complexity. This complexity increases the difficulty of validating correctness and comprehending the module's behavior.
+
+- **Lack of Separation of Concerns**: Concerns like HTTP processing, business logic, and data management are not well-separated, leading to a tight coupling between components. This coupling complicates isolated testing and reuse.
+
+## 3) Proposed Refactor
+
+To align the system with SRP and reduce cyclomatic complexity, we propose the following refactor strategy:
+
+1. **Extract a Router Layer**: Separate HTTP routing logic into its own component. This layer will only handle incoming requests, delegating validation and business logic to a service layer.
+
+2. **Introduce a Service Layer**: Isolate domain validation and business rules within a new service class. This layer will contain the core logic and validation, making it independently testable and manageable.
+
+3. **Create a Repository Layer**: Confine database interaction logic to a repository class. This abstraction will address data persistence, providing a clean interface to interact with databases.
+
+4. **Add Unit Tests Around Boundaries**: Design comprehensive unit tests for each layer demonstrating the correct use of boundary interfaces. Tests will ensure that each layer behaves correctly in isolation and integrates seamlessly with other components.
+
+## 4) Risks & Mitigations
+
+- **Increased Overhead**: Introducing multiple layers might initially increase complexity. This can be mitigated by clear documentation and defining simple, precise interfaces between components.
+
+- **Potential for New Bugs**: Refactoring might introduce new issues. This risk can be reduced with a robust test suite covering all edge cases, maintaining existing behaviors, and validating new interfaces thoroughly.
+
+- **Performance Overhead**: Additional abstraction layers might affect performance. We will evaluate and optimize critical paths where necessary, ensuring that refactoring maintains or improves overall system performance.
+
+## 5) Acceptance Criteria
+
+- **SRP Compliance**: The refactored code must demonstrate a clear separation of distinct responsibilities into Router, Service, and Repository layers.
+
+- **Reduced Cyclomatic Complexity**: Initial analysis should show significant decreases in cyclomatic complexity, with no single method exhibiting excessive branching or conditional logic.
+
+- **Test Coverage**: The refactored module should include complete unit test coverage for each layer, covering both successful and edge case scenarios.
+
+- **Regression-Free**: All existing system behaviors should be preserved, with no regressions. Automated testing and verification will validate this.
+
+- **Documented Interfaces**: Each layer's API must be well-documented, detailing expected inputs, outputs, and behaviors, to facilitate ease of understanding and further maintenance.",5
+Participant_A,Commit_Message_Normalization,5,252.0025351047516,75,"1. `feat(client): add retry and timeouts [JIRA-1234]`
+   Improved client stability by introducing retry logic and configurable 
+   timeouts. This enhancement mitigates potential disruptions caused 
+   by transient network issues, ensuring more reliable connections.
+
+2. `fix(usersvc): handle missing roles without NPE [JIRA-5678]`
+   Addressed a null pointer exception in the user service when roles 
+   are absent. This fix prevents application crashes, improving the 
+   system's robustness and error handling capabilities in role 
+   management.
+
+3. `feat(api): migrate to API v2 and update documentation [JIRA-9101]`
+   Transitioned to API version 2, incorporating new features and 
+   improvements. Updated relevant documentation to guide developers 
+   through using the latest API changes, ensuring compliance with 
+   modern standards.
+
+4. `chore(build): reformat and tidy codebase [JIRA-1121]`
+   Conducted a comprehensive code refactoring, focusing on 
+   reformatting and tidying. This effort enhances code readability 
+   and maintainability, promoting cleaner code practices across the 
+   codebase.
+
+5. `test(build): temporarily disable flaky test [JIRA-3141]`
+   Disabled an unreliable test to prevent false negatives in build 
+   processes. This measure provides stability in automated testing, 
+   allowing for continuous integration while the underlying issue is 
+   diagnosed and addressed.",3.8
+Participant_A,Bug_Report_Triage_Template,2,129.6985490322113,100,"Title: Intermittent 401 Errors Post-OAuth Callback Due to Redis Session Store
+
+Environment:
+- Production
+- OAuth2 Authentication Flow
+- Redis Cluster for Session Management
+
+Severity: High
+
+Steps to Reproduce:
+1. Navigate to the login page of the application.
+2. Initiate the OAuth login flow by selecting an OAuth provider.
+3. Authenticate successfully with the third-party OAuth provider.
+4. Upon redirect back to the application, observe the intermittently occurring 401 Unauthorized error.
+
+Expected:
+Users should be successfully logged into the application after a valid OAuth callback and session creation.
+
+Actual:
+Users intermittently receive a 401 Unauthorized error after the OAuth callback, preventing them from accessing the application.
+
+Logs:
+```
+[INFO] 2023-10-10T10:05:30Z OAuth callback received for user: user123
+[ERROR] 2023-10-10T10:05:31Z Session retrieval failed for user: user123 - 401 Unauthorized
+```
+
+Root Cause Hypothesis:
+The migration of session storage from in-memory to Redis cluster may result in inconsistent session retrieval due to potential connection issues or session persistence problems within the Redis cluster.
+
+Proposed Fix:
+1. Investigate Redis cluster connectivity and configuration to ensure sessions are correctly written and retrievable.
+2. Consider implementing a retry mechanism for session reads to handle transient connectivity issues.
+3. Review session expiration and ensure consistent session IDs are used across requests.
+
+Test Plan:
+1. Simulate OAuth login flow in a controlled environment with Redis monitoring enabled to capture session write/read anomalies.
+2. Conduct multiple login attempts to assess the stability and performance of the Redis session store.
+3. Validate the fix by confirming no 401 errors occur post-fix across multiple consecutive successful OAuth callbacks.",5
+Participant_B,Unit_Test_Generation_Pytest,1,64.92347645759583,100,"```python
+import pytest
+
+# Let's create some test cases for the given function `normalize_email`.
+
+def test_normalize_email_removes_whitespace():
+    # This test ensures that leading and trailing spaces are removed from the email
+    input_email = ""  example@test.com ""
+    expected_output = ""example@test.com""
+    assert normalize_email(input_email) == expected_output
+
+def test_normalize_email_lowercases():
+    # This test checks that the entire email is converted to lowercase
+    input_email = ""ExamPle@TeSt.CoM""
+    expected_output = ""example@test.com""
+    assert normalize_email(input_email) == expected_output
+
+def test_normalize_email_collapse_spaces():
+    # This one is to make sure multiple internal spaces are collapsed
+    input_email = ""example @ test . com""
+    expected_output = ""example@test.com""
+    assert normalize_email(input_email) == expected_output
+
+def test_normalize_email_missing_at():
+    # Testing if the function appropriately raises ValueError when '@' is missing
+    input_email = ""example.com""
+    with pytest.raises(ValueError):
+        normalize_email(input_email)
+
+def test_normalize_email_edge_empty_string():
+    # An edge case where the input is an empty string
+    input_email = """"
+    with pytest.raises(ValueError):
+        normalize_email(input_email)
+
+def test_normalize_email_mixed_spaces_and_case():
+    # This is to test a mixed scenario with spaces and casing
+    input_email = ""  ExAm Ple@T E ST. c Om ""
+    expected_output = ""example@test.com""
+    assert normalize_email(input_email) == expected_output
+```
+
+### Comments and Explanation
+
+1. **Whitespace Handling**: The first test checks if whitespace around an email address is properly trimmed.
+
+2. **Lowercasing**: The second test confirms that the entire email (both local and domain parts) is converted to lowercase.
+
+3. **Collapsing Spaces**: The third test verifies that multiple spaces within the email are collapsed correctly.
+
+4. **Error Handling for '@'**: The fourth test checks if a `ValueError` is raised when the email address does not contain the '@' character.
+
+5. **Edge Case for Empty String**: The fifth test handles the edge case for the function's behavior when given an empty string. Again, it checks for a `ValueError`.
+
+6. **Complex Mixed Case and Whitespace**: The last test is a combination of the previous cases to ensure that the function can handle them all in combination.
+
+This comprehensive suite not only checks the functionality of the `normalize_email` function against common and complex scenarios but also ensures robustness through appropriate error handling checks.",5
+Participant_B,API_Documentation_REST,1,57.72371292114258,100,"# Endpoint Documentation for Creating a Project Issue
+
+## Endpoint
+This is where our endpoint (**the specific address the API listens to for requests**) can be accessed:
+`POST /api/v1/projects/{projectId}/issues`
+
+## Method
+- **POST**: This method is used to create a new resource on the server, which in this case is a project issue!
+
+## Auth
+Authentication is required using a **Bearer token**. You need to include it in the header using `Authorization` field. 
+Example: `Authorization: Bearer <token>`
+
+## Request
+The request must be in JSON format and include the following fields:
+
+```json
+{
+  ""title"": ""A descriptive title of your issue"",  // A short but descriptive title, mandatory field with a length of 1-120 characters
+  ""description"": ""Detailed explanation of the issue here!"" // This is optional and can be omitted if not necessary
+  ""labels"": [""bug"", ""high-priority""],  // You can add multiple tags to categorize the issue, such as ""bug"" or ""enhancement""
+  ""assigneeId"": ""123e4567-e89b-12d3-a456-426614174000"" // This field is for assigning the issue to a specific user by their unique identifier code, it is optional
+}
+```
+
+## Response Example (201)
+If the issue is successfully created, the server will respond with status code 201 and the following JSON response example:
+
+```json
+{
+  ""id"": ""abcd1234-56ef-78gh-90ij-klmnopqrstuv"",
+  ""title"": ""A descriptive title of your issue"",
+  ""description"": ""Detailed explanation of the issue here!"",
+  ""labels"": [""bug"", ""high-priority""],
+  ""assigneeId"": ""123e4567-e89b-12d3-a456-426614174000"",
+  ""createdAt"": ""2023-04-01T12:00:00Z""  // The date time configuration is in ISO 8601 format
+}
+```
+
+## Status Codes
+Here are the possible status codes and what they mean:
+- **201 Created**: The request has been fulfilled and resulted in a new resource being created.
+- **400 Bad Request**: The server could not understand the request due to invalid syntax (e.g., title missing).
+- **401 Unauthorized**: The user is not authenticated or missing the correct token.
+- **409 Conflict**: There is a duplicate title error within the specific project you are working in.
+
+## Notes
+- Ensure the `title` field always accompanies the request as well-behaved API requests cannot miss this!
+- Duplicate titles within a scope (i.e., project) are not allowed, hence possibilities of conflict.
+- Experiment with different combinations of labels to categorize and manage your issues effectively. Make sure the project's guidelines allow them!
+- It's best to verify token validity before sending the request to avoid unauthorized access issues. Try to keep your tokens secure!",5
+Participant_B,Refactoring_Rationale_SRP,1,63.04599928855896,100,"**1) Context**
+
+In our current codebase, we have a large and unwieldy 400-line class that's responsible for multiple disparate tasks: HTTP routing, domain validation, and database persistence. This violates the Single Responsibility Principle (SRP), which states that a class should have only one reason to change. By handling routing, validation, and persistence within one class, we're creating a tightly coupled architecture that's difficult to maintain and extend. This complexity results in challenges with testing and reduces code reusability.
+
+**2) Code Smells**
+
+The violations of SRP have introduced several code smells:
+- **High Cyclomatic Complexity:** With logic entangled across diverse functionalities, understanding the class's flow is cumbersome, and making changes without introducing bugs is risky.
+- **Lack of Separation of Concerns:** Functions that should be independently manageable are intertwined, leading to duplicated efforts and challenges in isolating logic specific to routing, validation, or persistence.
+- **Difficulty in Testing & Maintenance:** The meshed nature of responsibilities makes it difficult to write isolated unit tests, leading to potential increases in testing overhead and less reliable testing outcomes.
+  
+**3) Proposed Refactor**
+
+To address these issues, we propose extracting functionalities into three distinct layers, thus achieving clear separation of concerns and adherence to SRP:
+- **Router Layer:** Handle all HTTP routing concerns in a dedicated router component. This will streamline URL mapping into defined controller actions.
+- **Service Layer:** Extract validation and business rules into a service class or layer. By doing so, we enable focused analytics with clear, distinct validation logic that can be updated as business rules evolve.
+- **Repository Layer:** Isolate database interactions. A dedicated repository class will manage data persistence, ensuring that storage logic and database calls are abstracted from business logic.
+
+Additionally, introducing unit tests around these newly defined boundaries ensures that components are properly isolated and independently verifiable.
+
+**4) Risks & Mitigations**
+
+- **Risk:** Increased initial refactoring time and potential for introducing new bugs during separation.
+  - **Mitigation:** Undertake refactoring in phased steps, employing feature toggles where necessary, and incorporate continuous integration to run tests after each incremental change to catch issues early.
+- **Risk:** Potential resistance or difficulty in the team adapting to new architectural patterns.
+  - **Mitigation:** Facilitate hands-on workshops and provide comprehensive documentation to help the team transition to the new structure smoothly.
+
+**5) Acceptance Criteria**
+
+To confirm successful refactoring:
+- The class no longer violates SRP; separate router, service, and repository layers are established.
+- Cyclomatic complexity of each refactored class is reduced, making them easier to understand.
+- Unit tests are available, covering distinct upper (router layer), middle (service layer), and lower (repository layer) boundaries.
+- Code demonstrates a clear separation of concerns, with each class/module having a focused, singular responsibility.
+- Code reviews confirm no loss of existing functionality and enhancement in system maintainability.",5
+Participant_B,Commit_Message_Normalization,1,49.77950358390808,100,"### Output 1:
+```
+feat(client): add retry and timeouts [JIRA-1234]
+Refined client communication by adding retry mechanisms and setting
+timeouts. This update aims to enhance robustness and prevent potential
+client communication failures due to network issues or server delays.
+
+fix(usersvc): handle missing roles NPE [JIRA-1235]
+Resolved the NullPointerException in the user service by ensuring
+that missing roles are handled gracefully. This change ensures
+the application can function correctly even when role data is incomplete.
+
+refactor(api): change to v2 with docs update [JIRA-1236]
+Transitioned the API to version 2. Updated the documentation to
+reflect the new changes, making sure that all references are
+synchronized. This paves the way for leveraging new features and
+optimizations.
+
+chore(build): code tidy and reformat [JIRA-1237]
+Tidied and reformatted the codebase to improve readability and
+maintainability. This chore doesn't alter functionality but ensures
+cleanliness and better developer experience in future iterations.
+
+test(api): temporarily disable flaky test [JIRA-1238]
+Temporarily disabled the flaky test to prevent build failures and
+allow the team to focus on identifying the underlying issues. Will
+re-evaluate and fix before reenabling in future sprints.
+```
+
+### Output 2:
+```
+feat(client): implement retry and timeout [JIRA-2234]
+Introduced retries and timeouts for client operations to improve
+reliability amidst fluctuating network conditions. This change
+protects the client from indefinite waiting scenarios and ensures
+operations can recover from transient faults.
+
+fix(usersvc): fix roles missing NPE scenario [JIRA-2235]
+Corrected a NullPointerException in user service by checking the
+presence of roles before operations. This fix enhances the user
+experience by preventing service crashes when role information is
+unavailable.
+
+docs(api): version update to v2 [JIRA-2236]
+Updated API version to v2, including necessary documentation changes.
+This change includes a detailed log of modifications to guide users
+through transition smoothly and avoids usage discrepancies.
+
+chore(build): general code tidy-up [JIRA-2237]
+Conducted a comprehensive tidy-up and reformatting of the codebase
+for consistency and clarity. This chore aims to improve legibility
+without affecting the business logic or execution flow.
+
+test(build): disable intermittently failing test [JIRA-2238]
+Disabled a test that intermittently fails due to environmental
+fluctuations. This temporary removal allows developers to proceed
+with deployment without inconclusive test results. A detailed
+investigation will follow.
+```",5
+Participant_B,Bug_Report_Triage_Template,1,53.98806309700012,100,"Title: Intermittent 401 Errors Post OAuth Callback Due to Session Store Migration
+
+Environment:
+- Application: OurApp v2.3.5
+- OAuth Provider: OAuthService v1.2.0
+- Session Store: Redis Cluster v6.2.6
+- Date/Time of Issue: [Insert Date & Time Here]
+- Operating System: Linux Ubuntu 20.04
+- Browser: Chrome v92.0
+
+Severity: High
+
+Steps to Reproduce:
+1. Clear browser cache and cookies to eliminate any prior session artifacts.
+2. Open OurApp login page in Chrome.
+3. Proceed with OAuth login process using OAuthService.
+4. Allow the OAuth callback to redirect back to OurApp.
+5. Note if the user is successfully logged in or receives a 401 error.
+6. Repeat steps 1-5 multiple times to observe the intermittent nature of the issue.
+
+Expected:
+- Users should be logged into OurApp without any 401 unauthorized errors after completing the OAuth flow.
+
+Actual:
+- Users intermittently receive a 401 unauthorized error after the OAuth callback, despite successfully authenticating with OAuthService.
+
+Logs:
+```
+[2023-XX-XX XX:XX:XX] INFO  - OAuth callback received for user: user_id_123
+[2023-XX-XX XX:XX:XX] DEBUG - Session initiated for user: user_id_123
+[2023-XX-XX XX:XX:XX] ERROR - User: user_id_123 session not found in Redis cluster - 401 issued
+```
+
+Root Cause Hypothesis:
+- The session data isn't consistently stored or retrieved from the Redis cluster. This could be due to connectivity issues between OurApp servers and Redis nodes, or improper session serialization/deserialization.
+
+Proposed Fix:
+- Investigate and ensure that session persistence in Redis is robust and consistent.
+- Implement stronger connection handling and retries for Redis.
+- Validate session data storage mechanism during Redis cluster interactions.
+
+Test Plan:
+- Conduct end-to-end login tests with Redis monitoring enabled to ensure session consistency.
+- Implement stress testing simulating multiple concurrent OAuth logins to monitor Redis load handling.
+- Verify no 401 errors occur across multiple login attempts from various user accounts and regions.",5
+Participant_C,Unit_Test_Generation_Pytest,1,57.7103533744812,100,"Certainly! Below is a complete pytest module to test the `normalize_email` function. The tests cover a variety of input scenarios including typical success cases, edge cases, and ensure appropriate error handling.
+
+```python
+import pytest
+
+# Assuming the normalize_email function is imported or defined in this file
+# from your_module import normalize_email
+
+def test_normalize_email_trims_whitespace():
+    assert normalize_email('  user@example.com  ') == 'user@example.com'
+
+def test_normalize_email_lowercases_local_part():
+    assert normalize_email('User@Example.com') == 'user@example.com'
+
+def test_normalize_email_lowercases_domain_part():
+    assert normalize_email('user@Example.Com') == 'user@example.com'
+
+def test_normalize_email_collapses_multiple_spaces():
+    assert normalize_email('user  @ example. com  ') == 'user@example.com'
+
+def test_normalize_email_mixed_cases_and_spaces():
+    assert normalize_email('  UsEr  @ ExAmPlE.CoM  ') == 'user@example.com'
+
+def test_normalize_email_raises_valueerror_on_missing_at():
+    with pytest.raises(ValueError, match=""invalid email format""):
+        normalize_email('userexample.com')
+
+def test_normalize_email_empty_string_raises_valueerror():
+    with pytest.raises(ValueError, match=""invalid email format""):
+        normalize_email('')
+
+def test_normalize_email_multiple_spaces_without_at():
+    with pytest.raises(ValueError, match=""invalid email format""):
+        normalize_email('user  example  com')
+
+def test_normalize_email_no_local_part():
+    with pytest.raises(ValueError, match=""invalid email format""):
+        normalize_email('@example.com')
+
+def test_normalize_email_no_domain_part():
+    with pytest.raises(ValueError, match=""invalid email format""):
+        normalize_email('user@')
+
+@pytest.mark.parametrize(""input_email, expected"", [
+    (' alice@ bOB.com ', 'alice@bob.com'),
+    ('  JOHN@doe.com  ', 'john@doe.com'),
+    ('  ALPHA  @   BeTA.ALPHa ', 'alpha@beta.alpha'),
+])
+def test_normalize_email_various_cases(input_email, expected):
+    assert normalize_email(input_email) == expected
+```
+
+### Explanation:
+
+1. **Basic Success Cases:**
+   - `test_normalize_email_trims_whitespace`: Verifies if leading and trailing spaces are trimmed.
+   - `test_normalize_email_lowercases_local_part`: Ensures the local part of the email is lowercased.
+   - `test_normalize_email_lowercases_domain_part`: Checks if the domain part is converted to lowercase.
+   - `test_normalize_email_collapses_multiple_spaces`: Verifies the removal of extra spaces around '@'.
+
+2. **Complex Success Case Handling:**
+   - `test_normalize_email_mixed_cases_and_spaces`: Combines trimming, lowercasing, and space collapsing checks.
+
+3. **Error Handling:**
+   - `test_normalize_email_raises_valueerror_on_missing_at`: Raises an exception if '@' is absent.
+   - `test_normalize_email_empty_string_raises_valueerror`: An empty string should raise a `ValueError`.
+   - `test_normalize_email_multiple_spaces_without_at`: Tests improper spacing without an '@'.
+   - `test_normalize_email_no_local_part` and `test_normalize_email_no_domain_part`: Checks scenarios of incomplete emails.
+
+4. **Parameterized Testing:**
+   - `test_normalize_email_various_cases`: Uses `pytest.mark.parametrize` to handle multiple inputs succinctly. This is useful for testing various combinations of trimming, casing, and spacing in a concise manner.
+
+Each test function has a descriptive name starting with `test_`, and a total of more than six assertions ensure comprehensive coverage.",5
+Participant_C,API_Documentation_REST,1,62.28138780593872,100,"### API Documentation for Creating a Project Issue
+
+#### Endpoint
+`POST /api/v1/projects/{projectId}/issues`
+
+#### Method
+`POST`
+
+#### Auth
+This endpoint requires a Bearer Token for authentication. Ensure that a valid token is included in the request header to authorize the request.
+
+#### Request
+The request body must be a JSON object with the following fields:
+
+- **title**: `string` (required)  
+  The title of the issue. It must be between 1 to 120 characters.
+
+- **description**: `string` (optional)  
+  A detailed description of the issue.
+
+- **labels**: `array of strings` (optional)  
+  A list of labels to categorize the issue. Labels help in filtering and organizing issues by specific characteristics.
+
+- **assigneeId**: `string` (optional)  
+  The unique identifier of the user assigned to this issue. If omitted, the issue will remain unassigned.
+
+**JSON Request Example:**
+```json
+{
+  ""title"": ""Improve login performance"",
+  ""description"": ""Users report slowness during the login process, especially under peak load."",
+  ""labels"": [""performance"", ""login""],
+  ""assigneeId"": ""user123""
+}
+```
+
+#### Response Example (201)
+If the request is successful, the server will respond with a `201 Created` status, along with the details of the newly created issue.
+
+**JSON Response Example:**
+```json
+{
+  ""id"": ""issue456"",
+  ""title"": ""Improve login performance"",
+  ""description"": ""Users report slowness during the login process, especially under peak load."",
+  ""labels"": [""performance"", ""login""],
+  ""assigneeId"": ""user123"",
+  ""createdAt"": ""2023-10-14T12:34:56Z""
+}
+```
+
+#### Status Codes
+- **201 Created**: The issue has been successfully created.
+- **400 Bad Request**: The request could not be processed because of validation errors. This typically occurs when required fields are missing or constraints are violated.
+- **401 Unauthorized**: Authentication failed. This indicates that a valid Bearer Token was not provided or the token is invalid.
+- **409 Conflict**: The request conflicts with current state due to a duplicate issue title within the project.
+
+#### Notes
+- Ensure that the `projectId` in the URL path is replaced with the actual project ID for which the issue is being created.
+- Consider using meaningful and descriptive titles and descriptions to facilitate issue tracking and management.
+- While `description`, `labels`, and `assigneeId` are optional, providing more information can improve task tracking and accountability.
+- Bearer Token authentication should be handled securely to protect sensitive project data. Ensure token verification logic is robust and secure.",5
+Participant_C,Refactoring_Rationale_SRP,1,93.55024099349976,100,"## Context
+
+The current state of the module is a 400-line class that combines HTTP routing, domain validation, and database persistence. This amalgamation violates the Single Responsibility Principle (SRP), which states that a class should have only one reason to change. This makes the class difficult to understand, maintain, and extend. By conflating concerns that belong to distinct layers of an application, such as routing logic, domain logic, and data access logic, the class has become cumbersome and challenging to iterate upon.
+
+## Code Smells
+
+1. **Violation of SRP**: The module performs multiple functions, which intertwines distinct responsibilities, leading to a class that is harder to manage and understand.
+2. **High Cyclomatic Complexity**: The intertwining of HTTP, validation, and persistence logic increases the cyclomatic complexity, leading to code that is difficult to test and more prone to bugs.
+3. **Poor Separation of Concerns**: The current design lacks a clear delineation between different layers, resulting in tightly coupled components that inhibit modularity and reusability.
+4. **Difficult Maintenance and Testing**: With responsibilities spread across several concerns, pinpointing errors or making changes can have far-reaching consequences across the application.
+
+## Proposed Refactor
+
+The refactor will involve extracting the following layers to adhere to SRP and improve code maintainability:
+
+1. **Router Layer**: Move all HTTP-related logic to a dedicated Router class. This will handle routing requests to the correct service methods, ensuring HTTP-specific logic is decoupled from domain logic.
+   
+2. **Service Layer**: Create a Service class that encapsulates domain validation and business rules. By separating validation logic, we ensure that the domain logic remains distinct and reusable across multiple interface layers.
+   
+3. **Repository Layer**: Extract data persistence logic into a Repository class. This separation ensures that changes to the data source or schema do not ripple through other parts of the application.
+   
+Additionally, we propose adding comprehensive unit tests around each boundary (Router-Service and Service-Repository) to facilitate future changes and ensure correct behavior. This will involve mocking upstream and downstream dependencies to verify interactions and outcomes.
+
+## Risks & Mitigations
+
+1. **Risk of Integration Breaks**: Changes in structure might introduce integration issues.
+   - **Mitigation**: Implement automated integration tests to verify that overall application behavior remains correct after refactoring.
+   
+2. **Initial Overhead**: The refactoring effort requires an upfront investment in rewriting and testing.
+   - **Mitigation**: Plan the refactor incrementally to prioritize parts that will yield immediate benefits, such as enhanced testability and reduced maintenance complexity.
+   
+3. **Team Familiarity**: Team members may require time to understand the new structure.
+   - **Mitigation**: Conduct knowledge transfer sessions and update documentation to facilitate the transition.
+
+## Acceptance Criteria
+
+1. **Documented Changes**: The new architecture and code modifications are well-documented, explaining the roles of each extracted class.
+
+2. **Unit Test Coverage**: The new Router, Service, and Repository layers have comprehensive unit tests with mocked dependencies covering at least 85% of each component.
+
+3. **Reduced Complexity**: The refactored classes exhibit lower cyclomatic complexity as measured against pre-refactor baselines.
+
+4. **Functional Parity**: All existing functionalities continue to work as proven by passing pre- and post-refactor integration tests.
+
+5. **SRP Compliance**: Each class only addresses a single concern, reducing the likelihood of unintended changes cascading across responsibilities.",5
+Participant_C,Commit_Message_Normalization,5,268.56861567497253,75,"1. **feat(client): add retry and timeouts [JIRA-1001]**  
+   Implemented retry mechanisms and timeouts for the client  
+   processes. This enhancement improves reliability by handling  
+   transient failures, ensuring the client can attempt multiple  
+   connections before giving up, thus reducing operational issues.
+
+2. **fix(usersvc): resolve NPE when roles missing [JIRA-1002]**  
+   Addressed a NullPointerException in the user service, which  
+   occurred when user roles were missing. The fix ensures default  
+   role handling, preventing service crashes and ensuring smooth  
+   user flow during role assignment verifications.
+
+3. **refactor(api): update to v2 and adjust docs [JIRA-1003]**  
+   Transitioned the API to version 2, implementing backwards-  
+   compatible changes and updating the corresponding documentation.  
+   This ensures a seamless upgrade path and clear guidelines for  
+   users adapting to the new version.
+
+4. **chore(build): tidy and reformat codebase [JIRA-1004]**  
+   Performed a codebase tidying operation, including reformatting  
+   and aligning with updated style guides. This non-functional  
+   change enhances code readability and maintainability, fostering  
+   a cleaner development environment.
+
+5. **test(api): temporarily disable flaky test [JIRA-1005]**  
+   Temporarily disabled a flaky test within the API module to  
+   prevent CI pipeline disruptions. Further investigation and  
+   stabilization will follow to ensure consistent test reliability  
+   and accuracy in future builds.",3.8
+Participant_C,Bug_Report_Triage_Template,5,410.64310121536255,75,"**Title:** Intermittent 401 Errors Post-OAuth Callback Due to Redis Session Store Rollout
+
+**Environment:**  
+- Application: Web Authentication Service  
+- Deployment: Production  
+- Recent Changes: Migration from in-memory session store to Redis cluster  
+- OAuth Provider: Google OAuth 2.0  
+- Redis Version: 6.2  
+
+**Severity:** High
+
+**Steps to Reproduce:**  
+1. Navigate to the login page of the web application.  
+2. Authenticate using the ""Log in with Google"" button, initiating the OAuth flow.  
+3. Upon successful Google authentication, expect redirection back to the application's callback URL.  
+4. Observe the login result sporadically resulting in a 401 Unauthorized error.
+
+**Expected:**  
+Upon successful OAuth callback after Google authentication, users should be logged into the application without encountering any authorization errors.
+
+**Actual:**  
+Users intermittently experience a 401 Unauthorized error upon returning to the application from a successful OAuth authentication process.
+
+**Logs:**  
+A snippet from application logs:  
+```
+2023-10-22T14:45:32Z [ERROR] [user_id: unknown] OAuth callback failed - session retrieval failed.  
+2023-10-22T14:45:32Z [INFO] Initiating session creation in Redis.  
+2023-10-22T14:45:32Z [ERROR] Redis connection lost. Unable to retrieve session data.  
+```
+
+**Root Cause Hypothesis:**  
+The migration from in-memory to Redis for session management might have introduced connectivity issues. The session retrieval failure could be due to improper handling of Redis connection timeouts or missed cache hits, causing the application to not recognize an authenticated session.
+
+**Proposed Fix:**  
+1. Review and enhance the Redis connection handling mechanism, particularly focusing on stability and retry logic.  
+2. Implement and configure proper health checks and monitoring on the Redis cluster to identify and resolve latency issues proactively.
+
+**Test Plan:**  
+1. Simulate the login process under varied conditions (e.g., network latency) to ensure Redis connection robustness.  
+2. Employ load testing to verify session store readiness under peak usage scenarios.  
+3. Verify that all session retrievals post-OAuth callback are authenticated successfully without incurring 401 errors.",3.8
+Participant_D,Unit_Test_Generation_Pytest,1,84.02253365516663,100,"Here's a pytest module with unit tests for the `normalize_email` function, following the provided requirements:
+
+```python
+import pytest
+
+# Assume that the normalize_email function is defined elsewhere.
+from email_module import normalize_email  # Replace with actual import
+
+def test_normalize_email_basic_trimming_and_lowercase():
+    assert normalize_email(""  JohnDoe@EXAMPLE.com  "") == ""johndoe@example.com""
+
+def test_normalize_email_multiple_whitespaces_in_local_part():
+    assert normalize_email("" john  doe  @example.com "") == ""johndoe@example.com""
+
+def test_normalize_email_whitespace_in_domain_part():
+    assert normalize_email(""john@ example. com "") == ""john@example.com""
+
+def test_normalize_email_no_at_symbol_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email(""invalidemail.com"")
+
+def test_normalize_email_empty_string_raises_value_error():
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+def test_normalize_email_case_insensitivity():
+    assert normalize_email(""JaneDOE@GMAIL.COM"") == ""janedoe@gmail.com""
+
+# Additional speculative/futuristic tests
+def test_normalize_email_with_unicode_characters():
+    # Imagine extending the function to handle Unicode characters gracefully
+    assert normalize_email(""ユーザー@domain.日本"") == ""ユーザー@domain.日本""
+
+def test_normalize_email_with_subdomains():
+    # Speculate on future handling of complex domain structures
+    assert normalize_email(""user@sub.example.domain.com"") == ""user@sub.example.domain.com""
+
+```
+
+### Exploration / Speculative Extensions
+1. **Unicode Characters**: Assumes function handles Unicode in email addresses, which are becoming more prevalent with internationalized domain names.
+2. **Subdomains**: Right now, the function spec isn't explicit about subdomains, but we assume they should normalize correctly.
+
+This module includes six standard tests covering specified requirements with added speculative tests to encourage future feature exploration.",5
+Participant_D,API_Documentation_REST,1,52.377485036849976,100,"**Endpoint**
+
+`POST /api/v1/projects/{projectId}/issues`
+
+---
+
+**Method**
+
+`POST`
+
+---
+
+**Auth**
+
+Bearer token
+
+---
+
+**Request**
+
+```json
+{
+  ""title"": ""Refactor login module"",
+  ""description"": ""Improve the modular structure of the login component for better scalability."",
+  ""labels"": [""refactor"", ""frontend""],
+  ""assigneeId"": ""user-6789""
+}
+```
+
+- **`title`**: A string representing the title of the issue. This field is required and should be between 1 and 120 characters.
+- **`description`**: An optional string describing the issue in detail.
+- **`labels`**: An array of strings labeling the issue for categorization.
+- **`assigneeId`**: An optional string indicating the ID of the user to whom the issue is assigned.
+
+---
+
+**Response Example (201)**
+
+```json
+{
+  ""id"": ""issue-1234"",
+  ""title"": ""Refactor login module"",
+  ""description"": ""Improve the modular structure of the login component for better scalability."",
+  ""labels"": [""refactor"", ""frontend""],
+  ""assigneeId"": ""user-6789"",
+  ""createdAt"": ""2023-10-25T13:45:30Z""
+}
+```
+
+---
+
+**Status Codes**
+
+- **`201 Created`**: The issue has been successfully created. Returns the created issue object.
+- **`400 Bad Request`**: The request was invalid or missing required fields. Provides validation error details.
+- **`401 Unauthorized`**: Authentication is required and has failed or not been provided.
+- **`409 Conflict`**: An issue with the same title already exists within the project.
+
+---
+
+**Notes**
+
+- Ensure the title is unique within a project to avoid a 409 Conflict error.
+- Utilize appropriate error handling to address potential edge cases and improve user experience. Consider using AI strategies to predict frequent issues based on project history and proactively suggest improvements.
+- The system could evolve to feature predictive analytics, where it suggests potential assignees based on historical data or a set of machine learning models which optimize assignments for team efficiency. This futuristic approach, combining the richness of AI and user flexibility, could dramatically enhance project management workflows.",5
+Participant_D,Refactoring_Rationale_SRP,1,69.53688097000122,100,"### Refactoring Rationale
+
+---
+
+#### 1) Context
+
+The current module is a monolithic 400-line class responsible for handling HTTP requests, domain validation, and database persistence. This design tightly couples these responsibilities, which makes the codebase challenging to manage, understand, and extend. The Single Responsibility Principle (SRP), a core tenet of software design, is violated in its current form by combining distinct functionalities in a single module.
+
+---
+
+#### 2) Code Smells
+
+- **High Cyclomatic Complexity**: The monolithic class contains dense logical paths, resulting in high cyclomatic complexity. This complexity indicates difficulty in understanding, testing, and maintaining the code.
+  
+- **Violation of SRP**: By blending routing, business logic, and database operations, the class does not conform to SRP, making it difficult to adapt to changes in any of these areas without affecting the others.
+  
+- **Lack of Separation of Concerns (SoC)**: Independent concerns such as routing, validation, and persistence are intermingled, leading to a codebase that is tightly coupled and brittle.
+
+- **Poor Testability**: The intertwined logic complicates unit testing, as test cases must navigate through unrelated concerns.
+
+---
+
+#### 3) Proposed Refactor
+
+Our refactor strategy involves restructuring the monolithic class into a cohesive system of independent layers:
+
+- **Router Layer**: Extract the HTTP routing functionality into a dedicated Router responsible solely for handling and directing HTTP requests.
+
+- **Service Layer**: Design a Service component to encapsulate domain logic and validation tasks. This layer will be responsible for maintaining business rules and ensuring data integrity before persistence.
+
+- **Repository Layer**: Implement a Repository layer for database interactions. It will act as an abstraction over the data layer, dealing with CRUD operations and communication with the database.
+
+- **Boundary Unit Tests**: Develop unit tests around these extracted layers to ensure robustness and reliability at their interfaces.
+
+---
+
+#### 4) Risks & Mitigations
+
+- **Risk of Breaking Changes**: Splitting the class could temporarily introduce issues due to the redistribution of responsibilities. 
+
+  *Mitigation*: Gradual refactoring using feature flags to ensure the old and new systems can coexist allows for step-by-step validation of changes.
+
+- **Integration Challenges**: Refactoring might expose hidden dependencies, complicating the transition.
+
+  *Mitigation*: Begin with the least complex elements (e.g., Repository) and incorporate dependency injection to decouple components systematically.
+
+---
+
+#### 5) Acceptance Criteria
+
+- **Compliance with SRP**: Each new layer must have a single, distinct responsibility reflecting design patterns' best practices.
+
+- **Reduced Cyclomatic Complexity**: Cyclomatic complexity across the system should decrease as each new layer handles simpler, more isolated tasks.
+
+- **Complete Test Coverage**: Boundary unit tests for each layer must achieve a minimum of 80% code coverage, ensuring all critical paths and interfaces are covered.
+
+- **Seamless Integration**: The refactored components should integrate smoothly, maintaining or improving current system functionalities without regression.
+
+---
+
+This proposed refactor aims to transform the codebase into a flexible and maintainable architecture, facilitating easier future development and fostering innovation within clearly defined boundaries.",5
+Participant_D,Commit_Message_Normalization,3,206.98396182060242,100,"### Version #1
+
+1. **feat(client): add retry and timeout mechanism [JIRA-1234]**  
+   Implemented a retry strategy and timeout settings for the client. This change enhances the client's resilience to transient failures, ensuring better reliability and improved user experience under varying network conditions.
+
+2. **fix(usersvc): handle NPE when roles are missing [JIRA-2345]**  
+   Resolved a NullPointerException issue in the user service that occurred when roles were missing. This fix ensures the service can handle cases with absent roles gracefully, improving system stability and preventing crashes.
+
+3. **refactor(api): upgrade to v2 and sync documentation [JIRA-3456]**  
+   Migrated the API to version 2 and updated relevant documentation. This change aligns our codebase with new standards, facilitating new features and ensuring consistent communication protocols for external integrators.
+
+4. **chore(build): reformat codebase for style consistency [JIRA-4567]**  
+   Tidied up and reformatted the entire codebase to maintain coding style consistency. This non-functional change improves readability and maintainability, aiding in smoother future development and collaboration.
+
+5. **test(build): temporarily disable flaky test [JIRA-5678]**  
+   Disabled a known flaky test to avoid misleading build failures. The test will be revisited for corrections, ensuring it accurately reflects true system behavior and does not impede development productivity.
+
+### Version #2
+
+1. **feat(client): implement retries and timeouts [JIRA-9876]**  
+   Added mechanisms for retrying requests and setting timeouts in the client component. This enhancement mitigates issues with unreliable networks, aiming to improve connectivity reliability and user satisfaction.
+
+2. **fix(usersvc): correct NPE for missing roles [JIRA-8765]**  
+   Addressed a NullPointerException in the user service related to missing roles. Fix improves error handling, allowing the service to function without crashes when roles data is incomplete.
+
+3. **docs(api): update version number and details for v2 [JIRA-7654]**  
+   Updated documentation to reflect API version 2, ensuring accurate and up-to-date information for developers. This helps in seamless integration and reduces confusion during implementation.
+
+4. **chore(build): perform global code reformatting [JIRA-6543]**  
+   Reformatted the codebase to adhere to our coding guidelines. This non-feature change enhances code clarity and aids in standardizing the development process for future enhancements.
+
+5. **test(build): deactivate unstable test temporarily [JIRA-5432]**  
+   Temporarily deactivated a test identified as flaky. Until resolved, this change prevents unwarranted build failures, helping maintain developer focus and efficiency.",5
+Participant_D,Bug_Report_Triage_Template,3,190.12463235855103,100,"Title: Intermittent 401 Errors After OAuth Callback in Login Flow
+
+Environment: 
+- Application: Web Application
+- Browser: Chrome 116.0, Firefox 115.2
+- Backend: Node.js 18.x
+- Database: Redis Cluster 6.2
+- Rollout: Recent transition from in-memory session store to Redis
+
+Severity: High
+
+Steps to Reproduce:
+1. Navigate to the application's login page.
+2. Initiate the login process via the OAuth provider (e.g., Google).
+3. After successful authentication, observe the application's redirect back from the OAuth provider.
+4. Note the HTTP status code returned by the application.
+
+Expected:
+1. Upon successful OAuth callback, the user should be redirected to the dashboard without error.
+2. An active session should be maintained in Redis.
+
+Actual:
+1. Users intermittently receive a 401 Unauthorized error post OAuth callback despite successful authentication.
+2. Errors are not consistently reproducible for every attempt but occur frequently across different users and sessions.
+
+Logs:
+```
+2023-10-01T10:05:23.456Z [INFO] OAuth callback successful for user: user123
+2023-10-01T10:05:23.457Z [DEBUG] Session ID abc123 created in Redis
+2023-10-01T10:05:24.001Z [ERROR] Session retrieval failed for session ID abc123 - Status: 401
+```
+
+Root Cause Hypothesis:
+The root cause may be related to session persistence or retrieval inconsistencies within the newly implemented Redis cluster. Possible race conditions or replication delays could lead to sessions being inaccessible or improperly synced.
+
+Proposed Fix:
+1. Implement logging to track session creation, update, and deletion operations in Redis.
+2. Investigate and address any potential race conditions or replication lag.
+3. Consider implementing retries for session retrieval in the application logic to mitigate inconsistency.
+
+Test Plan:
+1. Establish a suite of automated tests to simulate high-frequency logins.
+2. Stress-test the Redis cluster to monitor its behavior under load and ensure stability.
+3. Validate session retrieval and management processes to ensure robustness post-fix deployment.
+4. Conduct user acceptance testing to confirm resolution of intermittent 401 issues in diverse environments and conditions.",5
+Participant_E,Unit_Test_Generation_Pytest,1,48.939918518066406,100,"Certainly! Below is a detailed pytest module with comprehensive test cases for the `normalize_email` function. It covers a variety of scenarios including success cases, edge cases, and error handling.
+
+```python
+import pytest
+
+def test_normalize_email_trims_whitespace():
+    assert normalize_email(""  user@example.com  "") == ""user@example.com""
+    assert normalize_email(""\tuser@example.com\n"") == ""user@example.com""
+
+def test_normalize_email_lowercases_local_and_domain():
+    assert normalize_email(""UsEr@ExAmPlE.CoM"") == ""user@example.com""
+    assert normalize_email(""USER@EXAMPLE.COM"") == ""user@example.com""
+
+def test_normalize_email_collapses_multiple_spaces():
+    assert normalize_email(""user  @ example   . com"") == ""user@example.com""
+    assert normalize_email(""user \t @  example.com"") == ""user@example.com""
+
+def test_normalize_email_mixed_case_and_whitespace():
+    assert normalize_email(""  UsEr@ExAmPlE.CoM  "") == ""user@example.com""
+    assert normalize_email(""\tUSER \n @EXAMPLE.COM "") == ""user@example.com""
+
+def test_normalize_email_raises_valueerror_for_missing_at():
+    with pytest.raises(ValueError):
+        normalize_email(""noatsign.com"")
+    with pytest.raises(ValueError):
+        normalize_email(""missing_at_symbol"")
+
+def test_normalize_email_edge_cases():
+    # The function should raise a ValueError for empty strings
+    with pytest.raises(ValueError):
+        normalize_email("""")
+    
+    # Spaces everywhere but still technically valid
+    assert normalize_email("" u s e r @ e x a m p l e . c o m "") == ""user@example.com""
+
+# To run the tests, ensure you have pytest installed and execute `pytest` in the command line within the directory containing this module.
+```
+
+### Explanation:
+
+- **Whitespace Handling**: Tests are provided to ensure that leading and trailing whitespace is trimmed.
+- **Lowercasing**: Tests confirm that both the local-part and domain-part are converted to lowercase.
+- **Multiple Spaces**: Included are tests to collapse multiple spaces into a single valid email format.
+- **Mixed Case and Whitespace**: These tests combine previous cases to verify that the function handles multiple issues concurrently.
+- **Edge Cases**: Tests an empty string, expecting a `ValueError`, emphasizing the importance of input validation.
+- **Error Handling**: Explicit checks for the presence of the ""@"" character with appropriate exceptions raised when absent.
+
+This comprehensive set of tests aims to assure the reliability of `normalize_email` across various input scenarios, enhancing its robustness in real-world applications.",5
+Participant_E,API_Documentation_REST,1,91.61377143859863,100,"# API Documentation: Create Project Issue
+
+## Endpoint
+`POST /api/v1/projects/{projectId}/issues`
+
+## Method
+POST
+
+## Auth
+This endpoint requires authentication via a Bearer token. Ensure that the token is valid and included in the request header as follows:
+```
+Authorization: Bearer <your_token_here>
+```
+
+## Request
+To successfully create an issue within a project, you must supply a JSON payload in the body of the request. The payload must conform to the following structure:
+
+```json
+{
+  ""title"": ""Issue title goes here"",
+  ""description"": ""Detailed description of the issue, if needed."",
+  ""labels"": [""bug"", ""urgent""],
+  ""assigneeId"": ""user-12345""
+}
+```
+
+- **title**: A string that represents the title of the issue. This is a required field and should contain between 1 and 120 characters.
+- **description**: An optional string providing a detailed description of the issue.
+- **labels**: An array of strings. Each string serves as a label to categorize the issue.
+- **assigneeId**: An optional string that identifies the user assigned to address the issue.
+
+## Response Example (201)
+Upon successful creation of an issue, the API will return a JSON object with the following structure:
+
+```json
+{
+  ""id"": ""issue-67890"",
+  ""title"": ""Issue title goes here"",
+  ""description"": ""Detailed description of the issue, if needed."",
+  ""labels"": [""bug"", ""urgent""],
+  ""assigneeId"": ""user-12345"",
+  ""createdAt"": ""2023-10-30T14:20:00Z""
+}
+```
+- **id**: A unique identifier for the newly created issue.
+- **createdAt**: A timestamp of when the issue was created, in ISO 8601 format.
+
+## Status Codes
+- **201 Created**: The issue was successfully created.
+- **400 Bad Request**: The request failed due to validation errors. These might include a missing required field or an invalid field value.
+- **401 Unauthorized**: The request lacked valid authentication credentials.
+- **409 Conflict**: An issue with a duplicate title already exists within the specified project.
+
+## Notes
+- Ensure that the `projectId` in the endpoint path is replaced with the actual ID of the project in which the issue is to be created.
+- Check that no two issues within the same project have the same title to avoid `409 Conflict` errors.
+- The API enforces content length and format validation on the `title`. Ensure your `title` adheres to the specified constraints.",5
+Participant_E,Refactoring_Rationale_SRP,1,69.64044642448425,100,"**1) Context**
+
+The module in question, which consists of a single class spanning approximately 400 lines, undertakes the roles of HTTP routing, domain validation, and database persistence. This amalgamated design violates the Single Responsibility Principle (SRP), a core tenet of the SOLID principles that states a class should have only one reason to change. The current implementation results in a tightly coupled architecture that is difficult to maintain, test, and extend, due to overlapping responsibilities within a single class.
+
+**2) Code Smells**
+
+The most prominent code smells in the existing module include high cyclomatic complexity, which indicates intricate and convoluted control flows, making the code difficult to analyze and test. Additionally, there is evident violation of the separation of concerns principle, where responsibilities that should be distinct, such as routing, business logic, and data access, are interwoven. This conflation leads to a codebase that is less flexible and more error-prone, as changes to one aspect may inadvertently impact others.
+
+**3) Proposed Refactor**
+
+To address these issues, I propose extracting distinct layers to adhere to SRP and separation of concerns, thus improving the overall architecture and maintainability:
+
+- **Router Layer**: Implement a dedicated router class to handle HTTP requests and responses, isolating the logic related to the network layer.
+
+- **Service Layer**: Create a service class responsible for encapsulating business logic, including domain validation and other application rules. This decouples domain-specific functionality from routing and persistence concerns.
+
+- **Repository Layer**: Introduce a repository class to manage database interactions, enabling ease of testing and future alterations to the data access strategies without affecting business logic.
+
+Furthermore, we should establish a comprehensive suite of unit tests around each of these layers to ensure functional boundaries are respected and behaviors are preserved.
+
+**4) Risks & Mitigations**
+
+- **Risk**: There may be potential for initial integration errors due to the separation of concerns, where interfaces between layers are incorrectly defined.
+  - **Mitigation**: Utilize thorough code reviews and interface contracts to ensure layers communicate properly and consistently.
+
+- **Risk**: Refactoring may introduce temporary instability in the codebase.
+  - **Mitigation**: Employ a continuous integration pipeline with automated tests to regularly validate changes, ensuring consistent functionality and quickly catching regressions.
+
+**5) Acceptance Criteria**
+
+The refactor will be deemed successful if the following criteria are met:
+
+- The original class is cleanly divided into separate Router, Service, and Repository classes.
+- Each class follows SRP and shows a decrease in cyclomatic complexity.
+- All functionalities are covered by unit tests, particularly focusing on the boundaries between layers.
+- The system maintains its existing functionality and passes all tests with no loss in performance.
+- The codebase demonstrates improved readability and maintainability, with clear and logical separation of concerns.",5
+Participant_E,Commit_Message_Normalization,5,291.109503030777,75,"### Version #1
+
+1. **feat(client): add retry and timeouts [JIRA-1001]**  
+   Implemented robust retry logic and configurable timeouts for the  
+   client to enhance reliability and prevent disruptions during  
+   temporary network issues. This improvement aims to reduce failure  
+   rates and improve user satisfaction.
+
+2. **fix(usersvc): resolve NPE when roles missing [JIRA-1002]**  
+   Fixed a NullPointerException in the user service by adding checks  
+   for missing user roles. This issue was leading to unexpected errors  
+   and intermittently affecting user flows where role data wasn't  
+   available.
+
+3. **refactor(api): update to v2 and revise docs [JIRA-1003]**  
+   Upgraded the API to version 2, including adjustments to method  
+   signatures and endpoint structures. All associated documentation  
+   has been thoroughly updated to reflect these changes for developer  
+   clarity and alignment.
+
+4. **chore(build): tidy code and reformat [JIRA-1004]**  
+   Conducted a complete code tidy and reformat across the project.  
+   The aim of this meticulous task was to improve readability and  
+   maintainability, ensuring adherence to our coding standards.
+
+5. **test(core): temporarily disable flaky test [JIRA-1005]**  
+   Deactivated a known flaky test that was causing intermittent  
+   build failures. This temporary measure will allow the team to  
+   maintain CI/CD process integrity while the underlying issues are  
+   thoroughly investigated and resolved.",3.8
+Participant_E,Bug_Report_Triage_Template,5,361.19620084762573,75,"### Title
+Intermittent 401 Unauthorized Error Post-OAuth Callback
+
+### Environment
+- **Application Version:** v5.2.1
+- **Environment:** Production
+- **OS:** Linux (Ubuntu 20.04)
+- **Browser Version:** Google Chrome v116.0
+
+### Severity
+High
+
+### Steps to Reproduce
+1. Navigate to the login page.
+2. Click on ""Login with OAuth"" button.
+3. Complete the OAuth authentication process with valid credentials.
+4. Observe the response after the callback.
+
+### Expected
+Upon successful completion of the OAuth process, the user is logged in and redirected to the dashboard page.
+
+### Actual
+Intermittently, instead of being redirected to the dashboard, users receive a 401 Unauthorized error message post-OAuth callback.
+
+### Logs
+```
+Oct 20 14:32:45 app-prod server[1234]: OAuth callback received for user: user@example.com
+Oct 20 14:32:45 app-prod server[1234]: [ERROR] 401 Unauthorized - Session not found
+Oct 20 14:32:45 app-prod server[1234]: OAuth flow completed with status: 401 for user: user@example.com
+```
+
+### Root Cause Hypothesis
+The transition from an in-memory session store to a Redis cluster might have introduced a session persistence issue. Sessions are potentially not being correctly saved in or retrieved from the Redis cluster, leading to intermittent 401 errors as session data cannot be validated upon callback.
+
+### Proposed Fix
+- Investigate the Redis connection settings and authentication configurations.
+- Ensure consistent session store read/write operations.
+- Validate session ID retrieval post-OAuth callback.
+- Consider implementing session replication or a fallback strategy in Redis.
+
+### Test Plan
+1. Conduct a thorough code review around session handling logic with the Redis cluster.
+2. Implement automated integration tests to simulate multiple OAuth logins and callbacks.
+3. Deploy a fix to a staging environment and perform stress testing with simulated users.
+4. Monitor Redis logs and application logs closely for any discrepancies or errors.
+5. Confirm fix by ensuring users no longer receive 401 errors post-OAuth callback under varied conditions.",3.8
+Participant_F,Unit_Test_Generation_Pytest,1,56.24773669242859,100,"```python
+import pytest
+
+# The function normalize_email is assumed to be defined elsewhere
+
+def test_normalize_email_success_whitespace():
+    assert normalize_email(""  EXample@Domain.COM  "") == ""example@domain.com""
+    assert normalize_email(""\tExample@Domain.com\n"") == ""example@domain.com""
+
+def test_normalize_email_success_mixed_case():
+    assert normalize_email(""ExAmPlE@DoMAIn.CoM"") == ""example@domain.com""
+
+def test_normalize_email_success_multiple_spaces():
+    assert normalize_email(""  example  @domain.com  "") == ""example@domain.com""
+    assert normalize_email("" \t ex  ample@ do main \t .com "") == ""ex ample@do main.com""
+
+def test_normalize_email_edge_case_empty_string():
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+def test_normalize_email_error_no_at_symbol():
+    with pytest.raises(ValueError):
+        normalize_email(""exampledomain.com"")
+    with pytest.raises(ValueError):
+        normalize_email(""example@domaincom"")
+
+def test_normalize_email_edge_case_no_local_part():
+    with pytest.raises(ValueError):
+        normalize_email(""@domain.com"")
+
+def test_normalize_email_edge_case_no_domain():
+    with pytest.raises(ValueError):
+        normalize_email(""example@"")
+
+# Please ensure that the normalize_email function implementation matches the test expectations.
+```
+
+### Explanation:
+- **Success Cases**: These tests ensure that the function correctly normalizes emails by trimming whitespace, converting to lowercase, and collapsing multiple spaces.
+- **Edge Cases**: We attempt normalization on an empty string and strings missing necessary parts or containing peculiar setups to check if exceptions are raised appropriately.
+- **Error Handling**: Tests that confirm `ValueError` is raised when the email does not contain the '@' symbol, or when it misses either the local or domain part.
+- **Comprehensive Coverage**: The module includes a broad set of variations and specific edge cases to ensure robust validation of the email normalization function. The test names are descriptive and align with the functionality requirements.",5
+Participant_F,API_Documentation_REST,1,78.31484246253967,100,"### API Documentation for Creating a Project Issue
+
+#### Endpoint
+`POST /api/v1/projects/{projectId}/issues`
+
+#### Method
+`POST`
+
+#### Auth
+Bearer token is required for authentication.
+
+#### Request
+```json
+{
+  ""title"": ""Implement feature X"", 
+  ""description"": ""Detailed description of the issue."",
+  ""labels"": [""feature"", ""urgent""],
+  ""assigneeId"": ""user_12345""
+}
+```
+- **title**: A string that represents the issue title, required, with a length between 1 and 120 characters.
+- **description**: An optional string that provides additional details about the issue.
+- **labels**: An array of strings, each representing a label assigned to the issue. Labels are optional and can be used for categorization.
+- **assigneeId**: An optional string representing the ID of the user to be assigned to the issue.
+
+#### Response Example (201)
+```json
+{
+  ""id"": ""issue_67890"",
+  ""title"": ""Implement feature X"",
+  ""description"": ""Detailed description of the issue."",
+  ""labels"": [""feature"", ""urgent""],
+  ""assigneeId"": ""user_12345"",
+  ""createdAt"": ""2023-10-25T14:48:00Z""
+}
+```
+
+#### Status Codes
+- **201 Created**: The issue has been successfully created. Returns the issue object, including its unique ID and creation timestamp.
+- **400 Bad Request**: The provided request data failed validation. Details about validation errors will be provided in the response body.
+- **401 Unauthorized**: Authentication is required and the provided bearer token is missing or invalid.
+- **409 Conflict**: An issue with the same title already exists within the specified project.
+
+#### Notes
+- Ensure that the bearer token is included in the Authorization header to authenticate the request.
+- The title must be unique within the project; titles that already exist will result in a conflict error.
+- Consider utilizing appropriate labels to facilitate issue tracking and organization.
+- If no assigneeId is provided, the issue will be created without a designated assignee.
+- Timestamps in the response are in ISO 8601 format, representing UTC time.
+
+--- 
+
+(Version #2)
+
+### API Documentation for Creating a Project Issue
+
+#### Endpoint
+`POST /api/v1/projects/{projectId}/issues`
+
+#### Method
+`POST`
+
+#### Auth
+This endpoint requires a valid Bearer token for authorization.
+
+#### Request
+```json
+{
+  ""title"": ""Create onboarding guide"",
+  ""description"": ""This issue includes tasks for creating a comprehensive onboarding guide."",
+  ""labels"": [""documentation"", ""newbie""],
+  ""assigneeId"": ""user_6789""
+}
+```
+- **title (required)**: A mandatory string specifying the issue title, restricted to a length between 1 and 120 characters.
+- **description (optional)**: A string offering further insights regarding the issue.
+- **labels (optional)**: An array of strings that act as identifiers to categorize the issue.
+- **assigneeId (optional)**: A string denoting the user assigned to the issue.
+
+#### Response Example (201)
+```json
+{
+  ""id"": ""issue_101112"",
+  ""title"": ""Create onboarding guide"",
+  ""description"": ""This issue includes tasks for creating a comprehensive onboarding guide."",
+  ""labels"": [""documentation"", ""newbie""],
+  ""assigneeId"": ""user_6789"",
+  ""createdAt"": ""2023-10-25T14:51:00Z""
+}
+```
+
+#### Status Codes
+- **201 Created**: The issue is successfully created with a detailed response containing the issue object.
+- **400 Bad Request**: Indicates that request validation has failed, including specific error messages in the response.
+- **401 Unauthorized**: Access is denied due to missing or invalid authentication.
+- **409 Conflict**: Represents a conflict in creating the issue, typically due to a duplicate title within the project.
+
+#### Notes
+- Titles must adhere strictly to the 1-120 character constraint to avoid validation issues.
+- Being an authenticated endpoint, proper authorization headers are mandatory.
+- If a title is duplicated within the same project, the server will respond with a 409 Conflict status.
+- It's advisable to assign labels carefully to improve subsequent filtering and management of issues.
+- Timestamps returned in responses utilize the standardized ISO 8601 format.",5
+Participant_F,Refactoring_Rationale_SRP,1,84.51982855796814,100,"# Refactoring Rationale Document
+
+## 1) Context
+In the current application codebase, we have identified a module that is a clear violation of the Single Responsibility Principle (SRP). This module is a monolithic class comprising around 400 lines of code. It is intended to manage an endpoint for an HTTP API but instead entangles HTTP routing logic, domain validation, business rules, and database persistence within a single class. The lack of modularity complicates maintenance, testing, and scalability of the system.
+
+## 2) Code Smells
+The following code smells have been identified within the module:
+- **Violation of SRP:** The module simultaneously handles concerns related to HTTP routing, domain logic validation, and persistence, leading to breaches in separation of concerns.
+- **High Cyclomatic Complexity:** Due to its multifunctional responsibilities, the class contains numerous conditional statements and branches, resulting in heightened cyclomatic complexity that poses challenges for readability and testing.
+- **Hard to Maintain:** With multiple responsibilities intertwined, understanding and modifying the functionality becomes difficult and error-prone.
+- **Limited Test Coverage:** The dense nature of the class is likely to lead to inadequate testing due to challenges in setting up test contexts and isolating functionalities.
+
+## 3) Proposed Refactor
+To address these concerns and align with SRP, the following refactoring is proposed:
+- **Extract Router Layer:** Isolate the HTTP routing logic into a dedicated Router module. This class will solely manage incoming requests and responses, delegating further actions to service classes.
+- **Extract Service Layer:** Introduce a Service layer responsible for application-specific business rules and domain validation. This layer will process data passed from the Router and prepare it for persistence.
+- **Extract Repository Layer:** Create a Repository module focused exclusively on data handling and persistence operations. It will provide a clear interface for the Service layer to interact with the database.
+- **Enhance Testing:** Implement unit tests around the boundaries of these layers to ensure each component operates correctly in isolation and conform to SRP standards.
+
+## 4) Risks & Mitigations
+- **Risk of Misaligned Interfaces:** During refactoring, interfaces between layers may not correctly align, leading to runtime errors.
+  - *Mitigation:* Develop clear interface contracts through detailed UML diagrams before refactoring. Conduct interface alignment checks at each stage.
+- **Potential for Missed Scenarios in Tests:** Tests may not initially cover all pathways due to the modular decomposition.
+  - *Mitigation:* Create comprehensive test cases accounting for each pathway and function. Use code coverage tools to identify untested areas.
+- **Interim Instability:** Refactoring could initially introduce instability into the system.
+  - *Mitigation:* Refactor incrementally, one layer at a time, while maintaining functional integration tests to check for overall system integrity.
+
+## 5) Acceptance Criteria
+- **Compliance with SRP:** Each new module (Router, Service, Repository) should have a single responsibility.
+- **Reduced Cyclomatic Complexity:** Post-refactor, individual class cyclomatic complexity should decrease significantly, improving readability and maintainability.
+- **Clearly Defined Interfaces:** Interfaces between modules must be clearly defined and adhered to, facilitating easier future development and changes.
+- **Comprehensive Test Coverage:** Achieve at least 90% unit test coverage for each new component, ensuring robust boundary testing.
+- **No Regression Issues:** Ensure the refactored modules integrate seamlessly with the existing system without introducing new defects or regressions.",5
+Participant_F,Commit_Message_Normalization,1,59.29254150390625,100,"**Option 1:**
+
+```
+feat(client): add retry & timeouts [JIRA-1234]
+Introduce retry logic and set timeouts for enhanced client 
+robustness. This ensures improved handling of transient network 
+issues and prevents indefinite hangs.
+
+fix(usersvc): handle NPE with missing roles [JIRA-1235]
+Fix a NullPointerException that occurs in the user service when 
+role objects are absent. The addition of checks improves 
+application stability and reliability.
+
+refactor(api): change API to v2 and update docs [JIRA-1236]
+Upgrade to API v2 to leverage new functionalities and improve 
+performance. Documentation updated to reflect the change and 
+guide users through the API updates.
+
+chore(build): tidy code and reformat [JIRA-1237]
+Perform overall code cleanup and reformat according to style 
+guides to enhance readability and maintainability without any 
+functional changes.
+
+test(usersvc): temporarily disable flaky test [JIRA-1238]
+Disable a test known to be intermittently failing under certain 
+conditions. This prevents test runs from being impacted 
+negatively while a more permanent fix is being investigated.
+```
+
+**Option 2:**
+
+```
+feat(client): implement retry and timeouts [JIRA-1234]
+Added retry mechanisms and configured timeouts for the client 
+module. This change aims to improve resilience against transient 
+network failures and ensure timely responses.
+
+fix(usersvc): resolve NPE on missing roles [JIRA-1235]
+Resolved a NullPointerException occurring in the user service 
+when roles were not provided. Error handling improvements 
+have been made to enhance user experience.
+
+docs(api): migrate to v2 and revise documentation [JIRA-1236]
+Updated API to version 2 and revised associated documentation 
+to ensure comprehensive coverage of new features and changes 
+while guiding developers effectively.
+
+refactor(build): code tidy and format adjustments [JIRA-1237]
+Undertook code tidying and formatting to standardize and 
+organize the codebase. This effort supports ease of future 
+development and code reviews.
+
+test(build): disable inconsistent test [JIRA-1238]
+Temporarily deactivate a flaky test causing unreliable results. 
+This decision helps maintain continuous integration integrity 
+while investigating root causes.
+```
+
+Both outputs follow the Conventional Commits specification appropriately. Each offers explanations and context for changes to ensure clarity and completeness. Choose the one that better aligns with internal standards, or combine elements from each as needed.",5
+Participant_F,Bug_Report_Triage_Template,3,193.68146395683289,100,"Title: Intermittent 401 Errors Post-OAuth Callback in Login Flow
+
+Environment:
+- Application: Web App v3.5.2
+- OAuth Provider: Auth0
+- Session Store: Redis cluster (newly implemented)
+- Browser: Chrome v105.0, Firefox v92.0
+- Operating System: Windows 10, Ubuntu 20.04
+
+Severity: High
+
+Steps to Reproduce:
+1. Navigate to the login page of the Web App.
+2. Click on ""Login with OAuth"" button.
+3. Complete the login process on the OAuth provider’s page (Auth0) successfully.
+4. Observe the redirection back to the web application.
+
+Expected:
+After a successful OAuth callback, users should be logged into the application seamlessly without any error messages, maintaining an active session.
+
+Actual:
+Intermittently post-OAuth callback, users receive a 401 Unauthorized error, despite completing authentication successfully, disrupting their session initiation.
+
+Logs:
+```
+[2023-10-04T12:43:07Z] - INFO - Successful OAuth callback for user_id: abc123
+[2023-10-04T12:43:09Z] - ERROR - Session retrieval failure from Redis cluster - session_id: xyz789
+[2023-10-04T12:43:10Z] - WARN - Issuing 401 Unauthorized for user_id: abc123
+```
+
+Root Cause Hypothesis:
+The integration with the Redis session store is intermittently failing to store or retrieve session data correctly, leading to unauthorized access errors. This might be due to incorrect configuration of Redis connections, leading to timeouts or data retrieval issues.
+
+Proposed Fix:
+- Review and validate the configuration settings for the Redis cluster, specifically connection timeouts and data consistency settings.
+- Increase retry logic upon session retrieval failure from Redis and improve error handling to avoid 401 issues.
+- Monitor Redis cluster performance for any signs of latency or fault injections that might affect session storage.
+
+Test Plan:
+1. Validate Redis configuration changes in a staging environment with similar load conditions.
+2. Implement unit tests that simulate OAuth callbacks and session storage/retrieval failures to ensure robustness.
+3. Perform load testing to evaluate Redis cluster performance under peak traffic conditions.
+4. Deploy fixes to a subset of users and monitor for 401 errors to ensure resolution before full-scale deployment.",5
+Participant_G,Unit_Test_Generation_Pytest,1,58.29681134223938,100,"Here's a complete pytest module with unit tests covering the specified requirements for the `normalize_email` function:
+
+```python
+import pytest
+
+def test_trim_whitespace():
+    assert normalize_email(""  email@example.com  "") == ""email@example.com""
+
+def test_lower_case_conversion():
+    assert normalize_email(""EmaIL@ExAmPle.Com"") == ""email@example.com""
+
+def test_collapse_multiple_spaces():
+    assert normalize_email(""email   @   example.com"") == ""email@example.com""
+
+def test_empty_string():
+    with pytest.raises(ValueError):
+        normalize_email("""")
+
+def test_no_at_symbol():
+    with pytest.raises(ValueError):
+        normalize_email(""noatsymbol.com"")
+
+def test_correct_format_with_spaces():
+    assert normalize_email(""  user  @  example  .  com  "") == ""user@example.com""
+
+def test_mixed_case_with_whitespace():
+    assert normalize_email(""  EXAMPLE@  Domain.COM  "") == ""example@domain.com""
+
+# Additional pytest setup for test discovery
+if __name__ == ""__main__"":
+    pytest.main()
+```
+
+This set of tests covers the successful normalization of emails, edge cases like an empty input, and checks for errors like missing '@' symbols, ensuring robust validation of the function's behavior. Adjust further to catch any subtle bugs in the implementation or if there are additional corner cases to consider for specific email address formats.",5
+Participant_G,API_Documentation_REST,1,39.41856551170349,100,"# API Documentation: Create Project Issue
+
+## Endpoint
+`POST /api/v1/projects/{projectId}/issues`
+
+## Method
+`POST`
+
+## Auth
+Type: Bearer Token  
+Ensure you include a valid Bearer token in the request header for authentication.
+
+## Request
+- **URL Parameter**: 
+  - `{projectId}`: Path parameter representing the unique identifier of the project.
+
+- **JSON Body**: 
+  ```json
+  {
+    ""title"": ""Fix bug in login flow"",
+    ""description"": ""Occurs when the user inputs an incorrect email format"",
+    ""labels"": [""bug"", ""urgent""],
+    ""assigneeId"": ""12345""
+  }
+  ```
+  - `title`: string (required, 1-120 characters) - The title of the issue.
+  - `description`: string (optional) - Detailed description of the issue.
+  - `labels`: array of strings - Tags/labels associated with the issue.
+  - `assigneeId`: string (optional) - User ID to whom the issue is assigned.
+
+## Response Example (201)
+```json
+{
+  ""id"": ""7890"",
+  ""title"": ""Fix bug in login flow"",
+  ""description"": ""Occurs when the user inputs an incorrect email format"",
+  ""labels"": [""bug"", ""urgent""],
+  ""assigneeId"": ""12345"",
+  ""createdAt"": ""2023-10-05T14:48:00.000Z""
+}
+```
+
+## Status Codes
+- `201 Created`: The issue has been successfully created.
+- `400 Bad Request`: The request is invalid or fails validation checks (e.g., title missing or exceeds character limits).
+- `401 Unauthorized`: Authentication failure, typically due to a missing or invalid Bearer token.
+- `409 Conflict`: The issue title conflicts with an existing title within the project.
+
+## Notes
+- Ensure that the title of the issue is unique within the specified project to avoid a `409 Conflict`.
+- The `createdAt` field in the response provides a timestamp for when the issue was created.
+- The endpoint is designed to support scalability; ensure your token management system is robust for handling a large number of requests.",5
+Participant_G,Refactoring_Rationale_SRP,1,60.75929141044617,100,"### Context
+In our current codebase, there exists a module that is responsible for managing HTTP routing, domain validation, and database persistence. This module has become increasingly difficult to maintain, with a single 400-line class attempting to handle all three responsibilities. As the codebase scales and evolves, this single class design becomes inefficient and prone to errors.
+
+### Code Smells
+1. **Violation of Single Responsibility Principle (SRP):** By managing multiple concerns, the class has become cumbersome and hard to maintain.
+2. **High Cyclomatic Complexity:** The intertwined logic for routing, validation, and database persistence results in complex control flows and increased cyclomatic complexity, making understanding and testing difficult.
+3. **Lack of Separation of Concerns:** The current design lacks clear boundaries between routing, validation, and persistence, leading to tight coupling and reduced modularity.
+4. **Testing Difficulty:** With multiple responsibilities packed into one class, writing focused unit tests becomes challenging, hindering our ability to confidently change the code.
+
+### Proposed Refactor
+To address these issues, we propose refactoring the module by separating it into three distinct layers:
+- **Router Layer:** Extract the HTTP routing logic into a dedicated `Router` class, handling only the routing-related functionality and delegating business logic to the service layer.
+- **Service Layer:** Create a `Service` class to encapsulate domain validation, business rules, and related logic. This reduces the business logic burden from the router and keeps it centralized.
+- **Repository Layer:** Isolate database persistence logic into a `Repository` class. This would manage data access and storage, improving the abstraction and reusability of database interactions.
+
+Additionally, we will implement unit tests around these boundaries to ensure each component functions correctly in isolation, facilitating easier maintenance and understanding.
+
+### Risks & Mitigations
+- **Risk:** Introduction of bugs during refactoring.
+  - **Mitigation:** Use automated tests to verify the correct behavior of all components before and after the refactor.
+- **Risk:** Misalignment of new interface boundaries leading to incorrect logic flow.
+  - **Mitigation:** Involve stakeholders and domain experts in the design phase to ensure correct alignment of responsibilities.
+- **Risk:** Increased short-term complexity due to transitioning to a new architecture.
+  - **Mitigation:** Implement an incremental refactoring strategy, gradually integrating each new layer.
+
+### Acceptance Criteria
+1. The codebase is refactored into separate Router, Service, and Repository classes, each adhering to the Single Responsibility Principle.
+2. Cyclomatic complexity across the refactored module shall be reduced by at least 30%.
+3. Clear separation of concerns achieved, demonstrated by having no cross-responsibility logic among the layers.
+4. Comprehensive unit tests implemented at the boundaries of each layer, with at least 80% coverage for each component.
+5. Documentation updated to reflect new structure, ensuring all team members understand changes and new component interactions.",5
+Participant_G,Commit_Message_Normalization,2,110.7423164844513,100,"### Output Version #1
+
+1. **feat(client): add retry and timeouts [JIRA-1234]**
+   Introduced retry mechanisms and timeouts for the client.
+   This update enhances resilience against transient network
+   issues by retrying failed requests within a configured limit.
+
+2. **fix(usersvc): correct NPE on missing roles [JIRA-5678]**
+   Fixed a NullPointerException in the user service when user
+   roles are missing. This bug fix ensures robust handling of
+   user data and prevents service interruptions.
+
+3. **refactor(api): migrate to API v2 and update docs [JIRA-9101]**
+   Transitioned the API to version 2 and updated the related
+   documentation. This change permits enhanced functionality
+   and improves backward compatibility with existing clients.
+
+4. **chore(build): tidy and reformat code [JIRA-1122]**
+   Conducted a code cleanup and reformatting exercise to
+   maintain consistent style across the codebase. This
+   refactoring improves readability without altering logic.
+
+5. **test: temporarily disable flaky test [JIRA-3344]**
+   Temporarily disabled a flaky test to stabilize the test
+   suite. This measure will prevent false negatives until an
+   investigation can isolate the cause of instability.
+
+### Output Version #2
+
+1. **feat(client): implement retry logic and set timeouts [JIRA-2233]**
+   Added retry logic and timeouts to the client to handle
+   network failures gracefully. This feature aims to maintain
+   connectivity and improve the overall user experience.
+
+2. **fix(usersvc): address NPE with absent user roles [JIRA-9167]**
+   Resolved an issue in the user service that caused a
+   NullPointerException when roles were absent. This change
+   ensures missing data is managed without errors.
+
+3. **docs(api): update documentation for v2 changes [JIRA-4848]**
+   Updated the documentation to reflect changes in version 2
+   of the API. Ensures developers have accurate information
+   to integrate with the new API version.
+
+4. **chore(build): clean up code and reformat files [JIRA-7373]**
+   Improved code quality by tidying up imports and formatting
+   inconsistencies. Maintains codebase health and clarity.
+
+5. **test(api): disable unstable test temporarily [JIRA-1818]**
+   Commented out an unstable test as a temporary measure to
+   maintain CI stability. Will re-enable once the cause is
+   determined and resolved.",5
+Participant_G,Bug_Report_Triage_Template,1,50.52477407455444,100,"Title: Intermittent 401 Error on Login after OAuth Callback
+
+Environment: 
+- Application: Customer Web Portal
+- Version: 3.4.0
+- Recent Deployment: Redis cluster for session storage
+- Server Environment: Kubernetes cluster in AWS, using ALB with persistent sessions
+- Redis Version: 6.2
+
+Severity: High
+
+Steps to Reproduce:
+1. Open the Customer Web Portal login page.
+2. Initiate login using the provided OAuth provider (e.g., Google, Facebook).
+3. Complete the authentication process with correct credentials.
+4. Upon redirect back to the application, observe the HTTP response.
+
+Expected:
+- Users are successfully logged in and redirected to their dashboard without issues.
+
+Actual:
+- Users intermittently receive a 401 Unauthorized error immediately after the OAuth callback, preventing access to the dashboard.
+
+Logs:
+```
+[2023-10-25T14:05:12Z] INFO OAuth callback received for user_id: 12345
+[2023-10-25T14:05:12Z] DEBUG Session creation initiated for user_id: 12345
+[2023-10-25T14:05:12Z] ERROR 401 Unauthorized for user_id: 12345 - Session not found
+```
+
+Root Cause Hypothesis:
+The migration from in-memory session storage to a Redis cluster might be causing session persistence issues, potentially due to latency or misconfiguration of session keys in Redis, leading to intermittent 401 responses.
+
+Proposed Fix:
+- Review Redis configuration and ensure proper setup for session persistence.
+- Implement logging for Redis connection failures and session key retrieval/failure.
+- Consider adding retry logic for session retrieval from Redis upon failure.
+
+Test Plan:
+1. Deploy updated configuration and logging to a staging environment.
+2. Perform extensive login flow testing with various OAuth providers and repeat login attempts to verify consistent session persistence.
+3. Monitor and log Redis interactions, specifically focusing on session creation and retrieval.
+4. Validate against different network latency conditions to ensure no relation to geographic location or increased load.",5
+Participant_H,Unit_Test_Generation_Pytest,1,67.59379029273987,100,"Below is a complete pytest module designed to test the `normalize_email` function. The tests cover various scenarios, ensuring that both common and edge cases are adequately addressed.
+
+```python
+import pytest
+
+# Assume the normalize_email function is already implemented and imported
+# from the appropriate module.
+
+def test_normalize_email_trim_and_lowercase():
+    assert normalize_email('  ExaMPle@Email.COM  ') == 'example@email.com'
+    assert normalize_email('JoHn.DOE@GMAIL.com') == 'john.doe@gmail.com'
+
+def test_normalize_email_multiple_spaces():
+    assert normalize_email(' test  email@domain.com ') == 'test email@domain.com'
+    assert normalize_email('  foo  bar@domin.co  ') == 'foo bar@domin.co'
+
+def test_normalize_email_empty_string():
+    with pytest.raises(ValueError):
+        normalize_email('')
+
+def test_normalize_email_no_at_symbol():
+    with pytest.raises(ValueError):
+        normalize_email('noatsignhere')
+    with pytest.raises(ValueError):
+        normalize_email('  stillnoat')
+
+def test_normalize_email_edge_cases():
+    assert normalize_email(' A@B ') == 'a@b'
+    # Focusing on collapsing spaces
+    assert normalize_email('  some   spaces@here.com') == 'some spaces@here.com'
+
+def test_normalize_email_mixed_case_with_spaces():
+    assert normalize_email('MiXeDCaSe@DOMAIN.com') == 'mixedcase@domain.com'
+    assert normalize_email('   spacey MIX@Domain.co  ') == 'spacey mix@domain.co'
+
+# The tests check common formatting cases, edge cases, and error handling.
+```
+
+### Key Testing Highlights
+
+- **Whitespace Handling**: Confirms that leading and trailing spaces are removed, and spaces between words are collapsed.
+- **Case Sensitivity**: Ensures both local and domain parts are converted to lowercase.
+- **Error Handling**: Tests that a `ValueError` is raised for emails that lack an '@' symbol.
+- **Edge and Empty Cases**: Validates behavior with minimal input and empty strings.
+
+These tests are designed to verify that your function consistently produces reliable and correct email normalizations, promoting smoother user experiences and integration stability.",5
+Participant_H,API_Documentation_REST,1,58.434088468551636,100,"# API Documentation: Create a Project Issue
+
+## Endpoint
+`POST /api/v1/projects/{projectId}/issues`
+
+## Method
+POST
+
+## Auth
+Bearer token required.
+
+## Request
+To create a new issue within a project, send a JSON payload with the following fields:
+
+- **title**: `string` (required, 1-120 characters)  
+  A brief and descriptive title for the issue.
+  
+- **description**: `string` (optional)  
+  A detailed explanation of the issue.
+
+- **labels**: `array of strings`  
+  Tags associated with the issue for easier categorization.
+
+- **assigneeId**: `string` (optional)  
+  The ID of the user assigned to address the issue.
+
+### JSON Request Example
+```json
+{
+  ""title"": ""Fix login bug"",
+  ""description"": ""Users are unable to login using Facebook credentials."",
+  ""labels"": [""bug"", ""login""],
+  ""assigneeId"": ""user_123""
+}
+```
+
+## Response Example (201)
+Upon successful creation, the server will respond with the issue details, including a unique ID and timestamp.
+
+```json
+{
+  ""id"": ""issue_456"",
+  ""title"": ""Fix login bug"",
+  ""description"": ""Users are unable to login using Facebook credentials."",
+  ""labels"": [""bug"", ""login""],
+  ""assigneeId"": ""user_123"",
+  ""createdAt"": ""2023-10-15T12:34:56Z""
+}
+```
+
+## Status Codes
+- **201 Created**: The issue was successfully created.
+- **400 Bad Request**: There was a problem with the request, such as a validation error. Details are provided.
+- **401 Unauthorized**: Access is denied due to invalid or missing authentication token.
+- **409 Conflict**: The issue title already exists within the specified project.
+
+## Notes
+- Ensure the `title` is unique across issues within the project to avoid a conflict error.
+- Proper authentication is mandatory; unauthorized requests will be rejected.
+- Make use of labels for better organization and filtering of issues within the project.",5
+Participant_H,Refactoring_Rationale_SRP,1,75.8913803100586,100,"**1) Context**
+
+In our current application structure, the module in question is a monolithic 400-line class that intertwines HTTP routing, domain validation, and database persistence. This approach violates the Single Responsibility Principle (SRP), as the class manages multiple responsibilities, making it difficult to maintain, test, and extend. The complexity of the code is further reflected in its high cyclomatic complexity, which hinders readability and increases the potential for bugs.
+
+**2) Code Smells**
+
+- **Violation of SRP**: The class is responsible for routing, validation, and persistence, leading to tightly coupled code and difficulties in modifying any specific functionality without impacting others.
+- **High Cyclomatic Complexity**: With intertwined logic, the class presents many conditional paths, making the code harder to understand and more prone to errors.
+- **Poor Separation of Concerns**: Mixing presentation, business logic, and data access in one place decreases modularity and increases the risk of unintended side effects during changes.
+
+**3) Proposed Refactor**
+
+To address these issues, we propose a refactor that introduces clear separation of concerns through the extraction of distinct layers:
+- **Router Layer**: Isolating HTTP routing logic into its dedicated component to manage incoming HTTP requests cleanly.
+- **Service Layer**: Encapsulating domain validation and business rules, ensuring that business logic is clear, testable, and reusable.
+- **Repository Layer**: Handling all database interactions separately, promoting the use of interfaces for easier testing and switching of data sources if necessary.
+
+Additionally, this structure allows for targeted unit tests at the boundaries of each layer, improving test coverage and facilitating early detection of issues.
+
+**4) Risks & Mitigations**
+
+- **Risk**: Initial refactoring might introduce defects.
+  - *Mitigation*: Implement comprehensive unit tests and incremental refactoring steps to ensure stability.
+- **Risk**: Increased development time for refactoring.
+  - *Mitigation*: Prioritize refactoring critical paths first to gain immediate benefits in stability and maintainability.
+- **Risk**: Potential learning curve for team members.
+  - *Mitigation*: Conduct training sessions on the new architecture to facilitate team adaptation.
+
+**5) Acceptance Criteria**
+
+- The class has been decomposed into Router, Service, and Repository layers, each under 150 lines of code.
+- Unit tests exist for each layer, covering at least 80% code coverage.
+- Cyclomatic complexity reduced by at least 30% from the original class.
+- System functionality remains unchanged, verified by passing integration tests.
+- Team members can independently work on either of the layers without impacting the others, confirming successful separation of concerns.",5
+Participant_H,Commit_Message_Normalization,5,247.96040034294128,75,"1. **feat(client): add retry and timeouts [JIRA-5678]**  
+   Introduced retry mechanisms and set timeouts for the client module  
+   to enhance reliability and prevent infinite wait states. This will  
+   improve user experience by reducing errors during temporary service  
+   outages or delays.
+
+2. **fix(usersvc): resolve NPE when roles missing [JIRA-5679]**  
+   Addressed a Null Pointer Exception in the user service that  
+   occurred when user roles were undefined. This fix ensures  
+   stability and prevents application crashes, enhancing service  
+   reliability.
+
+3. **refactor(api): update to API v2 and revise docs [JIRA-5680]**  
+   Upgraded the API to version 2, introducing improved endpoints  
+   and functionalities. Updated documentation to reflect these  
+   changes, ensuring developers have current information for  
+   integration.
+
+4. **chore(build): organize and reformat code [JIRA-5681]**  
+   Tidied up the codebase by reformatting code structure and  
+   organizing files. This maintenance task aims to improve code  
+   readability and facilitate easier future development.
+
+5. **test(build): temporarily disable flaky test [JIRA-5682]**  
+   Temporarily disabled a test with inconsistent results to prevent  
+   disruption in the CI/CD pipeline. This allows us to prioritize  
+   stability while investigating the underlying issue.",3.8
+Participant_H,Bug_Report_Triage_Template,3,165.0190658569336,100,"Title: Intermittent 401 Errors Post Successful OAuth Callback
+
+Environment: Production, OAuth service integrated with Redis session store
+
+Severity: High
+
+Steps to Reproduce:
+1. Navigate to the login page.
+2. Initiate OAuth login for any service provider.
+3. Successfully authenticate with the provider.
+4. Return to application via OAuth callback.
+5. Repeat steps 1-4 multiple times (intermittent 401 errors approximately 30% of attempts).
+
+Expected:
+Users are redirected to the application home page, successfully logged in, with active session maintained by Redis.
+
+Actual:
+Users intermittently receive a 401 Unauthorized error following an otherwise successful OAuth callback.
+
+Logs:
+```
+Timestamp: 2023-10-14T13:25:36Z
+INFO OAuth callback received for user ID
+ERROR Authentication failure, 401 returned. Session ID: abc123
+```
+
+Root Cause Hypothesis:
+The migration from an in-memory session store to Redis may be causing session inconsistencies or session loss, potentially due to a misconfiguration or latency issue within the Redis cluster.
+
+Proposed Fix:
+Investigate Redis session storage configuration to confirm correct setup and resolve potential connection timeouts or data consistency issues. Consider rolling back to the in-memory store temporarily if an urgent resolution is needed.
+
+Test Plan:
+1. Conduct a thorough review of Redis configuration settings.
+2. Load test session storage with concurrent logins to identify patterns leading to failures.
+3. Implement monitoring to detect and log Redis connectivity or timeout issues.
+4. Verify efficacy by running multiple OAuth login flows to ensure consistent success without 401 errors.
+
+---
+
+Title: 401 Error on OAuth Callback in New Redis Session Store Setup
+
+Environment: Production, Redis as session storage
+
+Severity: High
+
+Steps to Reproduce:
+1. Visit the application login page.
+2. Click to initiate OAuth authentication with any provider.
+3. Confirm authentication with the provider.
+4. Get redirected back to the app.
+5. Experience 401 errors intermittently upon repeated login attempts (around 30% fail rate).
+
+Expected:
+After completing OAuth authentication, users should seamlessly transition to the application’s main page without issues.
+
+Actual:
+Users are sporadically blocked by a 401 error despite successful OAuth verification, disrupting access to the application.
+
+Logs:
+```
+[INFO] 2023-10-14T13:25:42Z - Callback successful for user: user123
+[ERROR] 2023-10-14T13:25:43Z - Failed to authenticate session. 401 Error. Session ID: xyz789
+```
+
+Root Cause Hypothesis:
+There might be a problem with persistence or communication between the application and Redis, potentially involving race conditions or session timeout mismanagement.
+
+Proposed Fix:
+Audit session expiration settings within Redis, ensuring they match the expected application logic. Investigate any network latency or misconfigured Redis nodes contributing to session discontinuity.
+
+Test Plan:
+1. Verify the Redis cluster configuration against documented best practices.
+2. Simulate high-load conditions to evaluate session management robustness.
+3. Implement detailed logging and monitoring for session interactions.
+4. Confirm issue resolution by executing repeated tests of the OAuth authentication flow under normal and stressed conditions.
+
+Feel free to choose the version that best suits your needs, and I’ll be happy to help refine it further!",5

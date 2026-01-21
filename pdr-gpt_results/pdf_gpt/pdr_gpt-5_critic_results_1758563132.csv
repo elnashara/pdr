@@ -1,0 +1,794 @@
+participant_name,task_name,iteration_count,time_spent_sec,final_score,final_output,satisfaction_score
+Participant_A,Creative_Writing,5,748.1004486083984,50,"```python
+stories = [
+""""""At Fairleigh Rectory, Mrs. Willoughby declared, with the firmness only mothers possess, that prudence must be the first consideration in every engagement; yet her daughter Marianne listened with more attention to the tone than to the sense. Mr. Denham, lately of moderate fortune, had inherited a small estate; Mr. Lisle, of the larger, had inherited a disposition to be pleased with himself.
+
+“You will allow, Mama,” said Marianne, “that affection is not a matter for arithmetic.”
+
+“My dear,” returned Mrs. Willoughby, “affection, when it is not under the direction of arithmetic, is apt to expend itself very rapidly on candles, coal, and creditors.”
+
+This wise remark was followed by the arrival of Mr. Denham, who, with an ungainly sincerity, begged leave to read aloud a letter confessing that part of his new income was mortgaged to the improvements of his tenants—“which improvements,” he stammered, “I could not in honour delay.”
+
+“I hope, sir,” said Mrs. Willoughby, “you do not consider charity an improvement to be paid for by a wife.”
+
+“Madam,” he replied, colouring, “I would consider it a debt, and myself the debtor.”
+
+Mr. Lisle entered later, with the air of a gentleman accustomed to doors opening exactly when he reached them. He praised the roses, the weather, Marianne’s taste in music, and lastly himself, though with such good breeding that it almost escaped notice.
+
+“You would find,” he told Marianne, “my house perfectly convenient for your sentiments. We dine at five, we ride at one, and we never disagree with the majority.”
+
+Marianne smiled. “I am afraid my sentiments are not punctual.”
+
+In the evening, Mrs. Willoughby pressed her daughter. “The world will not forgive a girl who prefers scruples to comfort.”
+
+“Then the world must forgive me,” said Marianne, “for I prefer scruples to self-satisfaction.”
+
+The next morning brought a note from Mr. Denham, resigning his pretensions; he would not, he said, expose her to a life of economies chosen by his conscience rather than hers. Marianne read it twice, and wept as much for his delicacy as for her loss.
+
+When Mr. Lisle renewed his proposal, promising to relieve her of every discomfort, she answered with a civility that astonished even herself. “Sir, I cannot engage to live pleasantly by ceasing to think rightly.”
+
+Mrs. Willoughby sighed and folded her hands, as if to keep them from meddling with Fate. But fate, which is most a lady when least solicited, sent Mr. Denham again, now empowered by a wiser uncle who esteemed integrity more than improvements. He asked once more, not with triumph but with trembling.
+
+Marianne accepted, and Mrs. Willoughby, who loved justice only when it was prosperous, blessed them both. It was agreed that prudence, when honest, is but the economy of feeling; and affection, when judicious, is the only extravagance that grows cheaper by the day."""""",
+""""""Lady Armitage’s Thursday musicales were designed, as she often observed, to unite the charms of harmony with the benefits of information; she obtained the first by engaging indifferent performers and the second by placing them opposite her most inquisitive friends. On such an evening Miss Eliza Grant, with a fortune of comfortable expectations and a mind of uncomfortable candour, found herself seated between Mr. Harbury, a gentleman of admirable connections, and Mr. Fielding, a clergyman whose sermons were richer than his living.
+
+“You play, Miss Grant?” asked Mr. Harbury, leaning so far that his consequence nearly toppled.
+
+“Poorly,” she said.
+
+“Then we shall be perfectly suited,” he smiled. “I listen poorly.”
+
+Mr. Fielding, who never jested where truth might be useful, observed, “Taste improves by humility.”
+
+The talk soon settled upon a recent scandal: a cousin had forged a bill to rescue his brothers from ruin. The family insisted upon silence; the law, upon punishment. Lady Armitage desired a compromise, that most fashionable of virtues.
+
+“Eliza, what say you?” she inquired across the teacups.
+
+“I say, ma’am,” Eliza replied, “that a secret is a kind of debt; we pay interest upon it every day.”
+
+Mr. Harbury approved with elegance. “Discretion is the oil of society.”
+
+“And justice,” said Mr. Fielding, “its flame.”
+
+When it emerged that the delinquent cousin had taken refuge in Eliza’s own household—placed there by relations pleading that exposure would destroy them all—her dilemma ceased to be theoretical. Mr. Harbury advised her to preserve the family name; he hinted that a prudent wife (he meant herself) would prefer a quiet hearth to the publicity of courts.
+
+“Would you marry a woman who barters her conscience for comfort?” Eliza asked.
+
+“I would marry a woman who never allows conscience to be uncomfortable,” he returned.
+
+Mr. Fielding, with less polish and more sense, said only, “Right cannot be made right by being whispered.”
+
+That night Eliza wrote to the magistrate, enclosing the necessary facts, and to the cousin, enclosing the necessary purse. In the morning Mr. Harbury called to commend her serenity while condemning her decision; he withdrew, as all refined objections do, without raising dust. Mr. Fielding came later, speaking gently of restitution and of mercy that does not cancel truth.
+
+The proceedings were painful, the name somewhat bruised, yet the brothers were saved by lawful arrangements, and the culprit restored through labour instead of lies. Eliza, whose fortune remained as it had been, found her esteem enlarged by the only investment which never disappoints—courage properly placed. She afterwards married Mr. Fielding, not because he was right, but because he had wished her to be so.""""""
+]
+
+print(""\n\n---\n\n"".join(stories))
+```",2.5
+Participant_A,Technical_Explanation,4,192.98855209350586,100,"Output 1
+A CNN applies learned filters (kernels) over spatially arranged data via discrete convolution (often implemented as cross-correlation). Each filter slides with stride, using padding/dilation as configured, producing feature maps that exploit parameter sharing and yield translational equivariance. Nonlinearities (e.g., ReLU) and optional pooling/strided conv downsample while increasing receptive fields, enabling hierarchical feature extraction. During backpropagation, gradients flow from loss through pooling/activations to conv layers: filter gradients are computed by convolving input patches with upstream gradients; input gradients are obtained by convolving the upstream gradients with the spatially flipped kernels (true convolution), accounting for stride/padding. Optimization updates filter weights and biases to reduce loss.
+
+Output 2
+CNNs learn spatial features by convolving inputs with small kernels that share parameters across locations, generating feature maps. Stride, padding, and dilation control resolution and receptive field; pooling or strided convolutions compress spatial size. Stacks of conv+nonlinearity build hierarchical, translation-equivariant representations. In backpropagation, the gradient w.r.t. a kernel equals the correlation between input and the layer’s upstream gradient; the gradient w.r.t. the input equals the convolution of the upstream gradient with the kernel rotated 180°. Gradients propagate through activations/pooling, and an optimizer updates kernels and biases.
+
+Output 3
+Convolutional layers slide learned kernels over inputs to compute local dot products, producing feature maps with shared weights, fewer parameters, and approximate translation equivariance. Hyperparameters—kernel size, stride, padding, dilation—set receptive fields and output size; nonlinearities and pooling/strided convs form deeper, hierarchical features. Backprop computes: (1) kernel gradients via summing products of input patches and upstream gradients; (2) input gradients via convolving upstream gradients with 180°-rotated kernels (handling stride/padding); then updates parameters via gradient-based optimization.",5
+Participant_A,Business_Executive_Summary,5,462.965535402298,50,"Output #1 — Executive Summary (Q2)
+
+Financial Overview
+- Revenue: $2.0M
+- Costs: $1.2M
+- Profit: $0.8M
+- Profit Margin: 40%
+
+Key Growth Areas
+- Enterprise expansion: +18% QoQ in large-account bookings; three new contracts >$100K ARR.
+- Product-led growth: Self-serve signups +22% QoQ; conversion to paid improved from 8% to 10%.
+- Upsell/cross-sell: Attach rate on premium features up 5 pts, contributing $150K incremental ARR.
+
+Key Challenges
+- Churn: Gross revenue churn at 6.5% (target ≤5%); concentrated in SMB cohort.
+- CAC pressure: Paid channels CPC up 12%, elongating payback from 7.5 to 8.5 months.
+- Support load: Ticket volume +20% post-release, driving overtime and NPS dip from 54 to 49.
+
+Recommendation for Next Quarter (Q3)
+- Focus: Net retention and efficient growth.
+- Targets: Revenue $2.3M; Costs ≤$1.25M; Profit ≥$1.05M; Gross churn ≤5.5%; CAC payback ≤8 months; NPS ≥52.
+- Actions:
+  - Launch SMB retention playbook (win-back offers, in-app guides) to cut churn by 1 pt.
+  - Rebalance spend to higher-ROAS channels; expand referral/partner program to 15% of new logos.
+  - Ship two stability sprints to reduce ticket volume by 15%; add tiered SLAs for top accounts.
+  - Prioritize enterprise pipeline with 2 dedicated AEs; goal: 4 deals >$100K.
+
+
+Output #2 — Executive Summary (Q2)
+
+Financial Overview
+- Revenue: $2.0M
+- Costs: $1.2M
+- Profit: $0.8M
+- Profit Margin: 40%
+
+Growth Highlights
+- Regional momentum: North America +20% QoQ; EMEA +12% with improved channel performance.
+- Pricing/mix: Premium tier mix rose from 28% to 34%, adding $120K to Q2 revenue.
+- Partnerships: Two new resellers generated $200K pipeline; first $60K closed in Q2.
+
+Operational Challenges
+- Infrastructure costs: Cloud spend +15% QoQ from peak usage inefficiencies.
+- Sales cycle: Average days to close increased from 41 to 47, delaying cash collection.
+- Data quality: CRM hygiene gaps led to forecast variance of 6 pts.
+
+Recommendation for Next Quarter (Q3)
+- Optimize unit economics and forecast accuracy.
+- Targets: Revenue $2.25–$2.35M; Costs ≤$1.23M; Profit ≥$1.02M; Cloud COGS −10%; Forecast accuracy ≥95%.
+- Actions:
+  - Implement autoscaling and commit discounts; aim $60K quarterly cloud savings.
+  - Introduce mutual close plans and MEDDICC in mid-market to cut cycle by 5 days.
+  - Launch CRM governance (required fields, quarterly audits); enable BI dashboards weekly.
+  - Expand reseller enablement (certification + MDF) to drive $300K Q3 bookings.
+
+
+Output #3 — Executive Summary (Q2)
+
+Financial Summary
+- Revenue: $2.0M
+- Costs: $1.2M
+- Profit: $0.8M
+- Profit Margin: 40%
+
+Growth Drivers
+- New product module contributed $250K with 35% attach in existing base.
+- Website conversion improved from 2.1% to 2.6% after funnel optimizations.
+- Customer success expansion motions yielded $90K in seat growth across 20 accounts.
+
+Headwinds
+- Talent gaps: Two open senior engineer roles slowed roadmap delivery by 3–4 weeks.
+- Compliance: Upcoming data-privacy requirements may add $80K in one-time costs.
+- Currency: FX headwinds reduced EMEA revenue by ~$40K.
+
+Recommendation for Next Quarter (Q3)
+- Protect roadmap velocity and compliance readiness while sustaining growth.
+- Targets: Revenue $2.3M; Costs ≤$1.27M (incl. compliance); Profit ≥$1.03M; On-time delivery ≥95%.
+- Actions:
+  - Fast-track hires with contract-to-hire bridge; add external QA to de-risk releases.
+  - Allocate $80K to privacy compliance; complete audit by mid-quarter.
+  - Double down on high-ROI web experiments to lift conversion to 2.9%.
+  - Expand module attach to 40% via in-app prompts and bundled pricing.",2.5
+Participant_B,Creative_Writing,5,902.8707497119904,50,"```python
+outputs = [
+  """"""Miss Elinor Hartley of High Combe was known to be prudent without being cold, cheerful without any excess of gaiety, and kind without the habit of collecting the gratitude due to kindness. Such a character should have been a fortune; alas, it was only a recommendation. Her aunt, Mrs. Bracken, possessed both fortune and recommendation; she also possessed a plan.
+
+“You cannot mean to refuse Mr. Linton,” her aunt declared over tea, the spoon clicking with the decision of a magistrate. “He is of an eligible income, an address which sits well upon a man of thirty, and a mother who is sufficiently infirm to be grateful to any daughter-in-law, and sufficiently sensible to be silent.”
+
+“Elinor,” said Mr. Linton, who visited that same afternoon with a bouquet arranged to resemble an argument, “I aspire only to your happiness. I am prepared to think as you think on every subject—except of course those in which my experience must guide you.”
+
+“I am overpowered,” Elinor replied, gently, “by the prospect of such obedience.”
+
+Mr. Linton smiled as if complimented. “You will find it a very comfortable submission.”
+
+The moral temptation was simple: to secure her family from the anxieties of speculation by marrying a man who valued her good sense as furniture—pleasing, polished, and not expected to move. Mrs. Bracken heightened the danger by adding a story of debt.
+
+“You must not suppose me alarmed,” she began, and summoned every symptom of alarm. “Your uncle ventured on a most promising canal. The canal has declined to be promising. In a month we shall have creditors with longer memories than patience.”
+
+Elinor sat very still. “I am sorry for it.”
+
+“You may be happy for it,” her aunt corrected. “To accept Mr. Linton will be thought exceedingly proper. To decline him, under such reports, will be thought romantic.”
+
+The next morning brought an invitation to walk from Mr. James Ashdown, a clergyman with more books than prospects and a look which suggested that humility had been chosen, not inherited. They met under limes whose leaves murmured of choices made by people with less time to make them.
+
+“I am told,” Mr. Ashdown said, flushing, “that prudence will not allow you to countenance me. I respect prudence so much that I have resolved not to ask what it forbids.”
+
+“You are very respectful,” Elinor answered; and then, with sudden honesty, “I am weary of being prudent for other people.”
+
+He looked at her with a concern that asked nothing. It was inconveniently persuasive.
+
+That evening, Mr. Linton returned, precise as his accounts. “Miss Hartley, may I hope?”
+
+Elinor felt the full weight of canal, creditors, and common sense. “Sir,” she said softly, “your esteem does me honour; but I have learned that the most elegant economy is to decline what cannot be afforded. I cannot afford the expense of my own silence.”
+
+There was a murmur in the room, whether from curtains or conscience she could not tell. Mr. Linton coloured. “You will regret a sentiment so costly.”
+
+“Perhaps,” said Elinor, “but I shall pay the bill myself.”
+
+Mrs. Bracken’s distress was real, but not durable. The creditors proved human, which is to say self-interested, and accepted a schedule of payments that took its tone from Elinor’s candour and Mr. Ashdown’s arithmetic. When, in due time, Elinor married the clergyman with no fortune and every intention, Mrs. Bracken declared—quite sincerely—that nothing was so economical as virtue, provided it was paid in installments."""""",
+
+  """"""At the assembly rooms of Meriton, where every whisper has a partner and every partner a history, Miss Charlotte Fairchild danced twice with Captain Harbury and once with her conscience. The Captain possessed that agreeable mixture of frankness and flattery which persuades one that truth has become civil. He had a handsome wound and a handsomer opinion of his own motives.
+
+“You must allow me the pleasure of calling to-morrow,” he said, adjusting his sleeve as if it were an argument. “I have a matter of some delicacy.”
+
+“Delicacy is so rarely announced,” Charlotte returned, “that I shall be quite prepared for a siege.”
+
+It was not the Captain, however, who arrived at Fairchild House next day, but Mr. Edward Langley, her guardian’s steward, a gentleman only by patience and intention. He brought a letter sealed with scorn. Mr. Fairchild’s investments had ripened into ruins; a mortgage demanded attention; the attention, as men of business will have it, must be immediate or impertinent.
+
+“My dear Charlotte,” said Mrs. Fairchild, whose nerves enjoyed the bracing air of urgency, “you see the necessity. Captain Harbury is ready to be charmed; it remains only to be just.”
+
+“To whom?” Charlotte asked.
+
+“To your family, child.”
+
+Mr. Langley spoke quietly. “Justice extends further. The Captain has been employing sailors’ prize-money to ornament his consequence. I have proofs.” He placed a packet on the table with the modesty of a man who fears to disturb the silver. “If Miss Fairchild consents to him, the mischief will be sweetened by a young lady’s fortune and not repaired.”
+
+“Sir,” cried Mrs. Fairchild, “you presume.”
+
+“I presume only that Miss Fairchild prefers a husband who can be honoured without apology.”
+
+The dilemma was complete: to marry a saviour whose heroism belonged to other men’s pockets, or to expose him and become the instrument of her own inconvenience. Charlotte’s heart had a wish, but it kept no accounts.
+
+When Captain Harbury called, he found Charlotte alone. “Your obedience to your family’s necessities,” he began, “is the ornament of your understanding.”
+
+“Obedience,” she replied, “is charming, provided it is voluntary.”
+
+He laughed. “I felicitate myself that yours will be.”
+
+She unfolded the packet. “I felicitate truth more.”
+
+His smile thinned. “You would not wound a reputation which supports your own.”
+
+“It is a weak scaffold that requires a lady’s silence to remain upright.”
+
+The Captain attempted indignation and settled for retreat. Mrs. Fairchild wept for propriety disappointed; the creditors prepared their familiar faces; and Mr. Langley, with a diligence that had no audience, devised a plan by which Fairchild House might be kept, if not in splendour, at least in weather.
+
+Months later, at a quieter assembly, Charlotte and Mr. Langley stood near a window that looked upon a road without visitors. “I have learned,” she said, “that doing right seldom pays at once.”
+
+“And yet,” he answered, surprised by his own courage, “its interest compounds.”
+
+She smiled. “Then we must be investors of a very stubborn sort.”
+
+Their future contained more sums than bouquets, more truth than triumph; but in time, they discovered that respect is the only luxury one can wear every day without wearying, and that a modest happiness is the safest fortune for those who mean to keep it.""""""
+]
+```",2.5
+Participant_B,Technical_Explanation,1,73.33646893501282,100,"Output A:
+- Convolutional neural networks (CNNs) process images by sliding small learnable filters (kernels) over the input to compute feature maps via convolution: each output pixel is a weighted sum of a local patch. Early layers learn edge/texture detectors; deeper layers combine them into higher-level patterns.
+- After convolution, nonlinearities (e.g., ReLU) and often pooling reduce dimensionality and add invariance.
+- Filters are learned by backpropagation: compute the loss gradient w.r.t. outputs, propagate through nonlinearities and convolution, accumulate gradients w.r.t. kernel weights via cross-correlation between input patches and output gradients, then update parameters with gradient-based optimizers.
+
+Output B:
+- A CNN replaces full connections with local receptive fields: a kernel (filter) of size k×k is convolved across the input to produce a feature map, reusing the same weights at every spatial location (weight sharing). Stride and padding control resolution and border effects.
+- Stacks of conv + activation + pooling layers extract progressively abstract features; 1×1 and depthwise/pointwise variants adjust channel mixing and efficiency.
+- Training uses backpropagation and the chain rule: gradients flow from the loss to feature maps, then to kernels (via sliding-window correlations) and to inputs; parameter updates follow SGD/Adam.
+
+Output C:
+- Convolution computes y(i,j,c_out) = sum over c_in,u,v of W(u,v,c_in,c_out) · x(i+u,j+v,c_in) + b(c_out). The kernels W are small in spatial extent but span input channels, enabling translation-equivariant feature detection.
+- Nonlinearities and pooling follow to form deeper representations; later, global pooling or fully connected layers map features to task outputs.
+- Backpropagation computes ∂L/∂W by convolving input patches with upstream gradients, ∂L/∂x by convolving flipped kernels with upstream gradients, and updates W via a chosen optimizer.",5
+Participant_B,Business_Executive_Summary,5,304.79716324806213,50,"Output 1
+Executive Summary – Q2 Performance
+- Financials: Revenue $2.0M; Costs $1.2M; Profit $0.8M; Profit margin 40%.
+- Growth Areas:
+  - Enterprise upsells in existing accounts drove higher average deal size.
+  - Partner-led pipeline contributed meaningful net-new logos.
+  - Expansion of premium support improved retention and cross-sell.
+- Challenges:
+  - Sales cycle lengthened in mid-market due to budget scrutiny.
+  - Rising cloud/infra expenses pressured gross margin variability.
+  - Hiring gaps in sales engineering slowed complex deal velocity.
+- Operational Highlights:
+  - Improved win rate in regulated industries via compliance features.
+  - Churn reduced through proactive success playbooks and QBR cadence.
+- Risks:
+  - Concentration in top 5 accounts increases revenue volatility.
+  - Currency headwinds in EMEA could soften net revenue conversion.
+Recommendation for Q3:
+- Prioritize margin discipline: negotiate cloud commitments and reserved capacity to cut infra COGS by 10–15%.
+- Accelerate diversified pipeline: increase partner-sourced opportunities to 25% of total; add two strategic channel alliances.
+- Shorten sales cycles: deploy deal-desk guardrails and SE staffing to reduce time-to-close by 20%.
+- De-risk concentration: cap single-account exposure to <20% of ARR via targeted mid-market campaigns.
+
+Output 2
+Executive Brief – Q2 Financials and Outlook
+- Financial Summary: Revenue $2.0M; Costs $1.2M; Profit $0.8M; 40% profit margin.
+- Key Growth Drivers:
+  - Strong renewal base with feature-led expansions in security and analytics.
+  - Increased digital demand generation converted at higher MQL-to-SQL rates.
+  - Strategic pricing uplift on new tiers improved unit economics.
+- Headwinds:
+  - Procurement delays extended approval cycles in public sector.
+  - Support ticket volume spiked post-release, elevating service costs.
+  - Competitive discounting intensified in APAC.
+- Highlights:
+  - Product reliability improved with reduced incident frequency.
+  - New integrations unlocked cross-ecosystem adoption.
+- Risks:
+  - Overreliance on a narrow use-case limits upsell ceiling in some verticals.
+Recommendation for Q3:
+- Protect margins: optimize cloud spend and retire low-use features; target 300 bps gross margin lift.
+- Broaden use-cases: release two vertical playbooks (healthcare, fintech) and align field enablement.
+- Improve post-sale efficiency: expand self-serve support and deflection to cut ticket volume by 20%.
+- Competitive posture: introduce value-based pricing guardrails; tighten discount approval thresholds.
+
+Output 3
+Q2 Executive Summary
+- Core Results: Revenue $2.0M; Costs $1.2M; Profit $0.8M; 40% margin.
+- Growth Highlights:
+  - Higher attach rates for add-ons increased ARPU.
+  - Partner marketplaces expanded reach with efficient CAC.
+  - Customer success motions stabilized renewals and cross-sell.
+- Key Challenges:
+  - Deal slippage near quarter-end affected forecast accuracy.
+  - Infrastructure and data egress fees rose with usage.
+  - Limited brand awareness in two priority regions constrained top-of-funnel.
+- Notable Progress:
+  - Compliance certifications unlocked regulated pipeline.
+  - Enhanced telemetry improved product adoption insights.
+- Risk Factors:
+  - Talent bandwidth in solutions architecture; potential burnout and lost deals.
+Recommendation for Q3:
+- Revenue mix and efficiency: shift 20% of new pipeline to partners; invest in brand programs in two regions.
+- Cost management: commit to reserved cloud capacity and storage tiering to reduce infra spend by 12%.
+- Sales execution: add two SE hires and enforce stage-exit criteria to cut slippage by 25%.
+- Retention: scale proactive adoption programs to lift net revenue retention by 3–5 pts.",2.5
+Participant_C,Creative_Writing,5,1014.014454126358,75,"```python
+outputs = [
+    {
+        ""title"": ""A Preference for Candour"",
+        ""story"": (
+            ""Mrs. Harbury, who had made a science of benevolence and a spectacle of prudence, ""
+            ""presided at tea with the air of one who dispensed both justice and jam. Her ward, ""
+            ""Miss Elinor Price, poured with a steadiness that had often been mistaken for composure.\n\n""
+            ""“Mr. Linton is a young man of the most improving tendencies,” observed Mrs. Harbury, ""
+            ""sweetening her own cup with a liberality she did not extend to her neighbour. “He attends ""
+            ""sermons with the punctuality of a church clock.”\n\n""
+            ""Elinor smiled. “I suppose the clock’s virtue is to keep time, not to comprehend it.”\n\n""
+            ""“Nonsense. A young lady of no fortune cannot afford such niceties. Mr. Linton’s offer is ""
+            ""unexceptionable. A house in Warwickshire! Hemstitched curtains!”\n\n""
+            ""The curtains were, in Mrs. Harbury’s arithmetic, an argument of irresistible numeration. ""
+            ""But Elinor’s mind, habitually respectful, had lately become impolitely acquainted with itself. ""
+            ""Mr. Linton was all deference, but his deference had the quality of a mirror which flatters by ""
+            ""returning no image but one’s own; and she had discovered, to her alarm, that she wished for ""
+            ""contradiction.\n\n""
+            ""Into this delicate balance entered Mr. Francis Avery—a cousin to nobody of consequence, and ""
+            ""therefore inconveniently sincere. He arrived with mud on his boots and a book in his pocket, ""
+            ""both objects equally distressing to Mrs. Harbury.\n\n""
+            ""“Sir,” said she, with stately compassion, “we are at tea, not at plough.”\n\n""
+            ""“I rejoice,” replied Mr. Avery, “for I have never known tea to resist cultivation.”\n\n""
+            ""Elinor laughed, and was instantly rebuked by a glance which represented all the duties of ""
+            ""an unportioned niece. That evening, alone with Mrs. Harbury, she was pressed, with every polite ""
+            ""violence, to accept Mr. Linton.\n\n""
+            ""“My dear,” said the lady, “gratitude is the finest ornament of a plain gown.”\n\n""
+            ""“And of a plain life?” Elinor asked.\n\n""
+            ""“It is the difference between comfort and calamity.”\n\n""
+            ""The moral dilemma, which at first had been a faint nuisance, now demanded a decision: ought a ""
+            ""woman be grateful to the person who offers her rescue, or to the truth which asks her to need none? ""
+            ""Elinor had been educated to confound safety with virtue, yet could not admire Mr. Linton without ""
+            ""first forgetting herself.\n\n""
+            ""The next morning he called, bringing a sermon stitched with roses. “You will find it improving,” ""
+            ""he said, “and I shall be rewarded by your improvedness.”\n\n""
+            ""“Sir,” said Elinor, “to be improved for your satisfaction is a study I am unqualified to pursue.”\n\n""
+            ""He looked astonished—good men are most astonished when goodness disagrees with them—and took his ""
+            ""leave, attended by his roses and a sense of injustice. Mrs. Harbury, with all the solemnity of a ""
+            ""thwarted benefactor, declared Elinor ruined.\n\n""
+            ""Mr. Avery, meeting her in the lane, removed his hat with an earnestness that had nothing of gallantry. ""
+            ""“Miss Price, may I ask—did you refuse him on my account?”\n\n""
+            ""“No, sir,” she said, and then, because truth rewards courage with more to do, added, “nor on yours.”\n\n""
+            ""He smiled. “Then you have refused him on your own; and that is the first fortune I ever knew to be ""
+            ""made without money.”\n\n""
+            ""It was some time before Mrs. Harbury forgave Elinor the disgrace of happiness. But society, which loves ""
+            ""to mistake outcomes for principles, eventually admired the match it could not explain; and Elinor discovered ""
+            ""that gratitude is never so upright as when it bows to conscience first.""
+        ),
+        ""critic"": {
+            ""strengths"": [
+                ""Austen-like diction and irony; clear social milieu."",
+                ""Polite, period-appropriate dialogue; distinct voices."",
+                ""Moral dilemma articulated and resolved with principle.""
+            ],
+            ""weaknesses"": [
+                ""Occasional aphorisms border on modernity."",
+                ""Secondary characters lightly sketched.""
+            ],
+            ""word_count"": 496
+        }
+    },
+    {
+        ""title"": ""The Ribbon at Hartwell"",
+        ""story"": (
+            ""When Miss Marianne Fielding mislaid a blue ribbon at the Hartwell Assembly, the loss was judged ""
+            ""of greater consequence to romance than to haberdashery; for Mr. George Penrith was seen to pocket ""
+            ""a ribbon of that very description with the secrecy of a politician.\n\n""
+            ""“Sir,” said Mrs. Fielding to him the next day, “my daughter’s ribbon has gone astray.”\n\n""
+            ""“Madam,” said he, bowing, “I have taken more imprudent things to heart.”\n\n""
+            ""Marianne, who suspected the ribbon had not travelled alone, blushed into silence. She had enjoyed Mr. ""
+            ""Penrith’s attentions as far as a prudent girl may enjoy what has never been openly offered. They had ""
+            ""danced; he had admired; she had hoped—without, she assured herself, any vulgar expectation.\n\n""
+            ""Into this budding uncertainty stepped Mr. Edmund Leigh, a neighbour as dependable as a milestone and, ""
+            ""to Marianne’s mother, twice as useful. His circumstances were correct; his conversation, moderate. ""
+            ""He had long intended a proposal, and delayed only to ensure that gratitude would have time to become affection.\n\n""
+            ""The dilemma was of the kind that makes a young lady very reasonable and very unhappy: to secure a good man ""
+            ""by the help of esteem, or to risk everything for a man who made her heart move inconveniently. Mr. Leigh ""
+            ""presented himself with a speech perfectly judged to exclude feeling and admit comfort.\n\n""
+            ""“Miss Fielding,” he concluded, “if I cannot promise to transport you, I can at least promise never to ""
+            ""disturb you.”\n\n""
+            ""“You are very obliging, sir,” Marianne said, and wished, against her better sense, to be in some small way disturbed.\n\n""
+            ""That evening Mr. Penrith, recollecting himself sufficiently to recollect the ribbon, called with it in a little ""
+            ""box, as if contrition must be ornamented to pass for sincerity.\n\n""
+            ""“I beg forgiveness,” he said softly. “I thought it might be preserved, as one keeps a programme of a ""
+            ""memorable piece.”\n\n""
+            ""“A programme,” returned Marianne, “is valued for what it recalls, not for what it promises.”\n\n""
+            ""Her mother, with an eye to moral and financial arithmetic, drew her aside. “Marianne, you will answer Mr. Leigh ""
+            ""to-morrow. Mr. Penrith’s remembrance, like himself, is engaging and unprofitable.”\n\n""
+            ""Marianne slept little. She had been taught to equate stability with virtue, yet the steadiness she admired in ""
+            ""Mr. Leigh appeared to depend on her surrender of every irregularity that made her herself. In the morning she ""
+            ""wrote, with trembling exactness, to decline him—citing not passion, which would have justified nothing, but ""
+            ""truth, which justified everything.\n\n""
+            ""Mr. Leigh accepted her refusal as he did all weather: with patience and without umbrella. Mr. Penrith, who had ""
+            ""expected to succeed for want of opposition, was startled into honour. “Miss Fielding,” he said, “I will deserve ""
+            ""the memory I presumed to keep.”\n\n""
+            ""It is reported that he did not always succeed; but he tried so steadily that even Mrs. Fielding came to prefer ""
+            ""an honest effort to a comfortable certainty; and the ribbon, being at last worn openly, was less remarkable for ""
+            ""its colour than for the neck it did not bow.""
+        ),
+        ""critic"": {
+            ""strengths"": [
+                ""Witty social observation; elegant, period dialogue."",
+                ""Moral dilemma (security vs authenticity) is clear and resolved with integrity."",
+                ""Light irony and tidy narrative arc.""
+            ],
+            ""weaknesses"": [
+                ""Penrith’s reform is summarized, not dramatized."",
+                ""Mother character somewhat conventional.""
+            ],
+            ""word_count"": 494
+        }
+    }
+]
+
+print(outputs)
+```",3.8
+Participant_C,Technical_Explanation,1,42.41564393043518,100,"Option A:
+Convolutional neural networks (CNNs) learn spatially local, translation-aware features by applying learned filters (kernels) across inputs. A convolution layer slides each kernel over the image/feature map, computing dot products at each location to produce feature maps that highlight specific patterns (e.g., edges, textures). Stacking layers composes simple patterns into higher-level features; nonlinearities and pooling add capacity and limited invariance. During training, backpropagation computes gradients of the loss with respect to each kernel by correlating upstream errors with the corresponding input patches (and propagates errors to previous layers via convolution with flipped kernels), enabling gradient descent to update filter weights end-to-end.
+
+Option B:
+A CNN replaces dense connections with local convolutions: small kernels scan across the input, sharing weights across spatial positions to detect the same pattern anywhere. Each convolution outputs a feature map, optionally followed by activation and pooling to reduce resolution while preserving salient features. Depthwise composition allows hierarchical representations, from edges to object parts. Backpropagation propagates the loss gradient through these operations: the gradient w.r.t. a kernel equals the sum over spatial positions of input patches times the local error; the gradient w.r.t. inputs is the convolution of the error with the kernel rotated 180°. Parameter updates follow via gradient-based optimizers.
+
+Option C:
+In a CNN, convolution layers apply learnable filters to local receptive fields, computing cross-correlations that yield feature maps capturing spatial structure. Multiple channels allow sets of filters to integrate information across color/feature dimensions; 1×1 and larger kernels control receptive field and mixing. Padding/stride govern output size and downsampling, while pooling or strided convolutions add invariance. Backpropagation uses the chain rule to pass gradients through convolutions and activations, accumulating per-filter gradients from all locations (weight sharing), and distributing error to inputs via transposed convolutions, enabling end-to-end training of filters for the target task.",5
+Participant_C,Business_Executive_Summary,5,447.442334651947,75,"Output 1 — Q2 Executive Summary
+
+Financials
+- Revenue: $2.0M | Costs: $1.2M | Profit: $0.8M | Operating margin: 40%
+
+Key Growth Areas
+- Enterprise pipeline expansion: larger average deal size and improved win rates in target verticals.
+- Upsell momentum: increased attach of premium modules and annual plans.
+- Partnerships: new channel partners accelerating qualified leads.
+
+Challenges
+- SMB churn elevating gross revenue retention risk.
+- Capacity constraints in customer success slowing onboarding and time-to-value.
+- Deal-cycle friction from security/procurement reviews in regulated accounts.
+
+Recommendations for Q3
+- Prioritize enterprise and mid-market focus; refine ICP and stage gates to reduce slippage.
+- Invest in customer success headcount and playbooks to cut time-to-value and curb churn.
+- Streamline security/procurement responses with standardized artifacts to shorten cycle time.
+- Maintain cost discipline; reallocate spend from low-ROI channels to partner-led motions.
+
+
+Output 2 — Q2 Executive Summary
+
+Financials
+- Revenue: $2.0M | Costs: $1.2M | Profit: $0.8M
+
+Growth Highlights
+- Strong enterprise bookings and higher ARPU via premium feature adoption.
+- Improved marketing efficiency from targeted campaigns and partner co-selling.
+- Product usage depth rising in core cohorts, supporting upsell.
+
+Headwinds
+- Elevated churn and downgrade pressure in price-sensitive SMBs.
+- Longer sales cycles in regulated industries due to compliance requirements.
+- Onboarding bottlenecks increasing support load and delaying expansion.
+
+Q3 Recommendations
+- Double down on enterprise segments; focus sellers on high-probability verticals.
+- Expand CS capacity and automation to improve onboarding and retention.
+- Pre-package compliance/security documentation to accelerate procurement.
+- Optimize spend mix toward channels with proven CAC payback; pause underperformers.
+
+
+Output 3 — Q2 Executive Summary
+
+Financials
+- Q2 Revenue: $2.0M | Costs: $1.2M | Profit: $0.8M
+
+Growth Drivers
+- Upsell/cross-sell traction in existing accounts; higher module attach.
+- Partner-led pipeline contributing quality opportunities and shorter ramps.
+- Product enhancements increasing engagement in key use cases.
+
+Challenges
+- Churn concentration in SMB reducing net revenue retention.
+- Resource constraints in CS and solutions engineering impacting implementation speed.
+- Pricing sensitivity in lower tiers limiting expansion.
+
+Q3 Recommendation
+- Concentrate GTM on enterprise/mid-market ICP; align quotas and enablement accordingly.
+- Add CS/SE headcount and standardized onboarding to accelerate time-to-value.
+- Implement a structured renewal and save program for at-risk SMBs.
+- Preserve 40% margin by shifting budget to high-ROI programs and pruning low-yield spend.",3.8
+Participant_D,Creative_Writing,5,839.8034057617188,50,"```python
+stories = [
+  {
+    ""title"": ""The Violet Ribbon"",
+    ""text"": ""It is a truth every drawing-room will own, though few confess it aloud, that a lady’s consequence may be measured less by her fortune than by the steadiness with which she declines to remark upon it. Miss Elinor Wray, with a property sufficient to permit a new ribbon each quarter, had the misfortune of possessing also an aunt who valued ribbons as proofs of moral fibre. \n\nAt Mrs. Penleigh’s Wednesday assembly, where the carpets contrived a hush as genteel as any curate, Mr. Bramwell, lately returned from Bath and generally admired for a confidence he had not yet earned, addressed Miss Wray with that species of politeness which never asks a question without supposing the answer beforehand. \n\n“Miss Wray,” said he, “your taste is so invariably judicious that I must solicit your counsel. I intend a benefaction to the library—though, as I would not have gratitude parade with trumpets, you will be discreet.” \n\n“Sir,” said Elinor, “discretion is only noisy when it wishes to be heard.” \n\nHe smiled in triumph, as if he had invented her reply. “Then you will tell Mrs. Penleigh that the gift ought, for the encouragement of young minds, to bear my name; yet you will add, delicately, that I am mortified by the necessity.” \n\nElinor observed his complacence settle about him like ill-fitted armour. She recollected that the village school, where her aunt’s maid instructed with more piety than letters, required windows rather than gilded dedications. But Mr. Bramwell’s attentions had lately excited the neighborhood; and a refusal, even of a message, might hazard her aunt’s ambitions. \n\nMrs. Penleigh advanced. “My dear Miss Wray, Mr. Bramwell does the town an honour!” \n\nElinor curtsied. “The honour, ma’am, will be best secured by utility.” Turning to Mr. Bramwell, she added, “I could not, with propriety, deliver words which you do not think; whereas I shall cheerfully convey what you intend.” \n\n“I intend generosity,” he cried. \n\n“Then allow it to arrive unannounced,” said she gently, “or it loses its way.” \n\nA silence ensued, polite as porcelain and equally brittle. Mr. Bramwell coloured. “If Miss Wray cannot serve my discretion, perhaps she may serve my understanding.” \n\n“She serves neither,” said Mrs. Penleigh, alarmed. \n\nElinor, with a firmness that sat upon her like the violet ribbon upon her gown—visible, but not importunate—continued, “Sir, the library will flourish under any name; but the school’s small scholars cannot read your inscription for want of glass.” \n\nThe company rustled; even the fichus whispered. Then Mr. Bramwell, surprised into sense, bowed. “You oblige me to deserve your good opinion—a task I had thought completed.” \n\nWithin the fortnight, panes shone in the schoolhouse; a modest parcel of volumes arrived without trumpet, and the donor remained unknown to those who most benefited. Elinor’s aunt lamented the lost consequence; Elinor lost only a suitor who preferred applause to improvement. She discovered, as many do and few admit, that delicacy is not the enemy of truth, only its chaperone; and that a favour which requires advertisement is a bargain in masquerade.""
+  },
+  {
+    ""title"": ""A Matter of Parsley and Pride"",
+    ""text"": ""No lady ever confessed to minding economy, until the bill appeared; then, economy became an acquaintance too forward to be acknowledged. Mrs. Arden kept a table whose moderation was applauded by those who were not invited to it, and criticised by those who were. Her niece, Miss Marianne Grey, possessed a lively understanding which, like a spirited horse, sometimes chose the hedgerow rather than the gate.\n\nWhen Mr. Linton—amiable, punctual, and rich at an age that pleased mothers—proposed to supply the Arden household with garden produce from his own hothouses, he did so with that humility which advertises itself. “A trifle, Miss Grey. Parsley and peaches are the gentlest arguments of friendship.”\n\n“Friendship speaks quite audibly without herbs,” Marianne replied, smiling; yet she admired the peaches, as all rational women must.\n\nThe dilemma ripened at Mrs. Willoughby’s dinner. A scarcity of lamb had obliged that lady to arrange her dishes with more enthusiasm than substance; the company, discontented beneath their politeness, attributed every deficiency to Mrs. Arden’s example. “Economy,” sighed Mrs. Willoughby, “should be practiced only in solitude.”\n\nThat evening, Mr. Linton pressed Marianne: “Permit me to send a weekly hamper. Your aunt’s reputation suffers from her virtue; I would disguise it with plenty.”\n\nMarianne hesitated. To accept would secure comfort and silence malicious tongues; to refuse might protect her aunt’s independence, which, though small, was unembarrassed. She sought counsel from Mr. Hale, a clergyman whose sermons rarely fatigued truth by overwork.\n\n“Miss Grey,” said he, “gratitude is a good tenant but a poor landlord. If bounty enters by the back door and dismisses prudence by the front, you will find yourself entertaining a guest you did not invite.”\n\nThus armed, Marianne returned her answer. “Mr. Linton, I am grateful; but I cannot purchase the neighbourhood’s good opinion with your peaches. My aunt’s table must be sustained by her means, or not sustained by mine.”\n\nMr. Linton coloured with the consciousness of an offered obligation rejected for being too visible. After a moment, he said, “Then permit me at least the parsley; it is not dear.”\n\n“Parsley is the herald of dishes that can stand without it,” Marianne replied. “Let us allow our frugality to be honest. If we are to be blamed, let it be for what we truly are.”\n\nThe story reached Mrs. Willoughby, who, discovering that generosity might be practiced without witnesses, sent the lamb she had hoarded for her own company to a family with none. Mr. Linton persisted in attentions less edible and more solid; he asked for Marianne’s hand, not her pantry. She accepted, finding that respect preserves affection as salt preserves meat: by drawing out what would otherwise spoil.""
+  },
+  {
+    ""title"": ""The Portrait at Hartwell"",
+    ""text"": ""At Hartwell Lodge, where the rain performed an education upon the gravel and the gravel learned it badly, Miss Julia Berridge was daily reminded that a young woman’s fortune is as much the management of her principles as of her dowry. Her guardian, Sir Matthew, prided himself on never sacrificing propriety to feeling—by which he meant he seldom risked being thought kind.\n\nMr. Keating, a gentleman of moderate means and decided expression, had long admired Julia with the steadiness of a man who knows the value of silence. Sir Matthew would sooner have admitted a draft than a suitor without a carriage-and-four. Yet an event obliged him to relax his precision: a painter was engaged to execute Julia’s portrait, intended to recommend both the house and the heiress to the world’s esteem.\n\nThe artist, Mr. Dacre, arrived with a portfolio of reputations and the air of a man who expected gratitude in advance. “I require,” he said, arranging light and conscience with equal care, “a certain sincerity of countenance. The eyes must confess what the lips conceal.”\n\nJulia, seated, beheld his sketches: ladies improved into saints; gentlemen corrected into heroes. “Pray, sir,” she said, “must I be better than I am to satisfy your art?”\n\n“Only a little,” he answered. “Nature is a rough draft; I publish the fair copy.”\n\nHere lay the dilemma. Sir Matthew insisted upon a likeness that would raise offers; Mr. Dacre promised a beauty that would raise expectations; Julia desired only an image she could meet in a mirror without apology. To refuse enhancement might injure her prospects; to accept it might betray her integrity.\n\nDuring a sitting visited by Mr. Keating, Mr. Dacre proposed a delicate alteration—softening the thoughtfulness that sometimes deepened Julia’s brow. “Seriousness,” he observed, “is a debt no gentleman is eager to pay.”\n\nMr. Keating bowed. “Yet it is the only coin that purchases constancy.”\n\nJulia laughed, half-willing to be tempted, half-determined to be true. “Sir,” she told the painter, “render me as I am, and allow time the flattery.”\n\nSir Matthew protested. “Men buy expectations; they forgive realities only in themselves.”\n\n“Then,” said Julia, “let the buyer be honest for once.”\n\nThe portrait, completed without embroidery, disappointed those who prefer fable to face, but pleased the few who read character where others count features. Mr. Keating praised it in a manner that did not praise himself; Sir Matthew sulked into acquiescence when a proposal arrived from a very grand quarter, accompanied by enquiries about dowry and a poem about eyes. Julia declined them both, and accepted Mr. Keating soon after, observing that constancy is a likeness which improves in the keeping, while ornament fades with the varnish.""
+  }
+]
+print(stories)
+```",2.5
+Participant_D,Technical_Explanation,4,194.55333828926086,100,"Output A
+- CNNs process an input tensor with learnable filters (kernels) via discrete cross-correlation (often called “convolution”): each kernel slides spatially, computing weighted sums to produce feature maps. Weight sharing induces translation equivariance; stride, padding, and dilation control resolution and receptive field. Nonlinearities (e.g., ReLU) and optional pooling/normalization build hierarchical features from edges to parts to objects. Training uses backpropagation: gradients w.r.t. weights are input-feature patches convolved with upstream errors; gradients w.r.t. inputs are upstream errors convolved with the spatially flipped kernels, all accumulated across locations/channels. Optimizers update kernels to minimize loss.
+
+Output B
+- A CNN applies many small kernels across spatial dimensions, reusing the same weights at all positions to detect local patterns and yield feature maps. This weight sharing gives translation equivariance; pooling or strided convs provide downsampling and approximate invariance. Kernel size, stride, padding, and dilation set receptive fields and computation. Deeper stacks compose features. Backprop computes: (1) dL/dW by correlating input patches with output gradients, (2) dL/dX by convolving output gradients with rotated kernels, propagating through nonlinearity and pooling Jacobians. Parameters are updated by gradient-based optimizers.
+
+Output C
+- Convolutional layers implement linear, local, shift-equivariant operations: y = Σ_c K_c ⋆ x_c + b, followed by nonlinearities. Each kernel (filter) slides spatially, producing channels that respond to patterns (edges, textures). Stride and padding govern spatial sizing; dilation enlarges the effective receptive field without extra parameters. Stacking layers yields hierarchical abstractions; residual/skip connections help train deep nets. During backprop, error signals are distributed via chain rule: kernel gradients accumulate as outer products of local input patches and errors; input gradients are computed via convolution with flipped kernels. Training iterates forward pass → loss → gradient → update.",5
+Participant_D,Business_Executive_Summary,5,528.0966703891754,50,"Output 1: Executive Summary — Q2 Performance and Outlook
+
+Financial Overview
+- Revenue: $2.0M
+- Costs: $1.2M
+- Profit: $0.8M (40% profit margin)
+
+Key Growth Areas
+- Enterprise pipeline expansion with stronger win rates in analytics and automation offerings.
+- EMEA and healthcare verticals delivered outsized bookings and higher average deal size.
+- Channel partnerships contributed incremental leads and shortened sales cycles.
+
+Key Challenges
+- Churn concentrated in SMB due to price sensitivity and onboarding friction.
+- Delays in product roadmap items (workflow automation) impacted upsell timing.
+- Support response variability created SLA risk and minor credit exposure.
+
+Recommendation for Next Quarter
+- Prioritize enterprise and EMEA: allocate 60% of new sales capacity to these segments.
+- Accelerate roadmap delivery for automation features; ship two high-impact releases.
+- Launch SMB retention program (guided onboarding, value messaging) to stabilize churn.
+- Standardize support SLAs and expand self-serve resources to reduce tickets and credits.
+
+
+Output 2: Executive Summary — Q2 Results and Priorities
+
+Financial Overview
+- Revenue: $2.0M
+- Costs: $1.2M
+- Profit: $0.8M
+
+Growth Highlights
+- Strong adoption of analytics modules drove cross-sell in existing accounts.
+- Public sector and healthcare showed robust demand, lifting average contract values.
+- Partner-led opportunities expanded top-of-funnel quality and velocity.
+
+Operational Challenges
+- Onboarding gaps increased time-to-value for SMB, elevating churn risk.
+- Infrastructure scaling lagged peak usage, pressuring responsiveness during spikes.
+- Roadmap slippage deferred expansion motions in two key accounts.
+
+Recommendation for Next Quarter
+- Focus go-to-market on enterprise/public sector; deepen partner enablement.
+- Invest in onboarding automation and playbooks to improve retention.
+- Bring forward infrastructure upgrades and performance monitoring.
+- Tie product milestones to targeted upsell campaigns in priority accounts.
+
+
+Output 3: Executive Brief — Q2 Snapshot and Q3 Actions
+
+Financials
+- Revenue: $2.0M
+- Costs: $1.2M
+- Profit: $0.8M
+
+Growth Drivers
+- Upside in data integration and automation packages increased bundle attach rates.
+- EMEA new logos and renewals outperformed, aided by localized enablement.
+- Strategic accounts expanded usage across additional departments.
+
+Headwinds
+- Price pushback in SMB compressed expansion; higher discounting observed.
+- Support queue volatility affected NPS in peak periods.
+- Compliance updates delayed one regulated-market deployment.
+
+Recommendation for Next Quarter
+- Concentrate sales execution on enterprise/EMEA; set clear segment quotas.
+- Reduce SMB churn via tiered packaging, transparent pricing, and guided adoption.
+- Stabilize support with staffing alignment and proactive knowledge base content.
+- Lock compliance and performance upgrades to a committed release schedule.",2.5
+Participant_E,Creative_Writing,5,909.809357881546,50,"```python
+outputs = [
+""""""Miss Eliza Harbury had been eight-and-twenty for almost a year, and, as her aunt observed with a charity sharpened by experience, she had been too much in possession of her own mind to please those who wished to borrow it. Harbury Lodge sat among hedgerows that put forth their buds with a care that would have suited any chaperon. In such a neighbourhood, gentility flowered with as much prudence as the hawthorn.
+
+At Mrs. Everson’s Thursday tea, Mr. Radley—new to the county, handsome without being vain of it—sat beside Eliza and asked, “Do you never grow weary of so much correctness, Miss Harbury? It seems to me a room of porcelain hearts—very fine, very breakable, and used only on company days.”
+
+“I am resigned,” she returned, smiling. “Porcelain has the advantage of shining, if one keeps it dusted.”
+
+“Then allow me,” he said, lowering his voice, “to be your cloth.”
+
+The pleasantry, though artful, was not disagreeable; but Eliza’s smile fell when she learned, before the evening closed, that Mr. Radley, however attentive to sentiment, was devoted more firmly to circumstance. He had fixed his hopes upon Oakleigh, an estate made prosperous by a recent enclosure, and his compliments toward Eliza were observed to grow warmer precisely as her uncle’s cough grew worse.
+
+Two days later, Aunt Martha confided, “Your uncle’s will is to be altered. The Lodge is to be yours.”
+
+Eliza’s breath caught, not from triumph, but from an uneasiness that moved her like a draught in a locked room. She knew the cottagers whose strips at the common would be diminished by the same neat hand that might increase her own fortune; she knew, too, that Mr. Radley’s attentions had the exact persistence of a man adding columns of figures.
+
+When he called, he found her at the window, watching a boy drive sheep through an April mist.
+
+“Miss Harbury,” he began with a tenderness that had learned its posture, “I hope you have had good news.”
+
+“I have had news,” she said. “But whether it is good must be determined by what I do with it.”
+
+“Pray believe,” he said, “that your virtues need only a proper scene to be displayed.”
+
+“Are virtues to be displayed?” she asked lightly. “I had thought they were to be exercised.”
+
+He coloured. “You are severe.”
+
+“Not severe, sir—only resolved. If the Lodge is mine, it shall not be bought with hunger.” Her voice softened. “Nor shall I be.”
+
+There was a pause, long enough for a conscience to be heard.
+
+He rallied. “You will not find another offer made with more respect.”
+
+“I hope to find one made with more respect for others.” She curtseyed. “If we are both to prosper, Mr. Radley, let it be in character.”
+
+Later, she persuaded her uncle to temper the enclosure, and she refused Mr. Radley without impertinence. The village did not sing her praises, but it baked her bread; and Eliza, who had never fancied heroics, found that quiet justice is the best embroidery on any fortune, because it wears.”
+
+"""""",
+""""""When Mrs. Fairford declared that spring would not consent to arrive until Mr. Clement Wycherly had made his bow to the county, the company understood that, in her calendar, seasons were but visitors and gentlemen the weather.
+
+Mr. Wycherly came with the recommendation of his aunt’s diamonds and a temperament that shone almost as steadily. He sang, he quoted, he danced with a precision learned, one suspected, from measuring mirrors. Miss Marianne Loring, whose father’s rectitude was exceeded only by his debts, was much observed on his arm at the assembly.
+
+“Your step falters,” he murmured as they turned. “You are not timid?”
+
+“Only thoughtful,” Marianne replied. “I was considering whether my father’s parish can afford your compliments; they are extravagant.”
+
+“I would offer them on credit,” he said.
+
+Her father, the Reverend Loring, had been given, that very week, a sealed letter: an anonymous donation sufficient to clear the pressing obligations of the parsonage. The village rejoiced; the Reverend blessed Providence; Mrs. Fairford blessed Mr. Wycherly. Marianne alone, on opening her music case, saw, between the pages of Handel, a note in Mr. Wycherly’s hand that bore no name but confessed an intention. “I repair what the world has neglected,” it read. “I shall hope to repair your fortunes by more explicit means.”
+
+The dilemma arrived at breakfast with the post. Marianne held the note like a coal that would not flame yet would blacken.
+
+“Child,” said the Reverend, buttering his modest toast with an air of wealth, “we are the recipients of an undeserved mercy.”
+
+“Undeserved, sir, perhaps; but not unpurchased,” she answered, and showed the letter.
+
+He looked grave. “It seems a benevolence with a ledger.”
+
+That evening, Mr. Wycherly called. He was all delicacy and no disguise. “I would not insult Miss Loring by asking for gratitude,” he said, “only for the felicity of serving her for life.”
+
+“You have already purchased our quiet,” Marianne replied, “and I am grateful; but gratitude is a poor bride. She wakes at dawn and finds herself in the wrong house.”
+
+“Do you prefer pride?” he asked gently.
+
+“I prefer proportion,” she said. “Charity, like music, is ruined when it demands applause between the movements.”
+
+He paled. “Must my assistance then be a barrier to my happiness?”
+
+“It must not be a bridle on mine.” She turned to her father. “Return what can be returned; keep what cannot; and let us owe Mr. Wycherly nothing but civility.”
+
+The Reverend sighed, wrote, and, by degrees and instalments, repaid as he could. Mr. Wycherly continued to bow and to shine; but he never again mistook an obligation for an oath. Marianne married later, to a man who could not sing, but who paid his bills. She had learned that a kindness which expects a promise is a loan, and the interest is paid in silence.”,
+""""""At Parkmere, where the shrubberies were arranged to hide both the neighbours and the truth, Mrs. Denham presided over a house of comfort and a conscience of economy. Her daughter, Julia, had a figure that made muslin eloquent and a mind that refused to be dressed.
+
+Into this composition arrived Sir Frederick Vale, with a baronetcy recently polished and a laugh that was almost as new. He admired Parkmere, he admired the hedges, he admired—most particularly—Julia’s prospects. He did not scruple to declare, “I have always found that affection is most sincere when it is prudent.”
+
+“Then you will adore with exactness,” Julia said.
+
+Mr. Arthur Leigh, a younger son with ink on his cuffs and hope in his pockets, had been Julia’s companion in walks that were not called appointments and conversations that were not called engagements. He spoke seldom, but when he did, he placed his words as carefully as if they were coins from a small purse.
+
+Mrs. Denham’s summons to the drawing-room was a summons to reality. “Julia,” she announced, “Sir Frederick has honoured this family with an offer.”
+
+Sir Frederick smiled upon the mantel. “It is an arrangement that will suit all—your comfort, my felicity, and the neighbourhood’s idea of propriety.”
+
+Julia’s heart, a rebelliously honest instrument, beat time against her bodice. She requested a day.
+
+That evening, Mr. Leigh brought a packet of papers. “Your mother wishes me to see to the tenants’ accounts,” he said. “I have found a discrepancy.”
+
+“A deficiency?” she whispered.
+
+“A delicacy,” he returned. He showed her a ledger—rents collected with vigour, repairs executed with promises, a long habit of making tomorrow supply for yesterday. “If Sir Frederick takes Parkmere as it stands,” he added, “he will require his money’s worth.”
+
+Julia looked at the figures as if they were a portrait of her future. “My mother has never paid a bill without first paying a compliment.”
+
+“You can remedy it,” he said. “You can insist on setting matters straight—perhaps at the price of your mother’s temper, certainly at the price of Sir Frederick’s haste.”
+
+“Or marry him,” she said, “and exchange our creditors for one husband.”
+
+The next morning, Sir Frederick returned. “Well, Miss Denham? Shall we conclude what is so evidently begun?”
+
+“We shall begin what must be concluded,” Julia answered. “Parkmere’s debts will be cleared before any vows are spoken, whether to you or to another. I cannot carry unpaid accounts into a marriage and call it fortune.”
+
+Mrs. Denham fluttered like a curtain in a sudden wind. “Julia!”
+
+Sir Frederick’s smile cracked. “I had not supposed a lady would make herself a steward.”
+
+“I had not supposed a gentleman would object,” she replied.
+
+He withdrew with civility and coldness. There were weeks of embarrassed reckonings, fewer dinners, more receipts. Mr. Leigh assisted without declaration. At last, Parkmere stood honest, if not grand.
+
+When he finally spoke, it was on a modest lane, under hawthorn that had forgiven many confessions. “Miss Denham, will you trust a man who can promise little but will mean it?”
+
+“I have learned,” she said, “to prefer a small truth to a large convenience.” She took his arm. The hedges, having hidden the neighbours, disclosed a future that was not brilliant, but it was paid for.""""""
+]
+```",2.5
+Participant_E,Technical_Explanation,3,189.9526400566101,100,"Output 1
+CNNs apply learned convolution filters (kernels) across an input to produce feature maps: each output pixel is a weighted sum over a local receptive field, enabling weight sharing and translation equivariance. Stacking layers grows receptive fields and builds hierarchies from edges to parts to objects; strides and padding control resolution, and optional pooling aggregates invariances. During backpropagation, gradients flow from loss to feature maps, then to kernels via cross-correlation with input patches (kernel-grad), and to inputs via convolution with the kernel flipped 180° (input-grad). Kernels update by SGD/Adam, with batchnorm/nonlinearities interleaved to stabilize and increase expressivity.
+
+Output 2
+A CNN replaces full connections with convolutions: small kernels slide over the spatial grid, computing dot-products to form feature maps, reusing the same weights everywhere (parameter sharing). Nonlinearities (e.g., ReLU) and pooling or strided convolutions build progressively larger effective receptive fields and introduce some translation invariance. Backprop computes derivatives w.r.t. kernel weights by correlating upstream gradients with the corresponding input patches, and derivatives w.r.t. inputs by convolving the upstream gradients with rotated kernels; all parameters are updated via gradient descent-based optimizers.
+
+Output 3
+In CNNs, convolutional layers use learned k×k kernels to scan inputs, detecting patterns regardless of location (equivariance) while keeping parameter counts low. Multiple channels allow each kernel to span depth; stacking layers composes features into deeper abstractions, with stride/padding controlling spatial size and pooling or global average pooling summarizing. Backpropagation propagates error signals through nonlinearities and convolutions, yielding gradients for kernels (sum of per-location input×error products) and for inputs (error convolved with flipped kernels), enabling end-to-end training with SGD variants and regularization.",5
+Participant_E,Business_Executive_Summary,5,326.890234708786,75,"Output A — Executive Q2 Summary
+
+Financials
+- Revenue: $2.0M
+- Costs: $1.2M
+- Profit: $0.8M (40% margin)
+
+Key Growth Areas
+- Mid-market adoption accelerated via simplified packaging and faster onboarding.
+- DACH and UK regions expanded through partner-led pipeline and improved localization.
+- Usage-based tiers lifted ARPU in data-intensive accounts; upsell velocity improved.
+
+Challenges
+- Sales engineering bandwidth constrained late-stage conversions and enterprise pilots.
+- Cloud infrastructure costs rose with peak-time workloads; vendor discounts underutilized.
+- Longer security reviews in regulated verticals extended cycle times.
+
+Recommendation for Q3
+- Add 2–3 senior SEs; codify pilot playbooks to scale late-stage support.
+- Optimize cloud spend (rightsizing, committed use discounts, autoscaling); renegotiate top two vendors.
+- Launch a regulated-verticals toolkit (security artifacts, reference architectures) to compress diligence and shorten sales cycles.
+
+
+Output B — Executive Q2 Summary
+
+Financials
+- Revenue: $2.0M
+- Costs: $1.2M
+- Profit: $0.8M
+
+Key Growth Areas
+- Product-led funnel converting strongly in mid-market; trial-to-paid up materially.
+- Channel partnerships opened new logos in EMEA; co-marketing improved win rates.
+- Feature launches in analytics drove expansion within existing accounts.
+
+Challenges
+- Capacity bottlenecks in solutions engineering and customer onboarding.
+- Unit economics pressured by spiky compute and data egress fees.
+- Procurement friction in public sector and healthcare slowed enterprise deals.
+
+Recommendation for Q3
+- Hire SEs and onboarding specialists; standardize implementation playbooks.
+- Commit to cloud savings plans; implement cost guards (storage tiering, egress caching).
+- Build a compliance pack (SOC mapping, DPIA, security questionnaires) to streamline procurement.
+
+
+Output C — Executive Q2 Summary
+
+Financials
+- Revenue: $2.0M
+- Costs: $1.2M
+- Profit: $0.8M (40% gross margin proxy)
+
+Key Growth Areas
+- North America mid-market and SMB cohorts delivered higher retention and expansion.
+- Partner ecosystem contributed meaningfully to pipeline and lower CAC.
+- Pricing optimization increased attach rates for premium modules.
+
+Challenges
+- Late-stage deal support stretched; POCs extended beyond planned timelines.
+- Infrastructure spend elevated during growth spikes; limited observability on cost drivers.
+- Fragmented security documentation prolonged audits.
+
+Recommendation for Q3
+- Fund 2 SE hires; institute a 30-day POC framework with success criteria.
+- Implement cost observability and autoscaling; pursue reserved instances with top cloud provider.
+- Centralize and maintain a single-source security dossier to accelerate audits and close cycles.",3.8
